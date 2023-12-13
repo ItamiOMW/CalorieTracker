@@ -30,8 +30,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val jwtToken get() = authManager.token
 
     override suspend fun registerGoogle(createUser: CreateUserGoogle): AppResponse<Unit> {
-        return when (val response =
-            authApiService.registerGoogle(createUser.toRegisterGoogleRequest())) {
+        return when (val response = authApiService.registerGoogle(createUser.toRegisterGoogleRequest())) {
             is ApiResponse.Success -> {
                 val user = response.body.user.toUser()
                 val token = response.body.token

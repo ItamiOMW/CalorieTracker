@@ -6,12 +6,12 @@ data class User(
     val email: String,
     val name: String,
     val profilePictureUrl: String?,
-    val createdAt: Long,
+    val createdAt: String,
     val age: Int,
     val heightCm: Int,
     val weightGrams: Int,
     val gender: Gender,
     val weightGoal: WeightGoal,
     val lifestyle: Lifestyle,
-    val dailyNutrients: DailyNutrients
+    val dailyNutrientsGoal: DailyNutrientsGoal
 )

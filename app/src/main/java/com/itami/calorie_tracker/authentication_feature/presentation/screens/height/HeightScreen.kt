@@ -54,7 +54,10 @@ fun HeightScreen(
         }
     }
 
-    Scaffold {
+    Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -144,7 +147,7 @@ private fun BottomSection(
             }
         ) {
             Text(
-                text = stringResource(R.string.text_back),
+                text = stringResource(R.string.back),
                 color = CalorieTrackerTheme.colors.onBackgroundVariant,
                 style = CalorieTrackerTheme.typography.bodyLarge,
             )

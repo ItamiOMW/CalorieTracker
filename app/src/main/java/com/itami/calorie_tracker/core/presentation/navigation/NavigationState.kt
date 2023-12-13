@@ -21,6 +21,29 @@ class NavigationState(
         }
     }
 
+    fun navigateToGraph(
+        graph: String,
+        popUpInclusive: Boolean,
+        newStartDestination: String,
+    ) {
+        navHostController.navigate(graph) {
+            popUpTo(navHostController.graph.id) {
+                inclusive = popUpInclusive
+            }
+        }
+    }
+
+    fun navigateToGraph(
+        graph: String,
+        popUpToId: Int,
+    ) {
+        navHostController.navigate(graph) {
+            popUpTo(popUpToId) {
+                saveState = true
+            }
+        }
+    }
+
     fun navigateToScreen(
         route: String,
         saveState: Boolean = true,

@@ -60,7 +60,10 @@ fun AgeScreen(
         }
     }
 
-    Scaffold {
+    Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,7 +81,7 @@ fun AgeScreen(
                     )
             )
             AgeSection(
-                age = { state.age },
+                age = state.age,
                 onValueChange = { age ->
                     onEvent(AgeEvent.AgeValueChange(age))
                 },
@@ -114,14 +117,14 @@ private fun TopSection(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.lifestyle_screen_title),
+            text = stringResource(R.string.age_screen_title),
             color = CalorieTrackerTheme.colors.onBackground,
             style = CalorieTrackerTheme.typography.titleLarge,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.small))
         Text(
-            text = stringResource(R.string.lifestyle_screen_description),
+            text = stringResource(R.string.age_screen_description),
             color = CalorieTrackerTheme.colors.onBackgroundVariant,
             style = CalorieTrackerTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
@@ -131,7 +134,7 @@ private fun TopSection(
 
 @Composable
 private fun AgeSection(
-    age: () -> String,
+    age: String,
     onValueChange: (age: String) -> Unit,
     modifier: Modifier,
 ) {
@@ -144,7 +147,7 @@ private fun AgeSection(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
                 .align(Alignment.Top),
-            value = age(),
+            value = age,
             onValueChange = { newValue ->
                 val newText = newValue.takeIf { input ->
                     input.isEmpty() || input.toIntOrNull() != null
@@ -195,7 +198,7 @@ private fun BottomSection(
             }
         ) {
             Text(
-                text = stringResource(R.string.text_back),
+                text = stringResource(R.string.back),
                 color = CalorieTrackerTheme.colors.onBackgroundVariant,
                 style = CalorieTrackerTheme.typography.bodyLarge,
             )

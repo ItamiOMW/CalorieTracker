@@ -1,6 +1,6 @@
 package com.itami.calorie_tracker.core.domain.repository
 
-import com.itami.calorie_tracker.core.domain.model.DailyNutrients
+import com.itami.calorie_tracker.core.domain.model.DailyNutrientsGoal
 import com.itami.calorie_tracker.core.domain.model.Gender
 import com.itami.calorie_tracker.core.domain.model.Lifestyle
 import com.itami.calorie_tracker.core.domain.model.User
@@ -27,6 +27,6 @@ interface UserManager {
 
     suspend fun setAge(age: Int)
 
-    suspend fun setDailyNutrients(dailyNutrients: DailyNutrients)
+    suspend fun setDailyNutrients(dailyNutrientsGoal: DailyNutrientsGoal)
 
 }

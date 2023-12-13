@@ -57,6 +57,7 @@ class RecommendedNutrientsViewModel @Inject constructor(
     }
 
     private fun getUserAndCalculateNutrients() {
+        state = state.copy(isLoading = true)
         viewModelScope.launch {
             val user = userManager.getUser()
             val nutrients = calculateNutrientsUseCase(
@@ -67,9 +68,9 @@ class RecommendedNutrientsViewModel @Inject constructor(
                 gender = user.gender,
                 lifestyle = user.lifestyle,
             )
-            this@RecommendedNutrientsViewModel.user = user.copy(dailyNutrients = nutrients)
+            this@RecommendedNutrientsViewModel.user = user.copy(dailyNutrientsGoal = nutrients)
             userManager.setDailyNutrients(nutrients)
-            state = state.copy(dailyNutrients = nutrients)
+            state = state.copy(dailyNutrientsGoal = nutrients, isLoading = false)
         }
     }
 
@@ -93,7 +94,7 @@ class RecommendedNutrientsViewModel @Inject constructor(
                 lifestyle = user.lifestyle,
                 gender = user.gender,
                 weightGoal = user.weightGoal,
-                dailyNutrients = user.dailyNutrients
+                dailyNutrientsGoal = user.dailyNutrientsGoal
             )
             when (val response = registerGoogleUseCase(createUser)) {
                 is AppResponse.Success -> {

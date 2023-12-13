@@ -1,6 +1,6 @@
 package com.itami.calorie_tracker.core.domain.use_case
 
-import com.itami.calorie_tracker.core.domain.model.DailyNutrients
+import com.itami.calorie_tracker.core.domain.model.DailyNutrientsGoal
 import com.itami.calorie_tracker.core.domain.model.Gender
 import com.itami.calorie_tracker.core.domain.model.Lifestyle
 import com.itami.calorie_tracker.core.domain.model.WeightGoal
@@ -9,7 +9,7 @@ import kotlin.math.roundToInt
 
 class CalculateNutrientsUseCase {
 
-    suspend operator fun invoke(
+    operator fun invoke(
         age: Int,
         heightCm: Int,
         weightGrams: Int,
@@ -19,7 +19,7 @@ class CalculateNutrientsUseCase {
         carbsRatio: Float = 0.4f,
         proteinsRatio: Float = 0.3f,
         fatsRatio: Float = 0.3f,
-    ): DailyNutrients {
+    ): DailyNutrientsGoal {
         val weightKgs = WeightUnit.KILOGRAM.gramsToKilograms(grams = weightGrams)
         //Factor in Physical Activity Level (PAL)
         val pal = when (lifestyle) {
@@ -61,12 +61,12 @@ class CalculateNutrientsUseCase {
         val fats = (tdee * fatsRatio / 9).roundToInt()
         val carbs = (tdee * carbsRatio / 4).roundToInt()
         val waterMl = (weightKgs * 30).roundToInt()
-        return DailyNutrients(
-            calories = tdee,
-            proteins = proteins,
-            fats = fats,
-            carbs = carbs,
-            waterMl = waterMl
+        return DailyNutrientsGoal(
+            caloriesGoal = tdee,
+            proteinsGoal = proteins,
+            fatsGoal = fats,
+            carbsGoal = carbs,
+            waterMlGoal = waterMl
         )
     }
 }

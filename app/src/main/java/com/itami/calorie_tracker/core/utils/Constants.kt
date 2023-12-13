@@ -3,8 +3,10 @@ package com.itami.calorie_tracker.core.utils
 object Constants {
 
     const val UNKNOWN_ID = -1
-
     const val EMPTY_STRING = ""
+
+    const val DEFAULT_FOOD_SERVING_GRAMS = 100
+    const val DEFAULT_WATER_SERVING_ML = 200
 
     const val DEFAULT_AGE = 25
     const val DEFAULT_HEIGHT_CM = 170
@@ -13,16 +15,10 @@ object Constants {
     const val DEFAULT_DAILY_PROTEINS = 130
     const val DEFAULT_DAILY_FATS = 90
     const val DEFAULT_DAILY_CARBS = 250
-    const val DEFAULT_WATER_ML = 2000
+    const val DEFAULT_DAILY_WATER_ML = 2000
 
     const val MIN_WEIGHT_GRAMS = 10000
     const val MAX_WEIGHT_GRAMS = 455_000
-
-    const val MIN_WEIGHT_POUNDS = 22
-    const val MAX_WEIGHT_POUNDS = 1000
-
-    const val MIN_WEIGHT_KILOGRAMS = 10000
-    const val MAX_WEIGHT_KILOGRAMS = 455
 
     const val MIN_HEIGHT_CM = 50
     const val MAX_HEIGHT_CM = 300

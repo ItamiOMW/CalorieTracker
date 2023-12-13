@@ -5,11 +5,14 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.itami.calorie_tracker.core.domain.model.HeightUnit
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.model.WeightUnit
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
+import com.itami.calorie_tracker.core.utils.Constants
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -26,18 +29,22 @@ class DataStoreAppSettingsManager @Inject constructor(
 
     private val dataStore: DataStore<Preferences> = context.dataStore
 
-    override val isDarkMode: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[IS_DARK_MODE_KEY] ?: false
+    override val theme: Flow<Theme> = dataStore.data.map { preferences ->
+        preferences[THEME_KEY]?.let { Theme.valueOf(it) } ?: Theme.SYSTEM_THEME
     }
 
-    override suspend fun changeDarkModeState(enabled: Boolean) {
+    override suspend fun changeTheme(theme: Theme) {
         dataStore.edit { preferences ->
-            preferences[IS_DARK_MODE_KEY] = enabled
+            preferences[THEME_KEY] = theme.name
         }
     }
 
     override val showOnboarding: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[SHOW_ONBOARDING_KEY] ?: true
+    }
+
+    override suspend fun getShowOnboardingState(): Boolean {
+        return dataStore.data.first()[SHOW_ONBOARDING_KEY] ?: true
     }
 
     override suspend fun changeShowOnboardingState(show: Boolean) {
@@ -78,17 +85,29 @@ class DataStoreAppSettingsManager @Inject constructor(
         }
     }
 
+    override val waterServingSize: Flow<Int> = dataStore.data.map { preferences ->
+        preferences[WATER_SERVING_SIZE_KEY] ?: Constants.DEFAULT_WATER_SERVING_ML
+    }
+
+    override suspend fun changeWaterServingSize(sizeMl: Int) {
+        dataStore.edit { preferences ->
+            preferences[WATER_SERVING_SIZE_KEY] = sizeMl
+        }
+    }
+
     companion object {
 
         private const val PREFERENCES_DATASTORE_NAME = "app_settings_preferences"
 
-        private val IS_DARK_MODE_KEY = booleanPreferencesKey("is_dark_theme")
+        private val THEME_KEY = stringPreferencesKey("theme")
 
         private val SHOW_ONBOARDING_KEY = booleanPreferencesKey("show_onboarding")
 
         private val WEIGHT_UNIT_KEY = stringPreferencesKey("weight_unit")
 
         private val HEIGHT_UNIT_KEY = stringPreferencesKey("height_unit")
+
+        private val WATER_SERVING_SIZE_KEY = intPreferencesKey("water_serving_size")
 
     }
 

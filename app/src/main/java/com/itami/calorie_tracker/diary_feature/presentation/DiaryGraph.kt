@@ -1,45 +1,151 @@
 package com.itami.calorie_tracker.diary_feature.presentation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import android.net.Uri
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
+import com.itami.calorie_tracker.core.presentation.navigation.appendParams
+import com.itami.calorie_tracker.core.presentation.navigation.navigateForResult
+import com.itami.calorie_tracker.core.presentation.navigation.popBackStackWithResult
+import com.itami.calorie_tracker.core.utils.Constants
+import com.itami.calorie_tracker.core.utils.DateTimeUtil
+import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.NewMealScreen
+import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.NewMealViewModel
+import com.itami.calorie_tracker.diary_feature.presentation.screens.diary.DiaryScreen
+import com.itami.calorie_tracker.diary_feature.presentation.screens.diary.DiaryViewModel
+import com.itami.calorie_tracker.diary_feature.presentation.screens.meal.MealScreen
+import com.itami.calorie_tracker.diary_feature.presentation.screens.meal.MealViewModel
+import com.itami.calorie_tracker.diary_feature.presentation.screens.search_food.SearchFoodScreen
+import com.itami.calorie_tracker.diary_feature.presentation.screens.search_food.SearchFoodViewModel
 
 
 fun NavGraphBuilder.diaryGraph(
     navState: NavigationState,
     imageLoader: ImageLoader,
-    isDarkTheme: Boolean,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
-        route = Graph.DIARY.route,
+        route = Graph.Diary.route,
         startDestination = DiaryGraphScreens.Diary.fullRoute
     ) {
         composable(DiaryGraphScreens.Diary.fullRoute) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Diary screen")
-            }
+            val viewModel: DiaryViewModel = hiltViewModel()
+            DiaryScreen(
+                onNavigateToMeal = { mealId ->
+                    navState.navigateToScreen(DiaryGraphScreens.Meal.routeWithArgs(mealId))
+                },
+                onNavigateToNewMeal = { datetime ->
+                    val encodedDate = Uri.encode(datetime)
+                    navState.navigateToScreen(DiaryGraphScreens.NewMeal.routeWithArgs(encodedDate))
+                },
+                onNavigateToProfile = {
+
+                },
+                onShowSnackbar = onShowSnackbar,
+                imageLoader = imageLoader,
+                state = viewModel.state,
+                uiEvent = viewModel.uiEvent,
+                onEvent = viewModel::onEvent
+            )
+        }
+        composable(
+            route = DiaryGraphScreens.NewMeal.fullRoute,
+            arguments = listOf(
+                navArgument(DiaryGraphScreens.ENCODED_DATETIME_ARG) {
+                    type = NavType.StringType
+                    defaultValue = DateTimeUtil.getCurrentDateTimeString()
+                }
+            )
+        ) {
+            val viewModel: NewMealViewModel = hiltViewModel()
+            NewMealScreen(
+                onNavigateSearchFood = { navCallback ->
+                    navState.navHostController.navigateForResult(
+                        route = DiaryGraphScreens.SearchFood.fullRoute,
+                        navResultCallback = navCallback,
+                    )
+                },
+                onNavigateBack = {
+                    navState.navigateBack()
+                },
+                onShowSnackbar = onShowSnackbar,
+                state = viewModel.state,
+                uiEvent = viewModel.uiEvent,
+                onEvent = viewModel::onEvent
+            )
+        }
+        composable(
+            route = DiaryGraphScreens.Meal.fullRoute,
+            arguments = listOf(
+                navArgument(DiaryGraphScreens.MEAL_ID_ARG) {
+                    type = NavType.IntType
+                    defaultValue = Constants.UNKNOWN_ID
+                }
+            )
+        ) {
+            val viewModel: MealViewModel = hiltViewModel()
+            MealScreen(
+                onNavigateSearchFood = { navCallback ->
+                    navState.navHostController.navigateForResult(
+                        route = DiaryGraphScreens.SearchFood.fullRoute,
+                        navResultCallback = navCallback,
+                    )
+                },
+                onNavigateBack = {
+                    navState.navigateBack()
+                },
+                onShowSnackbar = onShowSnackbar,
+                state = viewModel.state,
+                uiEvent = viewModel.uiEvent,
+                onEvent = viewModel::onEvent
+            )
+        }
+        composable(route = DiaryGraphScreens.SearchFood.fullRoute) {
+            val viewModel: SearchFoodViewModel = hiltViewModel()
+            SearchFoodScreen(
+                onNavigateBack = { consumedFood ->
+                    navState.navHostController.popBackStackWithResult(consumedFood)
+                },
+                onShowSnackbar = onShowSnackbar,
+                state = viewModel.state,
+                uiEvent = viewModel.uiEvent,
+                onEvent = viewModel::onEvent
+            )
         }
     }
 }
 
-private sealed class DiaryGraphScreens(
+sealed class DiaryGraphScreens(
     protected val route: String,
     vararg params: String,
 ) : Screen(route, *params) {
 
     data object Diary : DiaryGraphScreens(route = "diary")
+
+    data object NewMeal : DiaryGraphScreens(route = "new_meal", ENCODED_DATETIME_ARG) {
+        fun routeWithArgs(date: String): String {
+            return route.appendParams(ENCODED_DATETIME_ARG to date)
+        }
+    }
+
+    data object Meal : DiaryGraphScreens(route = "meal", MEAL_ID_ARG) {
+        fun routeWithArgs(mealId: Int): String {
+            return route.appendParams(MEAL_ID_ARG to mealId)
+        }
+    }
+
+    data object SearchFood : DiaryGraphScreens(route = "search_food")
+
+    companion object {
+        const val ENCODED_DATETIME_ARG = "encoded_date_arg"
+        const val MEAL_ID_ARG = "meal_id_arg"
+    }
 
 }

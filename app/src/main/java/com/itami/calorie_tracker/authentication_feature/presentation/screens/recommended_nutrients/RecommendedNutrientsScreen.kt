@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.itami.calorie_tracker.BuildConfig
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.authentication_feature.presentation.utils.OneTapSignInWithGoogle
-import com.itami.calorie_tracker.core.domain.model.DailyNutrients
+import com.itami.calorie_tracker.core.domain.model.DailyNutrientsGoal
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import kotlinx.coroutines.flow.Flow
 
@@ -58,7 +58,7 @@ fun RecommendedNutrientsScreen(
     }
 
     OneTapSignInWithGoogle(
-        opened = { state.showGoogleOneTap },
+        opened = state.showGoogleOneTap,
         clientId = BuildConfig.GOOGLE_CLIENT_ID,
         onIdTokenReceived = { idToken ->
             onEvent(RecommendedNutrientEvent.ShowGoogleOneTap(false))
@@ -70,22 +70,22 @@ fun RecommendedNutrientsScreen(
         }
     )
 
-    Scaffold {
+    Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it),
             contentAlignment = Alignment.Center
         ) {
-            if (state.dailyNutrients == null) {
-                CircularProgressIndicator(color = CalorieTrackerTheme.colors.lightBlue)
-            }
-            if (state.dailyNutrients != null) {
+            if (state.dailyNutrientsGoal != null) {
                 TopSection(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.TopCenter),
-                    dailyNutrients = { state.dailyNutrients }
+                    dailyNutrientsGoal = { state.dailyNutrientsGoal }
                 )
                 BottomSection(
                     modifier = Modifier
@@ -94,11 +94,13 @@ fun RecommendedNutrientsScreen(
                         .padding(horizontal = CalorieTrackerTheme.padding.medium)
                         .padding(bottom = CalorieTrackerTheme.padding.large),
                     isLoading = { state.isLoading },
-                    onEvent = onEvent
+                    onShowGoogleOneTap = { show ->
+                        onEvent(RecommendedNutrientEvent.ShowGoogleOneTap(show = show))
+                    }
                 )
-                if (state.isLoading) {
-                    CircularProgressIndicator(color = CalorieTrackerTheme.colors.lightBlue)
-                }
+            }
+            if (state.isLoading) {
+                CircularProgressIndicator(color = CalorieTrackerTheme.colors.primary)
             }
         }
     }
@@ -108,7 +110,7 @@ fun RecommendedNutrientsScreen(
 private fun BottomSection(
     modifier: Modifier,
     isLoading: () -> Boolean,
-    onEvent: (RecommendedNutrientEvent) -> Unit,
+    onShowGoogleOneTap: (show: Boolean) -> Unit
 ) {
     OutlinedButton(
         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Unspecified),
@@ -118,7 +120,7 @@ private fun BottomSection(
         contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
         modifier = modifier,
         onClick = {
-            onEvent(RecommendedNutrientEvent.ShowGoogleOneTap(show = true))
+            onShowGoogleOneTap(true)
         }
     ) {
         Row(
@@ -131,7 +133,7 @@ private fun BottomSection(
                 modifier = Modifier.size(20.dp)
             )
             Text(
-                text = stringResource(R.string.text_continue_with_google),
+                text = stringResource(R.string.continue_with_google),
                 color = CalorieTrackerTheme.colors.onBackground,
                 style = CalorieTrackerTheme.typography.bodyMedium,
             )
@@ -142,7 +144,7 @@ private fun BottomSection(
 @Composable
 private fun TopSection(
     modifier: Modifier,
-    dailyNutrients: () -> DailyNutrients,
+    dailyNutrientsGoal: () -> DailyNutrientsGoal,
 ) {
     Column(
         modifier = modifier,
@@ -185,15 +187,15 @@ private fun TopSection(
             ) {
                 NutrientItem(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.proteins_to_grams, dailyNutrients().proteins)
+                    text = stringResource(R.string.proteins_to_grams, dailyNutrientsGoal().proteinsGoal)
                 )
                 NutrientItem(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.fats_to_grams, dailyNutrients().fats)
+                    text = stringResource(R.string.fats_to_grams, dailyNutrientsGoal().fatsGoal)
                 )
                 NutrientItem(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.carbs_to_grams, dailyNutrients().carbs)
+                    text = stringResource(R.string.carbs_to_grams, dailyNutrientsGoal().carbsGoal)
                 )
             }
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.small))
@@ -204,7 +206,7 @@ private fun TopSection(
                     vertical = CalorieTrackerTheme.padding.small,
                     horizontal = CalorieTrackerTheme.padding.extraSmall
                 ),
-                text = stringResource(R.string.calories_to_amount, dailyNutrients().calories)
+                text = stringResource(R.string.calories_amount, dailyNutrientsGoal().caloriesGoal)
             )
         }
     }

@@ -55,7 +55,10 @@ fun LifestyleScreen(
         }
     }
 
-    Scaffold {
+    Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -75,7 +78,7 @@ fun LifestyleScreen(
             LifestylesSection(
                 modifier = Modifier
                     .fillMaxWidth(),
-                selectedLifestyle = { state.selectedLifestyle },
+                selectedLifestyle = state.selectedLifestyle,
                 onLifestyleClick = { lifestyle ->
                     onEvent(LifestyleEvent.SelectLifestyle(lifestyle = lifestyle))
                 }
@@ -126,7 +129,7 @@ private fun TopSection(
 @Composable
 private fun LifestylesSection(
     modifier: Modifier,
-    selectedLifestyle: () -> Lifestyle,
+    selectedLifestyle: Lifestyle,
     onLifestyleClick: (lifestyle: Lifestyle) -> Unit,
 ) {
     val lifestyles = remember {
@@ -144,7 +147,7 @@ private fun LifestylesSection(
     ) {
         lifestyles.forEach { lifestyle ->
             LifestyleItem(
-                selected = lifestyle == selectedLifestyle(),
+                selected = lifestyle == selectedLifestyle,
                 lifestyle = lifestyle,
                 onClick = {
                     onLifestyleClick(lifestyle)
@@ -175,7 +178,7 @@ private fun BottomSection(
             }
         ) {
             Text(
-                text = stringResource(R.string.text_back),
+                text = stringResource(R.string.back),
                 color = CalorieTrackerTheme.colors.onBackgroundVariant,
                 style = CalorieTrackerTheme.typography.bodyLarge,
             )
