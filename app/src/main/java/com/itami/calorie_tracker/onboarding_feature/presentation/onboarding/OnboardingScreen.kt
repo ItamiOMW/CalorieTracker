@@ -51,7 +51,6 @@ import kotlinx.coroutines.launch
 fun OnboardingScreen(
     onNavigateToAuthGraph: () -> Unit,
     imageLoader: ImageLoader,
-    isDarkTheme: Boolean,
     onEvent: (OnboardingEvent) -> Unit,
     uiEvent: Flow<OnboardingUiEvent>,
 ) {
@@ -104,7 +103,6 @@ fun OnboardingScreen(
             OnboardingPager(
                 pagerState = pagerState,
                 pages = pages,
-                isDarkTheme = isDarkTheme,
                 imageLoader = imageLoader,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -118,7 +116,6 @@ fun OnboardingScreen(
 private fun OnboardingPager(
     pagerState: PagerState,
     pages: List<OnboardingPage>,
-    isDarkTheme: Boolean,
     imageLoader: ImageLoader,
     modifier: Modifier,
 ) {
@@ -139,7 +136,7 @@ private fun OnboardingPager(
                         end = CalorieTrackerTheme.padding.extraLarge
                     ),
                 onboardingPage = pages[page],
-                isDarkTheme = isDarkTheme,
+                isDarkTheme = CalorieTrackerTheme.isDarkTheme,
                 imageLoader = imageLoader
             )
         }
@@ -181,8 +178,8 @@ private fun BottomSection(
             }
         ) {
             Text(
-                text = if (pagerState.currentPage == 0) stringResource(R.string.text_skip)
-                else stringResource(R.string.text_back),
+                text = if (pagerState.currentPage == 0) stringResource(R.string.skip)
+                else stringResource(R.string.back),
                 color = CalorieTrackerTheme.colors.onBackgroundVariant,
                 style = CalorieTrackerTheme.typography.bodyLarge,
             )

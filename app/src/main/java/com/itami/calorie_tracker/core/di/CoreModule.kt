@@ -83,13 +83,12 @@ object CoreModule {
                 )
             }
             install(HttpRequestRetry) {
-                retryOnExceptionOrServerErrors(maxRetries = 2)
-                exponentialDelay()
+                retryOnExceptionOrServerErrors(maxRetries = 1)
             }
             install(HttpTimeout) {
-                connectTimeoutMillis = 30_000
-                requestTimeoutMillis = 30_000
-                socketTimeoutMillis = 30_000
+                connectTimeoutMillis = 20_000
+                requestTimeoutMillis = 15_000
+                socketTimeoutMillis = 20_000
             }
             defaultRequest {
                 url(BuildConfig.BASE_URL)

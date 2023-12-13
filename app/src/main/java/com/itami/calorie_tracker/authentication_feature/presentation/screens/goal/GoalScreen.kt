@@ -52,7 +52,10 @@ fun GoalScreen(
         }
     }
 
-    Scaffold {
+    Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -72,7 +75,7 @@ fun GoalScreen(
             WeightGoalsSection(
                 modifier = Modifier
                     .fillMaxWidth(),
-                selectedWeightGoal = { state.selectedGoal },
+                selectedWeightGoal = state.selectedGoal,
                 onWeightGoalClick = { goal ->
                     onEvent(GoalEvent.SelectGoal(weightGoal = goal))
                 }
@@ -121,7 +124,7 @@ private fun TopSection(
 @Composable
 private fun WeightGoalsSection(
     modifier: Modifier,
-    selectedWeightGoal: () -> WeightGoal,
+    selectedWeightGoal:  WeightGoal,
     onWeightGoalClick: (weightGoal: WeightGoal) -> Unit,
 ) {
     val weightGoals = remember {
@@ -138,7 +141,7 @@ private fun WeightGoalsSection(
     ) {
         weightGoals.forEach { weightGoal ->
             WeightGoalItem(
-                selected = weightGoal == selectedWeightGoal(),
+                selected = weightGoal == selectedWeightGoal,
                 weightGoal = weightGoal,
                 onClick = {
                     onWeightGoalClick(weightGoal)
@@ -206,15 +209,15 @@ private fun WeightGoalItem(
             text = stringResource(
                 id = when (weightGoal) {
                     WeightGoal.LOSE_WEIGHT -> {
-                        R.string.text_lose_weight
+                        R.string.goal_lose_weight
                     }
 
                     WeightGoal.KEEP_WEIGHT -> {
-                        R.string.text_keep_weight
+                        R.string.goal_keep_weight
                     }
 
                     WeightGoal.GAIN_WEIGHT -> {
-                        R.string.text_gain_weight
+                        R.string.goal_gain_weight
                     }
                 }
             ),

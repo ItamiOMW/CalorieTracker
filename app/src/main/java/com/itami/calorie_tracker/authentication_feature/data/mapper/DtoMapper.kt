@@ -12,9 +12,9 @@ fun CreateUserGoogle.toRegisterGoogleRequest() = GoogleRegisterRequest(
     gender = this.gender,
     weightGoal = this.weightGoal,
     lifestyle = this.lifestyle,
-    dailyCalories = this.dailyNutrients.calories,
-    dailyProteins = this.dailyNutrients.proteins,
-    dailyFats = this.dailyNutrients.fats,
-    dailyCarbs = this.dailyNutrients.carbs,
-    waterMl = this.dailyNutrients.waterMl
+    dailyCalories = this.dailyNutrientsGoal.caloriesGoal,
+    dailyProteins = this.dailyNutrientsGoal.proteinsGoal,
+    dailyFats = this.dailyNutrientsGoal.fatsGoal,
+    dailyCarbs = this.dailyNutrientsGoal.carbsGoal,
+    waterMl = this.dailyNutrientsGoal.waterMlGoal
 )

@@ -67,7 +67,7 @@ fun WelcomeScreen(
     }
 
     OneTapSignInWithGoogle(
-        opened = { state.showGoogleOneTap },
+        opened = state.showGoogleOneTap,
         clientId = BuildConfig.GOOGLE_CLIENT_ID,
         onIdTokenReceived = { idToken ->
             onEvent(WelcomeEvent.ShowGoogleOneTap(show = false))
@@ -106,7 +106,10 @@ fun WelcomeScreen(
         }
     }
 
-    Scaffold {
+    Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -127,7 +130,7 @@ fun WelcomeScreen(
                     .padding(bottom = CalorieTrackerTheme.padding.large)
             )
             if (state.isLoading) {
-                CircularProgressIndicator(color = CalorieTrackerTheme.colors.lightBlue)
+                CircularProgressIndicator(color = CalorieTrackerTheme.colors.primary)
             }
         }
     }
@@ -143,7 +146,7 @@ private fun LogoSection(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.app_logo),
-            contentDescription = stringResource(R.string.app_logo),
+            contentDescription = stringResource(R.string.desc_app_logo),
             tint = CalorieTrackerTheme.colors.primary,
             modifier = Modifier.size(100.dp)
         )
@@ -153,14 +156,14 @@ private fun LogoSection(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = stringResource(R.string.text_welcome),
+                text = stringResource(R.string.welcome),
                 style = CalorieTrackerTheme.typography.titleLarge,
                 color = CalorieTrackerTheme.colors.onBackground,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.tiny))
             Text(
-                text = stringResource(R.string.text_start_or_sign_in),
+                text = stringResource(R.string.start_or_sign_in),
                 style = CalorieTrackerTheme.typography.bodyLarge,
                 color = CalorieTrackerTheme.colors.onBackgroundVariant,
                 textAlign = TextAlign.Center
@@ -196,7 +199,7 @@ private fun BottomSection(
             },
         ) {
             Text(
-                text = stringResource(R.string.text_start),
+                text = stringResource(R.string.start),
                 style = CalorieTrackerTheme.typography.titleSmall,
             )
         }
@@ -206,7 +209,7 @@ private fun BottomSection(
             horizontalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.none)
         ) {
             Text(
-                text = stringResource(R.string.text_already_have_an_account),
+                text = stringResource(R.string.already_have_an_account_qm),
                 color = CalorieTrackerTheme.colors.onBackground,
                 style = CalorieTrackerTheme.typography.bodyMedium,
             )
@@ -218,7 +221,7 @@ private fun BottomSection(
                 contentPadding = PaddingValues(CalorieTrackerTheme.padding.tiny)
             ) {
                 Text(
-                    text = stringResource(R.string.text_sign_in),
+                    text = stringResource(R.string.sign_in),
                     color = CalorieTrackerTheme.colors.primary,
                     style = CalorieTrackerTheme.typography.labelLarge,
                 )
@@ -261,7 +264,7 @@ private fun BottomSheetContent(
                     modifier = Modifier.size(20.dp)
                 )
                 Text(
-                    text = stringResource(R.string.text_sign_in_with_google),
+                    text = stringResource(R.string.sign_in_with_google),
                     color = CalorieTrackerTheme.colors.onBackground,
                     style = CalorieTrackerTheme.typography.bodyMedium,
                 )
@@ -292,12 +295,11 @@ private fun BottomSheetContent(
                     modifier = Modifier.size(20.dp)
                 )
                 Text(
-                    text = stringResource(R.string.text_sign_in_with_email),
+                    text = stringResource(R.string.sign_in_with_email),
                     color = CalorieTrackerTheme.colors.onBackground,
                     style = CalorieTrackerTheme.typography.bodyMedium
                 )
             }
         }
     }
-
 }

@@ -71,7 +71,7 @@ fun OnboardingPageComponent(
 @Preview
 @Composable
 fun OnboardingPageComponentPreview() {
-    CalorieTrackerTheme(isDarkTheme = false) {
+    CalorieTrackerTheme {
         OnboardingPageComponent(
             onboardingPage = OnboardingPage.Welcoming,
             isDarkTheme = false,

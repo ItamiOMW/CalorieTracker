@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.authentication_feature.domain.use_case.IsAuthenticatedUseCase
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
 import com.itami.calorie_tracker.core.utils.AppResponse
 import kotlinx.coroutines.launch
@@ -16,7 +17,7 @@ class MainViewModel @Inject constructor(
     private val isAuthenticatedUseCase: IsAuthenticatedUseCase,
 ) : ViewModel() {
 
-    var isDarkTheme by mutableStateOf(false)
+    var theme by mutableStateOf(Theme.SYSTEM_THEME)
         private set
 
     var showSplash by mutableStateOf(true)
@@ -36,7 +37,7 @@ class MainViewModel @Inject constructor(
 
     private fun getIsAuthenticatedState() {
         viewModelScope.launch {
-            when (val response = isAuthenticatedUseCase()) {
+            when (isAuthenticatedUseCase()) {
                 is AppResponse.Success -> {
                     isAuthenticated = true
                     showSplash = false
@@ -52,19 +53,18 @@ class MainViewModel @Inject constructor(
 
     private fun getShowOnboardingState() {
         viewModelScope.launch {
-            appSettingsManager.showOnboarding.collect { show ->
-                showOnboarding = show
-                if (show) {
-                    showSplash = false
-                }
+            val show = appSettingsManager.getShowOnboardingState()
+            showOnboarding = show
+            if (show) {
+                showSplash = false
             }
         }
     }
 
     private fun getIsDarkThemeState() {
         viewModelScope.launch {
-            appSettingsManager.isDarkMode.collect { isDarkTheme ->
-                this@MainViewModel.isDarkTheme = isDarkTheme
+            appSettingsManager.theme.collect { theme ->
+                this@MainViewModel.theme = theme
             }
         }
     }

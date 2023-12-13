@@ -55,7 +55,10 @@ fun GenderScreen(
         }
     }
 
-    Scaffold {
+    Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -75,7 +78,7 @@ fun GenderScreen(
             GendersSection(
                 modifier = Modifier
                     .fillMaxWidth(),
-                selectedGender = { state.selectedGender },
+                selectedGender = state.selectedGender,
                 onGenderClick = { gender ->
                     onEvent(GenderEvent.SelectGender(gender = gender))
                 }
@@ -126,7 +129,7 @@ private fun TopSection(
 @Composable
 private fun GendersSection(
     modifier: Modifier,
-    selectedGender: () -> Gender,
+    selectedGender:  Gender,
     onGenderClick: (gender: Gender) -> Unit,
 ) {
     val genders = remember {
@@ -142,7 +145,7 @@ private fun GendersSection(
     ) {
         genders.forEach { gender ->
             GenderItem(
-                selected = gender == selectedGender(),
+                selected = gender == selectedGender,
                 gender = gender,
                 onClick = {
                     onGenderClick(gender)
@@ -173,7 +176,7 @@ private fun BottomSection(
             }
         ) {
             Text(
-                text = stringResource(R.string.text_back),
+                text = stringResource(R.string.back),
                 color = CalorieTrackerTheme.colors.onBackgroundVariant,
                 style = CalorieTrackerTheme.typography.bodyLarge,
             )

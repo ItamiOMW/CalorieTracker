@@ -7,6 +7,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.itami.calorie_tracker.core.domain.model.Theme
 
 private val lightTheme = CalorieTrackerColors(
     background = Color(0XFFFFFFFF),
@@ -70,6 +71,7 @@ private val CalorieTrackerTypographyProvider = staticCompositionLocalOf { typogr
 private val CalorieTrackerShapesProvider = staticCompositionLocalOf { shapes }
 private val CalorieTrackerSpacingProvider = staticCompositionLocalOf { spacing }
 private val CalorieTrackerPaddingProvider = staticCompositionLocalOf { padding }
+private val IsDarkThemeProvider = staticCompositionLocalOf { false }
 
 object CalorieTrackerTheme {
 
@@ -92,15 +94,24 @@ object CalorieTrackerTheme {
     val padding: CalorieTrackerPadding
         @Composable
         get() = CalorieTrackerPaddingProvider.current
+
+    val isDarkTheme: Boolean
+        @Composable
+        get() = IsDarkThemeProvider.current
 }
 
 @Composable
 fun CalorieTrackerTheme(
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
+    theme: Theme = Theme.SYSTEM_THEME,
     content: @Composable () -> Unit,
 ) {
-    val systemUiController = rememberSystemUiController()
+    val isDarkTheme = when(theme) {
+        Theme.DARK_THEME -> true
+        Theme.LIGHT_THEME -> false
+        Theme.SYSTEM_THEME -> isSystemInDarkTheme()
+    }
 
+    val systemUiController = rememberSystemUiController()
     DisposableEffect(key1 = systemUiController, key2 = isDarkTheme) {
         systemUiController.setSystemBarsColor(
             darkIcons = !isDarkTheme,
@@ -115,6 +126,7 @@ fun CalorieTrackerTheme(
         CalorieTrackerShapesProvider provides shapes,
         CalorieTrackerSpacingProvider provides spacing,
         CalorieTrackerPaddingProvider provides padding,
+        IsDarkThemeProvider provides isDarkTheme,
         content = content
     )
 }

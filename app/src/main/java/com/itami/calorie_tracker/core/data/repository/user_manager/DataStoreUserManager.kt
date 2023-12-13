@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.itami.calorie_tracker.core.data.mapper.toDataStoreUser
 import com.itami.calorie_tracker.core.data.mapper.toUser
-import com.itami.calorie_tracker.core.domain.model.DailyNutrients
+import com.itami.calorie_tracker.core.domain.model.DailyNutrientsGoal
 import com.itami.calorie_tracker.core.domain.model.Gender
 import com.itami.calorie_tracker.core.domain.model.Lifestyle
 import com.itami.calorie_tracker.core.domain.model.User
@@ -78,13 +78,13 @@ class DataStoreUserManager @Inject constructor(
         }
     }
 
-    override suspend fun setDailyNutrients(dailyNutrients: DailyNutrients) {
+    override suspend fun setDailyNutrients(dailyNutrientsGoal: DailyNutrientsGoal) {
         dataStore.updateData { datastoreUser ->
             datastoreUser.copy(
-                dailyCalories = dailyNutrients.calories,
-                dailyProteins = dailyNutrients.proteins,
-                dailyFats = dailyNutrients.fats,
-                dailyCarbs = dailyNutrients.carbs
+                dailyCalories = dailyNutrientsGoal.caloriesGoal,
+                dailyProteins = dailyNutrientsGoal.proteinsGoal,
+                dailyFats = dailyNutrientsGoal.fatsGoal,
+                dailyCarbs = dailyNutrientsGoal.carbsGoal
             )
         }
     }

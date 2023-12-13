@@ -15,11 +15,10 @@ import com.itami.calorie_tracker.onboarding_feature.presentation.onboarding.Onbo
 fun NavGraphBuilder.onboardingGraph(
     navState: NavigationState,
     imageLoader: ImageLoader,
-    isDarkTheme: Boolean,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
-        route = Graph.ONBOARDING.route,
+        route = Graph.Onboarding.route,
         startDestination = OnboardingGraphScreen.Onboarding.fullRoute
     ) {
         composable(
@@ -29,12 +28,11 @@ fun NavGraphBuilder.onboardingGraph(
             OnboardingScreen(
                 onNavigateToAuthGraph = {
                     navState.navigateToGraph(
-                        graph = Graph.AUTH.route,
+                        graph = Graph.Auth.route,
                         popUpInclusive = true
                     )
                 },
                 imageLoader = imageLoader,
-                isDarkTheme = isDarkTheme,
                 onEvent = viewModel::onEvent,
                 uiEvent = viewModel.uiEvent
             )
@@ -43,7 +41,7 @@ fun NavGraphBuilder.onboardingGraph(
     }
 }
 
-private sealed class OnboardingGraphScreen(
+sealed class OnboardingGraphScreen(
     protected val route: String,
     vararg params: String,
 ) : Screen(route, *params) {

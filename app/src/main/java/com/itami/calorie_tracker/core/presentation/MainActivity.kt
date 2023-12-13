@@ -22,19 +22,20 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen().setKeepOnScreenCondition { mainViewModel.showSplash }
+        installSplashScreen().setKeepOnScreenCondition {
+            mainViewModel.showSplash
+        }
         setContent {
-            val isDarkTheme = mainViewModel.isDarkTheme
+            val theme = mainViewModel.theme
             val startRoute = when {
-                mainViewModel.showOnboarding -> Graph.ONBOARDING.route
-                mainViewModel.isAuthenticated -> Graph.DIARY.route
-                else -> Graph.AUTH.route
+                mainViewModel.isAuthenticated -> Graph.Diary.route
+                mainViewModel.showOnboarding -> Graph.Onboarding.route
+                else -> Graph.Auth.route
             }
-            CalorieTrackerTheme(isDarkTheme = isDarkTheme) {
+            CalorieTrackerTheme(theme = theme) {
                 val navState = rememberNavigationState()
                 MainScreen(
                     startRoute = startRoute,
-                    isDarkTheme = isDarkTheme,
                     navState = navState,
                     imageLoader = imageLoader,
                 )

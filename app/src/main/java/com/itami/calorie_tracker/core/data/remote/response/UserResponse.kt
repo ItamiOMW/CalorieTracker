@@ -11,7 +11,7 @@ data class UserResponse(
     val email: String,
     val name: String,
     val profilePictureUrl: String?,
-    val createdAt: Long,
+    val createdAt: String,
     val age: Int,
     val heightCm: Int,
     val weightGrams: Int,

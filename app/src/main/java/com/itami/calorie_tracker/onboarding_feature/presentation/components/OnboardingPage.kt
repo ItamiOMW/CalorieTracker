@@ -14,7 +14,7 @@ sealed class OnboardingPage(
     data object Welcoming: OnboardingPage(
         lightImageId = R.drawable.illustration_welcoming_light,
         darkImageId = R.drawable.illustration_welcoming_dark,
-        titleId = R.string.title_welcome,
+        titleId = R.string.welcome_em,
         descId = R.string.welcome_onboarding_description
     )
 

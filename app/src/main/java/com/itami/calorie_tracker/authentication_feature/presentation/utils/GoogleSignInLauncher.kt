@@ -15,7 +15,7 @@ import com.itami.calorie_tracker.R
 
 @Composable
 fun OneTapSignInWithGoogle(
-    opened: () -> Boolean,
+    opened:  Boolean,
     clientId: String,
     rememberAccount: Boolean = true,
     nonce: String? = null,
@@ -55,7 +55,7 @@ fun OneTapSignInWithGoogle(
     }
 
     LaunchedEffect(key1 = opened) {
-        if (opened()) {
+        if (opened) {
             signIn(
                 activity = activity,
                 clientId = clientId,

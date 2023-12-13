@@ -29,11 +29,10 @@ import com.itami.calorie_tracker.core.presentation.navigation.Screen
 fun NavGraphBuilder.authGraph(
     navState: NavigationState,
     imageLoader: ImageLoader,
-    isDarkTheme: Boolean,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
-        route = Graph.AUTH.route,
+        route = Graph.Auth.route,
         startDestination = AuthGraphScreen.Welcome.fullRoute
     ) {
         composable(route = AuthGraphScreen.Welcome.fullRoute) {
@@ -41,8 +40,8 @@ fun NavGraphBuilder.authGraph(
             WelcomeScreen(
                 onNavigateToDiary = {
                     navState.navigateToGraph(
-                        graph = Graph.DIARY.route,
-                        popUpInclusive = true
+                        graph = Graph.Diary.route,
+                        popUpInclusive = true,
                     )
                 },
                 onNavigateToGoal = {
@@ -142,7 +141,10 @@ fun NavGraphBuilder.authGraph(
             val viewModel: RecommendedNutrientsViewModel = hiltViewModel()
             RecommendedNutrientsScreen(
                 onNavigateToDiary = {
-                    navState.navigateToGraph(graph = Graph.DIARY.route, popUpInclusive = true)
+                    navState.navigateToGraph(
+                        graph = Graph.Diary.route,
+                        popUpInclusive = true,
+                    )
                 },
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
@@ -153,7 +155,7 @@ fun NavGraphBuilder.authGraph(
     }
 }
 
-private sealed class AuthGraphScreen(
+sealed class AuthGraphScreen(
     protected val route: String,
     vararg params: String,
 ) : Screen(route, *params) {

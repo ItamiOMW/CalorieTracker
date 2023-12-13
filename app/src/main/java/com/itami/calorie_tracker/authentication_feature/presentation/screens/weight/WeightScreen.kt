@@ -69,7 +69,10 @@ fun WeightScreen(
         }
     }
 
-    Scaffold {
+    Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,7 +90,7 @@ fun WeightScreen(
                     )
             )
             WeightSection(
-                weight = { state.weight },
+                weight = state.weight,
                 onValueChange = { weight ->
                     onEvent(WeightEvent.WeightValueChange(weight))
                 },
@@ -127,14 +130,14 @@ private fun TopSection(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(R.string.lifestyle_screen_title),
+            text = stringResource(R.string.weight_screen_title),
             color = CalorieTrackerTheme.colors.onBackground,
             style = CalorieTrackerTheme.typography.titleLarge,
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.small))
         Text(
-            text = stringResource(R.string.lifestyle_screen_description),
+            text = stringResource(R.string.weight_screen_description),
             color = CalorieTrackerTheme.colors.onBackgroundVariant,
             style = CalorieTrackerTheme.typography.bodyLarge,
             textAlign = TextAlign.Center
@@ -144,7 +147,7 @@ private fun TopSection(
 
 @Composable
 private fun WeightSection(
-    weight: () -> String,
+    weight: String,
     onValueChange: (weight: String) -> Unit,
     weightUnit: () -> WeightUnit,
     onChangeWeightUnit: (WeightUnit) -> Unit,
@@ -161,7 +164,7 @@ private fun WeightSection(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
                 .align(Alignment.Top),
-            value = weight(),
+            value = weight,
             onValueChange = { newValue ->
                 val newText = newValue.takeIf { input ->
                     input.isEmpty() || input.toFloatOrNull() != null
@@ -269,7 +272,7 @@ private fun BottomSection(
             }
         ) {
             Text(
-                text = stringResource(R.string.text_back),
+                text = stringResource(R.string.back),
                 color = CalorieTrackerTheme.colors.onBackgroundVariant,
                 style = CalorieTrackerTheme.typography.bodyLarge,
             )

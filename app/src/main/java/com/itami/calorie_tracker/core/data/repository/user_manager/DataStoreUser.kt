@@ -4,15 +4,16 @@ import com.itami.calorie_tracker.core.domain.model.Gender
 import com.itami.calorie_tracker.core.domain.model.Lifestyle
 import com.itami.calorie_tracker.core.domain.model.WeightGoal
 import com.itami.calorie_tracker.core.utils.Constants
+import com.itami.calorie_tracker.core.utils.DateTimeUtil
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class DataStoreUser(
     val id: Int = Constants.UNKNOWN_ID,
     val email: String = Constants.EMPTY_STRING,
-    val name: String = Constants.EMPTY_STRING,
+    val name: String = "Username",
     val profilePictureUrl: String? = null,
-    val createdAt: Long = 0L,
+    val createdAt: String = DateTimeUtil.getCurrentDateTimeString(),
     val age: Int = Constants.DEFAULT_AGE,
     val heightCm: Int = Constants.DEFAULT_HEIGHT_CM,
     val weightGrams: Int = Constants.DEFAULT_WEIGHT_GRAMS,
@@ -23,5 +24,6 @@ data class DataStoreUser(
     val dailyProteins: Int = Constants.DEFAULT_DAILY_PROTEINS,
     val dailyFats: Int = Constants.DEFAULT_DAILY_FATS,
     val dailyCarbs: Int = Constants.DEFAULT_DAILY_CARBS,
-    val waterMl: Int = Constants.DEFAULT_WATER_ML,
+    val waterMl: Int = Constants.DEFAULT_DAILY_WATER_ML,
+    val updatedOnServer: Boolean = false,
 )
