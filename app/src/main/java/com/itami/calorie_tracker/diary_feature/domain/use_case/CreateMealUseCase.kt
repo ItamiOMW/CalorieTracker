@@ -8,10 +8,11 @@ import com.itami.calorie_tracker.diary_feature.domain.repository.DiaryRepository
 class CreateMealUseCase(private val diaryRepository: DiaryRepository) {
 
     suspend operator fun invoke(createMeal: CreateMeal): AppResponse<Unit> {
-        if (createMeal.name.isBlank()) {
+        val trimmedMealName = createMeal.name.trim()
+        if (trimmedMealName.isBlank()) {
             return AppResponse.failed(EmptyMealNameException)
         }
-        return diaryRepository.createMeal(createMeal)
+        return diaryRepository.createMeal(createMeal.copy(name = trimmedMealName))
     }
 
 }

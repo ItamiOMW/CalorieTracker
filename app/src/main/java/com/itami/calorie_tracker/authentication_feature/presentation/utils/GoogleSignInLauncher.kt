@@ -15,7 +15,7 @@ import com.itami.calorie_tracker.R
 
 @Composable
 fun OneTapSignInWithGoogle(
-    opened:  Boolean,
+    opened: Boolean,
     clientId: String,
     rememberAccount: Boolean = true,
     nonce: String? = null,
@@ -42,6 +42,7 @@ fun OneTapSignInWithGoogle(
                 CommonStatusCodes.CANCELED -> {
                     onDialogDismissed(null)
                 }
+
                 CommonStatusCodes.NETWORK_ERROR -> {
                     onDialogDismissed(activity.getString(R.string.error_network))
                 }
@@ -90,7 +91,7 @@ private fun signIn(
                 .setFilterByAuthorizedAccounts(rememberAccount)
                 .build()
         )
-        .setAutoSelectEnabled(true)
+        .setAutoSelectEnabled(false)
         .build()
 
     oneTapClient.beginSignIn(signInRequest)

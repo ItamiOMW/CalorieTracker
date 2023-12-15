@@ -159,6 +159,10 @@ class AuthRepositoryImpl @Inject constructor(
             }
 
             is ApiResponse.Error.SerializationError -> {
+                //Supporting offline-first mode
+                if (storedUser.id != Constants.UNKNOWN_ID) {
+                    return AppResponse.success(Unit)
+                }
                 AppResponse.failed(
                     exception = GeneralException,
                     message = context.getString(R.string.error_unknown)

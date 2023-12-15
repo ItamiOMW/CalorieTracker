@@ -28,7 +28,7 @@ sealed class OnboardingPage(
     data object GoalSetting: OnboardingPage(
         lightImageId = R.drawable.illustration_progress_light,
         darkImageId = R.drawable.illustration_progress_dark,
-        titleId = R.string.title_effortless_tracking,
+        titleId = R.string.title_goal_setting,
         descId = R.string.goal_setting_onboarding_description
     )
 

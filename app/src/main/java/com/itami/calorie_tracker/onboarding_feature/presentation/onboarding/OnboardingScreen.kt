@@ -80,6 +80,8 @@ fun OnboardingScreen(
     }
 
     Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground,
         bottomBar = {
             BottomSection(
                 pagerState = pagerState,

@@ -84,6 +84,7 @@ fun WelcomeScreen(
 
     if (showBottomSheet) {
         ModalBottomSheet(
+            containerColor = CalorieTrackerTheme.colors.surfacePrimary,
             sheetState = bottomSheetState,
             onDismissRequest = {
                 showBottomSheet = false
