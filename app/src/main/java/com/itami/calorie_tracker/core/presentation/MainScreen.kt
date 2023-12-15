@@ -2,6 +2,7 @@ package com.itami.calorie_tracker.core.presentation
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -68,10 +69,11 @@ fun MainScreen(
             BottomBar(navState = navState)
         }
     ) {
+        it
         RootNavGraph(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it),
+                .padding(PaddingValues()),
             navState = navState,
             imageLoader = imageLoader,
             startGraphRoute = startRoute,

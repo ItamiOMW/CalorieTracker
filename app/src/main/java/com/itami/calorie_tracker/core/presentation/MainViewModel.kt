@@ -9,9 +9,11 @@ import com.itami.calorie_tracker.authentication_feature.domain.use_case.IsAuthen
 import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
 import com.itami.calorie_tracker.core.utils.AppResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class MainViewModel @Inject constructor(
     private val appSettingsManager: AppSettingsManager,
     private val isAuthenticatedUseCase: IsAuthenticatedUseCase,

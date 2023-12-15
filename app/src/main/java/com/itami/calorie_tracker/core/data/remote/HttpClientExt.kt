@@ -26,6 +26,8 @@ suspend inline fun <reified T, reified E> HttpClient.safeRequest(
         ApiResponse.Error.NetworkError
     } catch (e: SerializationException) {
         ApiResponse.Error.SerializationError
+    } catch (e: Exception) {
+        ApiResponse.Error.SerializationError
     }
 
 suspend inline fun <reified E> ResponseException.errorBody(): E? =

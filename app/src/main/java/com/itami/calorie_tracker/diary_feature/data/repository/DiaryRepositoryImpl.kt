@@ -111,11 +111,11 @@ class DiaryRepositoryImpl @Inject constructor(
 
     override suspend fun loadMealsWithWater(date: String): AppResponse<Unit> {
         val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
-        return when (val response =
-            diaryApiService.getMealsWithWaterIntake(token = token, date = date)) {
+        val utcDate = DateTimeUtil.changeDateTimeStrZone(date, ZoneId.of("UTC"))
+        return when (val response = diaryApiService.getMealsWithWaterIntake(token = token, date = utcDate)) {
             is ApiResponse.Success -> {
                 val meals = response.body.meals
-                insertMeals(meals)
+                insertMealsByDate(meals, utcDate)
                 AppResponse.success(Unit)
             }
 
@@ -206,8 +206,8 @@ class DiaryRepositoryImpl @Inject constructor(
         val createMealRequest = createMeal.toCreateMealRequest()
         return when (val response = diaryApiService.createMeal(token, createMealRequest)) {
             is ApiResponse.Success -> {
-                val mealEntity = response.body
-                insertMeals(listOf(mealEntity))
+                val meal = response.body
+                insertMealById(meal)
                 AppResponse.success(Unit)
             }
 
@@ -236,8 +236,8 @@ class DiaryRepositoryImpl @Inject constructor(
         val updateMealRequest = updateMeal.toUpdateMealRequest()
         return when (val response = diaryApiService.updateMeal(token, mealId, updateMealRequest)) {
             is ApiResponse.Success -> {
-                val mealEntity = response.body
-                insertMeals(listOf(mealEntity))
+                val meal = response.body
+                insertMealById(meal)
                 AppResponse.success(Unit)
             }
 
@@ -289,7 +289,22 @@ class DiaryRepositoryImpl @Inject constructor(
         }
     }
 
-    private suspend fun insertMeals(meals: List<MealResponse>) {
+    private suspend fun insertMealById(meal: MealResponse) {
+        mealDao.deleteMeal(meal.id)
+
+        val mealEntity = meal.toMealEntity()
+        mealDao.insertMeal(mealEntity)
+
+        val foodEntities = meal.consumedFoods.map { it.food.toFoodEntity() }
+        foodDao.insertAll(foodEntities)
+
+        val consumedFoodEntities = meal.consumedFoods.map { it.toConsumedFoodEntity(mealEntity.id) }
+        consumedFoodDao.insertConsumedFoods(consumedFoodEntities)
+    }
+
+    private suspend fun insertMealsByDate(meals: List<MealResponse>, utcDate: String) {
+        mealDao.deleteAllByDate(utcDate)
+
         val mealEntities = meals.map { it.toMealEntity() }
         mealDao.insertMeals(mealEntities)
 

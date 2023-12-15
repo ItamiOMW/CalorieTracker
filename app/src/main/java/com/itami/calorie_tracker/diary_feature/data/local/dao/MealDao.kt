@@ -33,6 +33,9 @@ interface MealDao {
     @Query("DELETE FROM meals WHERE id=:mealId")
     suspend fun deleteMeal(mealId: Int)
 
+    @Query("DELETE FROM meals WHERE SUBSTR(utcCreatedAt, 1, 10) = SUBSTR(:utcDate, 1, 10)")
+    suspend fun deleteAllByDate(utcDate: String)
+
     @Query("DELETE FROM meals")
     suspend fun deleteAll()
 
