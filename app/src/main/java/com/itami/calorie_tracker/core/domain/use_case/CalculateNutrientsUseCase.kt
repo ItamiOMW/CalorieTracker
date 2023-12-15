@@ -16,9 +16,9 @@ class CalculateNutrientsUseCase {
         gender: Gender,
         weightGoal: WeightGoal,
         lifestyle: Lifestyle,
-        carbsRatio: Float = 0.4f,
-        proteinsRatio: Float = 0.3f,
-        fatsRatio: Float = 0.3f,
+        carbsRatio: Float = 0.5f,
+        proteinsRatio: Float = 0.25f,
+        fatsRatio: Float = 0.25f,
     ): DailyNutrientsGoal {
         val weightKgs = WeightUnit.KILOGRAM.gramsToKilograms(grams = weightGrams)
         //Factor in Physical Activity Level (PAL)

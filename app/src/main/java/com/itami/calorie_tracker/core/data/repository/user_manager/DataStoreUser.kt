@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class DataStoreUser(
     val id: Int = Constants.UNKNOWN_ID,
-    val email: String = Constants.EMPTY_STRING,
+    val email: String = "useremail@gmail.com",
     val name: String = "Username",
     val profilePictureUrl: String? = null,
     val createdAt: String = DateTimeUtil.getCurrentDateTimeString(),

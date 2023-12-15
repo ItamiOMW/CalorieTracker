@@ -138,7 +138,11 @@ private fun BottomBar(
                             if (!selected) {
                                 navState.navigateToGraph(
                                     graph = navItem.screenRoute,
-                                    popUpToId = navState.navHostController.graph.findStartDestination().id
+                                    popUpToId = navState.navHostController.graph.findStartDestination().id,
+                                    inclusive = false,
+                                    saveState = true,
+                                    restoreState = true,
+                                    launchSingleTop = true
                                 )
                             }
                         }
