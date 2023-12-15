@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.presentation.components.DialogComponent
-import com.itami.calorie_tracker.core.presentation.navigation.NavResultCallback
+import com.itami.calorie_tracker.core.presentation.navigation.util.NavResultCallback
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.diary_feature.domain.model.ConsumedFood
 import com.itami.calorie_tracker.diary_feature.presentation.components.ConsumedFoodComponent

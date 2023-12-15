@@ -87,6 +87,8 @@ fun SearchFoodScreen(
     }
 
     Scaffold(
+        containerColor = CalorieTrackerTheme.colors.background,
+        contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
             TopBarSection(
                 searchQuery = state.searchQuery,

@@ -12,23 +12,19 @@ class NavigationState(
 
     fun navigateToGraph(
         graph: String,
-        popUpInclusive: Boolean,
+        launchSingleTop: Boolean = true,
+        popUpInclusive: Boolean = false,
+        saveState: Boolean = false,
+        restoreState: Boolean = false,
     ) {
         navHostController.navigate(graph) {
-            popUpTo(navHostController.graph.id) {
-                inclusive = popUpInclusive
-            }
-        }
-    }
-
-    fun navigateToGraph(
-        graph: String,
-        popUpInclusive: Boolean,
-        newStartDestination: String,
-    ) {
-        navHostController.navigate(graph) {
-            popUpTo(navHostController.graph.id) {
-                inclusive = popUpInclusive
+            this.launchSingleTop = launchSingleTop
+            this.restoreState = restoreState
+            navHostController.currentDestination?.id?.let {  id ->
+                popUpTo(id) {
+                    this.inclusive = popUpInclusive
+                    this.saveState = saveState
+                }
             }
         }
     }
@@ -36,10 +32,17 @@ class NavigationState(
     fun navigateToGraph(
         graph: String,
         popUpToId: Int,
+        inclusive: Boolean = false,
+        launchSingleTop: Boolean = true,
+        saveState: Boolean = true,
+        restoreState: Boolean = true,
     ) {
         navHostController.navigate(graph) {
+            this.launchSingleTop = launchSingleTop
+            this.restoreState = restoreState
             popUpTo(popUpToId) {
-                saveState = true
+                this.saveState = saveState
+                this.inclusive = inclusive
             }
         }
     }

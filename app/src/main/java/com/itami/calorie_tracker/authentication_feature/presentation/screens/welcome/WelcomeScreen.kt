@@ -290,7 +290,7 @@ private fun BottomSheetContent(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_mail),
-                    contentDescription = stringResource(R.string.desc_mail_icon),
+                    contentDescription = stringResource(R.string.desc_icon_mail),
                     tint = CalorieTrackerTheme.colors.onBackground,
                     modifier = Modifier.size(20.dp)
                 )

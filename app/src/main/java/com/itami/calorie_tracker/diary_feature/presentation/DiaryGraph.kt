@@ -1,6 +1,12 @@
 package com.itami.calorie_tracker.diary_feature.presentation
 
 import android.net.Uri
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
@@ -11,17 +17,17 @@ import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
-import com.itami.calorie_tracker.core.presentation.navigation.appendParams
-import com.itami.calorie_tracker.core.presentation.navigation.navigateForResult
-import com.itami.calorie_tracker.core.presentation.navigation.popBackStackWithResult
+import com.itami.calorie_tracker.core.presentation.navigation.util.appendParams
+import com.itami.calorie_tracker.core.presentation.navigation.util.navigateForResult
+import com.itami.calorie_tracker.core.presentation.navigation.util.popBackStackWithResult
 import com.itami.calorie_tracker.core.utils.Constants
 import com.itami.calorie_tracker.core.utils.DateTimeUtil
-import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.NewMealScreen
-import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.NewMealViewModel
 import com.itami.calorie_tracker.diary_feature.presentation.screens.diary.DiaryScreen
 import com.itami.calorie_tracker.diary_feature.presentation.screens.diary.DiaryViewModel
 import com.itami.calorie_tracker.diary_feature.presentation.screens.meal.MealScreen
 import com.itami.calorie_tracker.diary_feature.presentation.screens.meal.MealViewModel
+import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.NewMealScreen
+import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.NewMealViewModel
 import com.itami.calorie_tracker.diary_feature.presentation.screens.search_food.SearchFoodScreen
 import com.itami.calorie_tracker.diary_feature.presentation.screens.search_food.SearchFoodViewModel
 
@@ -46,7 +52,12 @@ fun NavGraphBuilder.diaryGraph(
                     navState.navigateToScreen(DiaryGraphScreens.NewMeal.routeWithArgs(encodedDate))
                 },
                 onNavigateToProfile = {
-
+                    navState.navigateToGraph(
+                        graph = Graph.Profile.route,
+                        popUpInclusive = false,
+                        saveState = false,
+                        restoreState = false
+                    )
                 },
                 onShowSnackbar = onShowSnackbar,
                 imageLoader = imageLoader,
@@ -62,7 +73,28 @@ fun NavGraphBuilder.diaryGraph(
                     type = NavType.StringType
                     defaultValue = DateTimeUtil.getCurrentDateTimeString()
                 }
-            )
+            ),
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                ) + fadeIn(animationSpec = tween(750))
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    targetOffset = {
+                        it / 2
+                    }
+                ) + fadeOut(animationSpec = tween(750))
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    targetOffset = {
+                        it / 2
+                    }
+                ) + fadeOut(animationSpec = tween(750))
+            }
         ) {
             val viewModel: NewMealViewModel = hiltViewModel()
             NewMealScreen(
@@ -88,7 +120,28 @@ fun NavGraphBuilder.diaryGraph(
                     type = NavType.IntType
                     defaultValue = Constants.UNKNOWN_ID
                 }
-            )
+            ),
+            enterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                ) + fadeIn(animationSpec = tween(750))
+            },
+            exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    targetOffset = {
+                        it / 2
+                    }
+                ) + fadeOut(animationSpec = tween(750))
+            },
+            popExitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
+                    targetOffset = {
+                        it / 2
+                    }
+                ) + fadeOut(animationSpec = tween(750))
+            }
         ) {
             val viewModel: MealViewModel = hiltViewModel()
             MealScreen(
@@ -107,7 +160,29 @@ fun NavGraphBuilder.diaryGraph(
                 onEvent = viewModel::onEvent
             )
         }
-        composable(route = DiaryGraphScreens.SearchFood.fullRoute) {
+        composable(
+            route = DiaryGraphScreens.SearchFood.fullRoute,
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { it }, animationSpec = tween(350)
+                ) + fadeIn(animationSpec = tween(750))
+            },
+            exitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { it }, animationSpec = tween(350)
+                ) + fadeOut(animationSpec = tween(750))
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { it }, animationSpec = tween(350)
+                ) + fadeOut(animationSpec = tween(750))
+            },
+            popEnterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { -it }, animationSpec = tween(350)
+                ).plus(fadeIn(tween(750)))
+            },
+        ) {
             val viewModel: SearchFoodViewModel = hiltViewModel()
             SearchFoodScreen(
                 onNavigateBack = { consumedFood ->

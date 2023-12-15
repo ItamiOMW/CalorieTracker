@@ -35,7 +35,9 @@ fun NavGraphBuilder.authGraph(
         route = Graph.Auth.route,
         startDestination = AuthGraphScreen.Welcome.fullRoute
     ) {
-        composable(route = AuthGraphScreen.Welcome.fullRoute) {
+        composable(
+            route = AuthGraphScreen.Welcome.fullRoute,
+        ) {
             val viewModel: WelcomeViewModel = hiltViewModel()
             WelcomeScreen(
                 onNavigateToDiary = {
@@ -143,7 +145,7 @@ fun NavGraphBuilder.authGraph(
                 onNavigateToDiary = {
                     navState.navigateToGraph(
                         graph = Graph.Diary.route,
-                        popUpInclusive = true,
+                        popUpInclusive = true
                     )
                 },
                 onShowSnackbar = onShowSnackbar,

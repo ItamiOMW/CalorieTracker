@@ -7,6 +7,7 @@ import coil.ImageLoader
 import com.itami.calorie_tracker.authentication_feature.presentation.authGraph
 import com.itami.calorie_tracker.diary_feature.presentation.diaryGraph
 import com.itami.calorie_tracker.onboarding_feature.presentation.onboardingGraph
+import com.itami.calorie_tracker.profile_feature.presentation.profileGraph
 import com.itami.calorie_tracker.recipes_feature.presentation.recipesGraph
 import com.itami.calorie_tracker.reports_feature.presentation.reportsGraph
 
@@ -46,6 +47,11 @@ fun RootNavGraph(
             onShowSnackbar = onShowSnackbar
         )
         reportsGraph(
+            navState = navState,
+            imageLoader = imageLoader,
+            onShowSnackbar = onShowSnackbar
+        )
+        profileGraph(
             navState = navState,
             imageLoader = imageLoader,
             onShowSnackbar = onShowSnackbar

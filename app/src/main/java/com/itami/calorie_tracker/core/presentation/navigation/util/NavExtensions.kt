@@ -1,4 +1,4 @@
-package com.itami.calorie_tracker.core.presentation.navigation
+package com.itami.calorie_tracker.core.presentation.navigation.util
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
@@ -20,16 +20,16 @@ internal fun String.appendParams(vararg params: Pair<String, Any?>): String {
 //Implementation by https://stackoverflow.com/a/75472964/20298826
 typealias NavResultCallback<T> = (T) -> Unit
 
-private const val NavResultCallbackKey = "NavResultCallbackKey"
+private const val NAV_RESULT_CALLBACK_KEY = "NavResultCallbackKey"
 
 
 fun <T> NavController.setNavResultCallback(callback: NavResultCallback<T>) {
-    currentBackStackEntry?.savedStateHandle?.set(NavResultCallbackKey, callback)
+    currentBackStackEntry?.savedStateHandle?.set(NAV_RESULT_CALLBACK_KEY, callback)
 }
 
 
 fun <T> NavController.getNavResultCallback(): NavResultCallback<T>? {
-    return previousBackStackEntry?.savedStateHandle?.remove(NavResultCallbackKey)
+    return previousBackStackEntry?.savedStateHandle?.remove(NAV_RESULT_CALLBACK_KEY)
 }
 
 
