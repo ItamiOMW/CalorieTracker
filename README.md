@@ -1,6 +1,6 @@
 # Calorie Tracker android app.
 
-Calorie tracker that helps you to track down your diet according to your personal goal.\
+Calorie tracker helps you to keep track of your diet according to your personal goal.\
 [Figma design](https://www.figma.com/file/DJ5C3WdVFr8uNEJFUOAhUU/Calorie-Tracker?type=design&node-id=0%3A1&mode=design&t=rMj47XB9ZHeac5w0-1)\
 [Ktor backend](https://github.com/ItamiOWM/ktor-calorie-tracker)
 
