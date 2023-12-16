@@ -49,15 +49,15 @@ Calorie tracker helps you to keep track of your diet according to your personal 
   ![Search Foods Dialog Light](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/search_foods_dialog_light.png)
 
   ## Screenshots (Dark Theme):
-  ![Welcome Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/welcome_dark.png)
-  ![Start Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/start_dark.png)
-  ![Start Bottomsheet Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/start_bottomsheet_dark.png)
-  ![Goal Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/goal_dark.png)
-  ![Recommended PFC Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/recommended_pfc_dark.png)
-  ![Diary Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/diary_dark.png)
-  ![Profile Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/profile_dark.png)
-  ![Meal Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/meal_dark.png)
-  ![Search Foods Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/search_foods_dark.png)
-  ![Search Foods Dialog Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/light_theme/search_foods_dialog_dark.png)
+  ![Welcome Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/welcome_dark.png)
+  ![Start Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/start_dark.png)
+  ![Start Bottomsheet Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/start_bottomsheet_dark.png)
+  ![Goal Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/goal_dark.png)
+  ![Recommended PFC Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/recommended_pfc_dark.png)
+  ![Diary Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/diary_dark.png)
+  ![Profile Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/profile_dark.png)
+  ![Meal Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/meal_dark.png)
+  ![Search Foods Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/search_foods_dark.png)
+  ![Search Foods Dialog Dark](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/dark_theme/search_foods_dialog_dark.png)
 
   
