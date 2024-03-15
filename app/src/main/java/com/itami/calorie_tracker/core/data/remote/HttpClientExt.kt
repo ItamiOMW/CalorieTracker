@@ -35,4 +35,6 @@ suspend inline fun <reified E> ResponseException.errorBody(): E? =
         response.body()
     } catch (e: SerializationException) {
         null
+    } catch (e: Exception) {
+        null
     }
