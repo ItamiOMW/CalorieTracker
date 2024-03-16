@@ -47,5 +47,4 @@ object AuthModule {
         authRepository: AuthRepository
     ) = LoginGoogleUseCase(authRepository)
 
-
 }

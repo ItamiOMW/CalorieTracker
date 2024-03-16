@@ -51,7 +51,7 @@ import com.itami.calorie_tracker.core.presentation.components.pull_refresh.pullR
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.rememberPullRefreshState
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.core.utils.DateTimeUtil
-import com.itami.calorie_tracker.diary_feature.presentation.components.MealComponent
+import com.itami.calorie_tracker.diary_feature.presentation.components.MealItem
 import com.itami.calorie_tracker.diary_feature.presentation.components.NutrientsComponent
 import com.itami.calorie_tracker.diary_feature.presentation.components.WaterIntakeComponent
 import com.itami.calorie_tracker.diary_feature.presentation.model.ConsumedWaterUi
@@ -228,7 +228,7 @@ private fun MealsSection(
                 userScrollEnabled = false,
             ) {
                 items(items = meals, key = { it.id }) { meal ->
-                    MealComponent(
+                    MealItem(
                         meal = meal,
                         onMealClick = { onMealClick(meal.id) },
                         modifier = Modifier

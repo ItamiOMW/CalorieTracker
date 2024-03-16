@@ -25,7 +25,7 @@ import com.itami.calorie_tracker.diary_feature.presentation.model.MealUi
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun MealComponent(
+fun MealItem(
     meal: MealUi,
     onMealClick: () -> Unit,
     modifier: Modifier = Modifier,
