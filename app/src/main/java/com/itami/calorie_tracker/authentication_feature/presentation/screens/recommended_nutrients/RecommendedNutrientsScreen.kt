@@ -110,7 +110,7 @@ fun RecommendedNutrientsScreen(
 private fun BottomSection(
     modifier: Modifier,
     isLoading: () -> Boolean,
-    onShowGoogleOneTap: (show: Boolean) -> Unit
+    onShowGoogleOneTap: (show: Boolean) -> Unit,
 ) {
     OutlinedButton(
         colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Unspecified),
@@ -187,7 +187,10 @@ private fun TopSection(
             ) {
                 NutrientItem(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.proteins_to_grams, dailyNutrientsGoal().proteinsGoal)
+                    text = stringResource(
+                        R.string.proteins_to_grams,
+                        dailyNutrientsGoal().proteinsGoal
+                    )
                 )
                 NutrientItem(
                     modifier = Modifier.weight(1f),
