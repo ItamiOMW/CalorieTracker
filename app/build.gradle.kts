@@ -92,7 +92,7 @@ dependencies {
     //Kotlinx Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
-    //Compose Navigation
+    //Compose Navigation, keep it 2.7.5 since updating to newer version breaks navigation for some reason
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     //Splash Screen Api
