@@ -8,7 +8,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
@@ -17,7 +16,6 @@ import com.itami.calorie_tracker.profile_feature.presentation.screens.profile.Pr
 
 fun NavGraphBuilder.profileGraph(
     navState: NavigationState,
-    imageLoader: ImageLoader,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
@@ -71,7 +69,6 @@ fun NavGraphBuilder.profileGraph(
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                imageLoader = imageLoader,
                 state = viewModel.state,
                 onEvent = viewModel::onEvent
             )

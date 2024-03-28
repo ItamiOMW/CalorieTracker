@@ -8,14 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 
 fun NavGraphBuilder.reportsGraph(
     navState: NavigationState,
-    imageLoader: ImageLoader,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
@@ -38,6 +36,6 @@ sealed class ReportsGraphScreen(
     vararg params: String,
 ) : Screen(route, *params) {
 
-    data object Reports: ReportsGraphScreen(route = "reports")
+    data object Reports : ReportsGraphScreen(route = "reports")
 
 }

@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -33,7 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.ImageLoader
 import coil.compose.AsyncImage
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.Theme
@@ -50,7 +49,6 @@ fun ProfileScreen(
     onNavigateToContactUs: () -> Unit,
     onNavigateToAboutApp: () -> Unit,
     onNavigateBack: () -> Unit,
-    imageLoader: ImageLoader,
     state: ProfileState,
     onEvent: (ProfileEvent) -> Unit,
 ) {
@@ -72,7 +70,6 @@ fun ProfileScreen(
                 modifier = Modifier
                     .padding(horizontal = CalorieTrackerTheme.padding.large)
                     .wrapContentWidth(),
-                imageLoader = imageLoader,
                 user = state.user
             )
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
@@ -86,7 +83,7 @@ fun ProfileScreen(
                 onWaterIntakeClick = onNavigateToWaterIntake
             )
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .padding(horizontal = CalorieTrackerTheme.padding.small)
                     .fillMaxWidth(),
@@ -120,7 +117,9 @@ private fun OptionsSection(
     ) {
         val isDarkTheme = CalorieTrackerTheme.isDarkTheme
         OptionItem(
-            modifier = Modifier.fillMaxWidth().height(54.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
             optionText = stringResource(R.string.dark_theme),
             leadingIcon = {
                 Icon(
@@ -155,7 +154,9 @@ private fun OptionsSection(
             }
         )
         OptionItem(
-            modifier = Modifier.fillMaxWidth().height(54.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
             optionText = stringResource(R.string.contact_us),
             leadingIcon = {
                 Icon(
@@ -169,7 +170,9 @@ private fun OptionsSection(
             onClick = onNavigateToContactUs
         )
         OptionItem(
-            modifier = Modifier.fillMaxWidth().height(54.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
             optionText = stringResource(R.string.about_app),
             leadingIcon = {
                 Icon(
@@ -183,7 +186,9 @@ private fun OptionsSection(
             onClick = onNavigateToAboutApp
         )
         OptionItem(
-            modifier = Modifier.fillMaxWidth().height(54.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
             optionText = stringResource(R.string.settings),
             leadingIcon = {
                 Icon(
@@ -307,7 +312,6 @@ private fun MainNavigationButtons(
 @Composable
 private fun ProfileInfoSection(
     modifier: Modifier,
-    imageLoader: ImageLoader,
     user: User,
 ) {
     Column(
@@ -317,7 +321,6 @@ private fun ProfileInfoSection(
         AsyncImage(
             model = user.profilePictureUrl,
             contentDescription = stringResource(R.string.desc_user_profile_picture),
-            imageLoader = imageLoader,
             error = painterResource(id = R.drawable.icon_account_circle),
             contentScale = ContentScale.FillBounds,
             modifier = Modifier

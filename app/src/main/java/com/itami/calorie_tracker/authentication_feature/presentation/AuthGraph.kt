@@ -4,7 +4,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import coil.ImageLoader
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.age.AgeScreen
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.age.AgeViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.gender.GenderScreen
@@ -28,7 +27,6 @@ import com.itami.calorie_tracker.core.presentation.navigation.Screen
 
 fun NavGraphBuilder.authGraph(
     navState: NavigationState,
-    imageLoader: ImageLoader,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(

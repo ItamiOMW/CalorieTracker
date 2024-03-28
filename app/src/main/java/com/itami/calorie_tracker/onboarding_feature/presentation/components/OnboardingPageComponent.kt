@@ -15,13 +15,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import coil.ImageLoader
 import coil.compose.AsyncImage
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 
@@ -29,7 +27,6 @@ import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 fun OnboardingPageComponent(
     onboardingPage: OnboardingPage,
     isDarkTheme: Boolean,
-    imageLoader: ImageLoader,
     modifier: Modifier = Modifier,
 ) {
     var columnSize by remember { mutableStateOf(IntSize.Zero) }
@@ -41,7 +38,6 @@ fun OnboardingPageComponent(
         AsyncImage(
             model = if (isDarkTheme) onboardingPage.darkImageId else onboardingPage.lightImageId,
             contentDescription = stringResource(id = onboardingPage.titleId),
-            imageLoader = imageLoader,
             modifier = Modifier
                 .height(230.dp)
         )
@@ -75,7 +71,6 @@ fun OnboardingPageComponentPreview() {
         OnboardingPageComponent(
             onboardingPage = OnboardingPage.Welcoming,
             isDarkTheme = false,
-            imageLoader = ImageLoader(LocalContext.current),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(

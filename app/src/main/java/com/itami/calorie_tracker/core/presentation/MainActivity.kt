@@ -5,18 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.rememberNavigationState
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    @Inject
-    lateinit var imageLoader: ImageLoader
 
     private val mainViewModel by viewModels<MainViewModel>()
 
@@ -37,7 +32,6 @@ class MainActivity : ComponentActivity() {
                 MainScreen(
                     startRoute = startRoute,
                     navState = navState,
-                    imageLoader = imageLoader,
                 )
             }
         }

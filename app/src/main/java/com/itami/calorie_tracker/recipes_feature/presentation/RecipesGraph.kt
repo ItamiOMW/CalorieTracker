@@ -8,14 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 
 fun NavGraphBuilder.recipesGraph(
     navState: NavigationState,
-    imageLoader: ImageLoader,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(

@@ -13,7 +13,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
@@ -34,7 +33,6 @@ import com.itami.calorie_tracker.diary_feature.presentation.screens.search_food.
 
 fun NavGraphBuilder.diaryGraph(
     navState: NavigationState,
-    imageLoader: ImageLoader,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
@@ -60,7 +58,6 @@ fun NavGraphBuilder.diaryGraph(
                     )
                 },
                 onShowSnackbar = onShowSnackbar,
-                imageLoader = imageLoader,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
                 onEvent = viewModel::onEvent

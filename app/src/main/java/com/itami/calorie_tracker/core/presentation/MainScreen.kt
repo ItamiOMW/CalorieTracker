@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
-import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.components.animated_bottom_bar.AnimatedNavigationBar
 import com.itami.calorie_tracker.core.presentation.components.animated_bottom_bar.BottomNavItem
 import com.itami.calorie_tracker.core.presentation.components.animated_bottom_bar.animation.ball_trajectory.StraightBall
@@ -38,7 +37,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
     navState: NavigationState,
-    imageLoader: ImageLoader,
     startRoute: String = Graph.Auth.route,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -75,7 +73,6 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(PaddingValues()),
             navState = navState,
-            imageLoader = imageLoader,
             startGraphRoute = startRoute,
             onShowSnackbar = { message ->
                 coroutineScope.launch {

@@ -41,7 +41,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
-import coil.ImageLoader
 import coil.compose.AsyncImage
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.DailyNutrientsGoal
@@ -66,7 +65,6 @@ fun DiaryScreen(
     onNavigateToNewMeal: (datetime: String) -> Unit,
     onNavigateToProfile: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    imageLoader: ImageLoader,
     state: DiaryState,
     uiEvent: Flow<DiaryUiEvent>,
     onEvent: (event: DiaryEvent) -> Unit,
@@ -107,7 +105,6 @@ fun DiaryScreen(
         topBar = {
             if (state.user != null) {
                 TopBarSection(
-                    imageLoader = imageLoader,
                     user = state.user,
                     date = state.date,
                     onShowDatePicker = { show ->
@@ -329,7 +326,6 @@ private fun NutrientsSection(
 
 @Composable
 private fun TopBarSection(
-    imageLoader: ImageLoader,
     user: User,
     date: ZonedDateTime,
     onShowDatePicker: (show: Boolean) -> Unit,
@@ -364,7 +360,6 @@ private fun TopBarSection(
             AsyncImage(
                 model = user.profilePictureUrl,
                 contentDescription = stringResource(R.string.desc_user_profile_picture),
-                imageLoader = imageLoader,
                 error = painterResource(id = R.drawable.icon_account_circle),
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier

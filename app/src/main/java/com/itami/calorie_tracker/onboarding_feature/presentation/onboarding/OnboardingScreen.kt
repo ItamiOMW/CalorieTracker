@@ -21,7 +21,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -38,7 +37,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.ImageLoader
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.onboarding_feature.presentation.components.OnboardingPage
@@ -46,11 +44,10 @@ import com.itami.calorie_tracker.onboarding_feature.presentation.components.Onbo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(
     onNavigateToAuthGraph: () -> Unit,
-    imageLoader: ImageLoader,
     onEvent: (OnboardingEvent) -> Unit,
     uiEvent: Flow<OnboardingUiEvent>,
 ) {
@@ -105,9 +102,7 @@ fun OnboardingScreen(
             OnboardingPager(
                 pagerState = pagerState,
                 pages = pages,
-                imageLoader = imageLoader,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -118,7 +113,6 @@ fun OnboardingScreen(
 private fun OnboardingPager(
     pagerState: PagerState,
     pages: List<OnboardingPage>,
-    imageLoader: ImageLoader,
     modifier: Modifier,
 ) {
     Column(
@@ -139,7 +133,6 @@ private fun OnboardingPager(
                     ),
                 onboardingPage = pages[page],
                 isDarkTheme = CalorieTrackerTheme.isDarkTheme,
-                imageLoader = imageLoader
             )
         }
         Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))

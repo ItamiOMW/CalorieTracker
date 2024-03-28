@@ -4,7 +4,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import coil.ImageLoader
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
@@ -14,7 +13,6 @@ import com.itami.calorie_tracker.onboarding_feature.presentation.onboarding.Onbo
 
 fun NavGraphBuilder.onboardingGraph(
     navState: NavigationState,
-    imageLoader: ImageLoader,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
@@ -32,7 +30,6 @@ fun NavGraphBuilder.onboardingGraph(
                         popUpInclusive = true
                     )
                 },
-                imageLoader = imageLoader,
                 onEvent = viewModel::onEvent,
                 uiEvent = viewModel.uiEvent
             )
