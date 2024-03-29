@@ -9,8 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.authentication_feature.domain.model.CreateUserGoogle
 import com.itami.calorie_tracker.authentication_feature.domain.use_case.RegisterGoogleUseCase
-import com.itami.calorie_tracker.core.domain.exceptions.NetworkException
-import com.itami.calorie_tracker.core.domain.exceptions.UnauthorizedException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
 import com.itami.calorie_tracker.core.domain.model.User
 import com.itami.calorie_tracker.core.domain.repository.UserManager
 import com.itami.calorie_tracker.core.domain.use_case.CalculateNutrientsUseCase
@@ -102,24 +101,27 @@ class RecommendedNutrientsViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = response.exception, message = response.message)
+                    handleException(appException = response.appException, message = response.message)
                 }
             }
             state = state.copy(isLoading = false)
         }
     }
 
-    private fun handleException(exception: Exception, message: String?) {
-        when (exception) {
-            is NetworkException -> {
-                sendUiEvent(RecommendedNutrientUiEvent.ShowSnackbar(application.getString(R.string.error_network)))
-            }
-
-            is UnauthorizedException -> {
+    private fun handleException(appException: AppException, message: String?) {
+        when (appException) {
+            is AppException.NetworkException -> {
                 sendUiEvent(
                     RecommendedNutrientUiEvent.ShowSnackbar(
-                        message = message
-                            ?: application.getString(R.string.error_google_unauthorized)
+                        application.getString(R.string.error_network)
+                    )
+                )
+            }
+
+            is AppException.UnauthorizedException -> {
+                sendUiEvent(
+                    RecommendedNutrientUiEvent.ShowSnackbar(
+                        message = message ?: application.getString(R.string.error_google_unauthorized)
                     )
                 )
             }

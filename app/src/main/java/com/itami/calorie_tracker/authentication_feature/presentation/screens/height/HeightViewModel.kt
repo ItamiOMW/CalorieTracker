@@ -7,7 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.R
-import com.itami.calorie_tracker.core.domain.exceptions.InvalidHeightException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
+import com.itami.calorie_tracker.core.domain.exceptions.UserInfoException
 import com.itami.calorie_tracker.core.domain.model.HeightUnit
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
 import com.itami.calorie_tracker.core.domain.repository.UserManager
@@ -84,16 +85,16 @@ class HeightViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = result.exception, message = result.message)
+                    handleException(appException = result.appException, message = result.message)
                 }
             }
             state = state.copy(isLoading = false)
         }
     }
 
-    private fun handleException(exception: Exception, message: String?) {
-        when (exception) {
-            is InvalidHeightException -> {
+    private fun handleException(appException: AppException, message: String?) {
+        when (appException) {
+            is UserInfoException.InvalidHeightException -> {
                 sendUiEvent(
                     uiEvent = HeightUiEvent.ShowSnackbar(
                         application.getString(R.string.error_invalid_height)

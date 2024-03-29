@@ -8,8 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.authentication_feature.domain.use_case.LoginGoogleUseCase
-import com.itami.calorie_tracker.core.domain.exceptions.NetworkException
-import com.itami.calorie_tracker.core.domain.exceptions.UnauthorizedException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
 import com.itami.calorie_tracker.core.utils.AppResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -56,20 +55,24 @@ class WelcomeViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = response.exception, message = response.message)
+                    handleException(appException = response.appException, message = response.message)
                 }
             }
             state = state.copy(isLoading = false)
         }
     }
 
-    private fun handleException(exception: Exception, message: String?) {
-        when (exception) {
-            is NetworkException -> {
-                sendUiEvent(WelcomeUiEvent.ShowSnackbar(application.getString(R.string.error_network)))
+    private fun handleException(appException: AppException, message: String?) {
+        when (appException) {
+            is AppException.NetworkException -> {
+                sendUiEvent(
+                    WelcomeUiEvent.ShowSnackbar(
+                        application.getString(R.string.error_network)
+                    )
+                )
             }
 
-            is UnauthorizedException -> {
+            is AppException.UnauthorizedException -> {
                 sendUiEvent(
                     WelcomeUiEvent.ShowSnackbar(
                         message = message ?: application.getString(R.string.error_google_unauthorized)

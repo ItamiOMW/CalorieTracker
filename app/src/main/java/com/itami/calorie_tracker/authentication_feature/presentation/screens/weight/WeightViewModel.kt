@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.R
-import com.itami.calorie_tracker.core.domain.exceptions.InvalidWeightException
+import com.itami.calorie_tracker.core.domain.exceptions.UserInfoException
 import com.itami.calorie_tracker.core.domain.model.WeightUnit
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
 import com.itami.calorie_tracker.core.domain.repository.UserManager
@@ -130,7 +130,7 @@ class WeightViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = result.exception, message = result.message)
+                    handleException(exception = result.appException, message = result.message)
                 }
             }
             state = state.copy(isLoading = false)
@@ -139,7 +139,7 @@ class WeightViewModel @Inject constructor(
 
     private fun handleException(exception: Exception, message: String?) {
         when (exception) {
-            is InvalidWeightException -> {
+            is UserInfoException.InvalidWeightException -> {
                 sendUiEvent(
                     uiEvent = WeightUiEvent.ShowSnackbar(
                         message = application.getString(R.string.error_invalid_weight)

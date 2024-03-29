@@ -21,7 +21,7 @@ class SetWeightUseCase(private val userManager: UserManager) {
         }
         val weightException = ValidationUtil.validateWeight(weightGrams = weightGrams)
         if (weightException != null) {
-            return AppResponse.failed(exception = weightException)
+            return AppResponse.failed(appException = weightException)
         }
         userManager.setWeight(weightGrams = weightGrams)
         return AppResponse.success(Unit)

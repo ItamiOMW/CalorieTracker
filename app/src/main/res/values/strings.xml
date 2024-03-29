@@ -133,4 +133,9 @@
     <string name="desc_icon_info">Info icon</string>
     <string name="settings">Settings</string>
     <string name="desc_icon_settings">Settings icon</string>
+    <string name="placeholder_search_for_recipes">Search for recipes..</string>
+    <string name="desc_search_icon">Search icon</string>
+    <string name="desc_filter_icon">Filter icon</string>
+    <string name="error_too_many_requests">Too many requests, try again later.</string>
+    <string name="error_server">Server failed, try again later.</string>
 </resources>

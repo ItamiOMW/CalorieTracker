@@ -9,10 +9,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.R
-import com.itami.calorie_tracker.core.domain.exceptions.NetworkException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
 import com.itami.calorie_tracker.core.utils.AppResponse
 import com.itami.calorie_tracker.core.utils.DateTimeUtil
-import com.itami.calorie_tracker.diary_feature.domain.exceptions.EmptyMealNameException
+import com.itami.calorie_tracker.diary_feature.domain.exceptions.MealException
 import com.itami.calorie_tracker.diary_feature.domain.model.ConsumedFood
 import com.itami.calorie_tracker.diary_feature.domain.model.CreateConsumedFood
 import com.itami.calorie_tracker.diary_feature.domain.model.CreateMeal
@@ -41,10 +41,11 @@ class NewMealViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            savedStateHandle.get<String>(DiaryGraphScreens.ENCODED_DATETIME_ARG)?.let { encodedDateTime ->
-                val datetime = Uri.decode(encodedDateTime)
-                this@NewMealViewModel.datetime = datetime
-            } ?: throw Exception("Date argument was not passed.")
+            savedStateHandle.get<String>(DiaryGraphScreens.ENCODED_DATETIME_ARG)
+                ?.let { encodedDateTime ->
+                    val datetime = Uri.decode(encodedDateTime)
+                    this@NewMealViewModel.datetime = datetime
+                } ?: throw Exception("Date argument was not passed.")
         }
     }
 
@@ -140,21 +141,21 @@ class NewMealViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = result.exception, message = result.message)
+                    handleException(appException = result.appException, message = result.message)
                 }
             }
             state = state.copy(isLoading = false)
         }
     }
 
-    private fun handleException(exception: Exception, message: String?) {
-        when (exception) {
-            is NetworkException -> {
+    private fun handleException(appException: AppException, message: String?) {
+        when (appException) {
+            is AppException.NetworkException -> {
                 val messageError = application.getString(R.string.error_network)
                 sendUiEvent(NewMealUiEvent.ShowSnackbar(messageError))
             }
 
-            is EmptyMealNameException -> {
+            is MealException.EmptyMealNameException -> {
                 val messageError = application.getString(R.string.error_empty_meal_name)
                 sendUiEvent(NewMealUiEvent.ShowSnackbar(messageError))
             }

@@ -9,7 +9,7 @@ class SetHeightUseCase(private val userManager: UserManager) {
     suspend operator fun invoke(heightCm: Int): AppResponse<Unit> {
         val heightException = ValidationUtil.validateHeight(heightCm = heightCm)
         if (heightException != null) {
-            return AppResponse.failed(exception = heightException)
+            return AppResponse.failed(appException = heightException)
         }
         userManager.setHeight(heightCm = heightCm)
         return AppResponse.success(Unit)

@@ -19,9 +19,9 @@ suspend inline fun <reified T, reified E> HttpClient.safeRequest(
         val response = request { block() }
         ApiResponse.Success(response.body())
     } catch (e: ClientRequestException) {
-        ApiResponse.Error.HttpError(e.response.status.value, e.errorBody())
+        ApiResponse.Error.HttpClientError(e.response.status.value, e.errorBody())
     } catch (e: ServerResponseException) {
-        ApiResponse.Error.HttpError(e.response.status.value, e.errorBody())
+        ApiResponse.Error.HttpServerError(e.response.status.value, e.errorBody())
     } catch (e: IOException) {
         ApiResponse.Error.NetworkError
     } catch (e: SerializationException) {

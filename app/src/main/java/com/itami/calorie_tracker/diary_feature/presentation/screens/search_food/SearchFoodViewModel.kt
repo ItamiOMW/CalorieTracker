@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.R
-import com.itami.calorie_tracker.core.domain.exceptions.NetworkException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
 import com.itami.calorie_tracker.core.domain.paginator.DefaultPaginator
 import com.itami.calorie_tracker.diary_feature.domain.model.ConsumedFood
 import com.itami.calorie_tracker.diary_feature.domain.use_case.SearchFoodUseCase
@@ -106,9 +106,9 @@ class SearchFoodViewModel @Inject constructor(
         }
     }
 
-    private fun handleException(exception: Exception, message: String?) {
-        when (exception) {
-            is NetworkException -> {
+    private fun handleException(appException: AppException, message: String?) {
+        when (appException) {
+            is AppException.NetworkException -> {
                 val messageError = application.getString(R.string.error_network)
                 sendUiEvent(SearchFoodUiEvent.ShowSnackbar(messageError))
             }

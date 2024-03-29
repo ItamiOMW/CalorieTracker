@@ -1,5 +1,6 @@
 package com.itami.calorie_tracker.core.domain.paginator
 
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
 import com.itami.calorie_tracker.core.utils.AppResponse
 
 class DefaultPaginator<Key, Item>(
@@ -7,7 +8,7 @@ class DefaultPaginator<Key, Item>(
     private inline val onLoadUpdated: (Boolean) -> Unit,
     private inline val onRequest: suspend (nextKey: Key) -> AppResponse<List<Item>>,
     private inline val getNextKey: suspend (List<Item>) -> Key,
-    private inline val onError: suspend (Exception) -> Unit,
+    private inline val onError: suspend (AppException) -> Unit,
     private inline val onSuccess: suspend (items: List<Item>, newKey: Key) -> Unit,
 ) : Paginator {
 
@@ -32,7 +33,7 @@ class DefaultPaginator<Key, Item>(
             }
 
             is AppResponse.Failed -> {
-                onError(result.exception)
+                onError(result.appException)
                 onLoadUpdated(false)
                 return
             }

@@ -4,9 +4,7 @@ import android.content.Context
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.data.auth.AuthManager
 import com.itami.calorie_tracker.core.data.remote.response.ApiResponse
-import com.itami.calorie_tracker.core.domain.exceptions.GeneralException
-import com.itami.calorie_tracker.core.domain.exceptions.NetworkException
-import com.itami.calorie_tracker.core.domain.exceptions.UnauthorizedException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
 import com.itami.calorie_tracker.core.utils.AppResponse
 import com.itami.calorie_tracker.core.utils.DateTimeUtil
 import com.itami.calorie_tracker.diary_feature.data.local.dao.ConsumedFoodDao
@@ -35,6 +33,7 @@ import com.itami.calorie_tracker.diary_feature.domain.model.Meal
 import com.itami.calorie_tracker.diary_feature.domain.model.UpdateMeal
 import com.itami.calorie_tracker.diary_feature.domain.repository.DiaryRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.ZoneId
@@ -74,7 +73,7 @@ class DiaryRepositoryImpl @Inject constructor(
         page: Int,
         pageSize: Int,
     ): AppResponse<List<Food>> {
-        val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
+        val token = jwtToken ?: return AppResponse.failed(AppException.UnauthorizedException)
         return when (
             val response = diaryApiService.searchFoods(
                 token = token,
@@ -89,20 +88,38 @@ class DiaryRepositoryImpl @Inject constructor(
                 AppResponse.success(foods)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
+                when(response.code) {
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
+                        )
+                    }
+
+                    else -> {
+                        AppResponse.failed(
+                            AppException.GeneralException,
+                            message = context.getString(R.string.error_unknown)
+                        )
+                    }
+                }
+            }
+
+            is ApiResponse.Error.HttpServerError -> {
                 AppResponse.failed(
-                    GeneralException,
-                    message = context.getString(R.string.error_unknown)
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
                 )
             }
 
             is ApiResponse.Error.NetworkError -> {
-                AppResponse.failed(NetworkException)
+                AppResponse.failed(AppException.NetworkException)
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    GeneralException,
+                    AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }
@@ -110,7 +127,7 @@ class DiaryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun loadMealsWithWater(date: String): AppResponse<Unit> {
-        val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
+        val token = jwtToken ?: return AppResponse.failed(AppException.UnauthorizedException)
         val utcDate = DateTimeUtil.changeDateTimeStrZone(date, ZoneId.of("UTC"))
         return when (val response = diaryApiService.getMealsWithWaterIntake(token = token, date = utcDate)) {
             is ApiResponse.Success -> {
@@ -119,20 +136,38 @@ class DiaryRepositoryImpl @Inject constructor(
                 AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
+                return when(response.code) {
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
+                        )
+                    }
+
+                    else -> {
+                        AppResponse.failed(
+                            AppException.GeneralException,
+                            message = context.getString(R.string.error_unknown)
+                        )
+                    }
+                }
+            }
+
+            is ApiResponse.Error.HttpServerError -> {
                 AppResponse.failed(
-                    GeneralException,
-                    message = context.getString(R.string.error_unknown)
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
                 )
             }
 
             is ApiResponse.Error.NetworkError -> {
-                AppResponse.failed(NetworkException)
+                AppResponse.failed(AppException.NetworkException)
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    GeneralException,
+                    AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }
@@ -140,7 +175,7 @@ class DiaryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addConsumedWater(waterMl: Int, date: String): AppResponse<Unit> {
-        val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
+        val token = jwtToken ?: return AppResponse.failed(AppException.UnauthorizedException)
         val addConsumedWaterRequest = AddConsumedWaterRequest(date, waterMl)
         return when (val response =
             diaryApiService.addConsumedWater(token, addConsumedWaterRequest)) {
@@ -150,20 +185,38 @@ class DiaryRepositoryImpl @Inject constructor(
                 AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
+                return when(response.code) {
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
+                        )
+                    }
+
+                    else -> {
+                        AppResponse.failed(
+                            AppException.GeneralException,
+                            message = context.getString(R.string.error_unknown)
+                        )
+                    }
+                }
+            }
+
+            is ApiResponse.Error.HttpServerError -> {
                 AppResponse.failed(
-                    GeneralException,
-                    message = context.getString(R.string.error_unknown)
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
                 )
             }
 
             is ApiResponse.Error.NetworkError -> {
-                AppResponse.failed(NetworkException)
+                AppResponse.failed(AppException.NetworkException)
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    GeneralException,
+                    AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }
@@ -171,7 +224,7 @@ class DiaryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun removeConsumedWater(waterMl: Int, date: String): AppResponse<Unit> {
-        val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
+        val token = jwtToken ?: return AppResponse.failed(AppException.UnauthorizedException)
         val removeConsumedWaterRequest = RemoveConsumedWaterRequest(date, waterMl)
         return when (val response =
             diaryApiService.removeConsumedWater(token, removeConsumedWaterRequest)) {
@@ -181,20 +234,38 @@ class DiaryRepositoryImpl @Inject constructor(
                 AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
+                return when(response.code) {
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
+                        )
+                    }
+
+                    else -> {
+                        AppResponse.failed(
+                            AppException.GeneralException,
+                            message = context.getString(R.string.error_unknown)
+                        )
+                    }
+                }
+            }
+
+            is ApiResponse.Error.HttpServerError -> {
                 AppResponse.failed(
-                    GeneralException,
-                    message = context.getString(R.string.error_unknown)
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
                 )
             }
 
             is ApiResponse.Error.NetworkError -> {
-                AppResponse.failed(NetworkException)
+                AppResponse.failed(AppException.NetworkException)
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    GeneralException,
+                    AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }
@@ -202,7 +273,7 @@ class DiaryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createMeal(createMeal: CreateMeal): AppResponse<Unit> {
-        val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
+        val token = jwtToken ?: return AppResponse.failed(AppException.UnauthorizedException)
         val createMealRequest = createMeal.toCreateMealRequest()
         return when (val response = diaryApiService.createMeal(token, createMealRequest)) {
             is ApiResponse.Success -> {
@@ -211,20 +282,38 @@ class DiaryRepositoryImpl @Inject constructor(
                 AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
+                return when(response.code) {
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
+                        )
+                    }
+
+                    else -> {
+                        AppResponse.failed(
+                            AppException.GeneralException,
+                            message = context.getString(R.string.error_unknown)
+                        )
+                    }
+                }
+            }
+
+            is ApiResponse.Error.HttpServerError -> {
                 AppResponse.failed(
-                    GeneralException,
-                    message = context.getString(R.string.error_unknown)
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
                 )
             }
 
             is ApiResponse.Error.NetworkError -> {
-                AppResponse.failed(NetworkException)
+                AppResponse.failed(AppException.NetworkException)
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    GeneralException,
+                    AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }
@@ -232,7 +321,7 @@ class DiaryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateMeal(mealId: Int, updateMeal: UpdateMeal): AppResponse<Unit> {
-        val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
+        val token = jwtToken ?: return AppResponse.failed(AppException.UnauthorizedException)
         val updateMealRequest = updateMeal.toUpdateMealRequest()
         return when (val response = diaryApiService.updateMeal(token, mealId, updateMealRequest)) {
             is ApiResponse.Success -> {
@@ -241,20 +330,38 @@ class DiaryRepositoryImpl @Inject constructor(
                 AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
+                return when(response.code) {
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
+                        )
+                    }
+
+                    else -> {
+                        AppResponse.failed(
+                            AppException.GeneralException,
+                            message = context.getString(R.string.error_unknown)
+                        )
+                    }
+                }
+            }
+
+            is ApiResponse.Error.HttpServerError -> {
                 AppResponse.failed(
-                    GeneralException,
-                    message = context.getString(R.string.error_unknown)
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
                 )
             }
 
             is ApiResponse.Error.NetworkError -> {
-                AppResponse.failed(NetworkException)
+                AppResponse.failed(AppException.NetworkException)
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    GeneralException,
+                    AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }
@@ -262,27 +369,45 @@ class DiaryRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteMeal(mealId: Int): AppResponse<Unit> {
-        val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
-        return when (diaryApiService.deleteMeal(token, mealId)) {
+        val token = jwtToken ?: return AppResponse.failed(AppException.UnauthorizedException)
+        return when (val response = diaryApiService.deleteMeal(token, mealId)) {
             is ApiResponse.Success -> {
                 mealDao.deleteMeal(mealId)
                 AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
+                return when(response.code) {
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
+                        )
+                    }
+
+                    else -> {
+                        AppResponse.failed(
+                            AppException.GeneralException,
+                            message = context.getString(R.string.error_unknown)
+                        )
+                    }
+                }
+            }
+
+            is ApiResponse.Error.HttpServerError -> {
                 AppResponse.failed(
-                    GeneralException,
-                    message = context.getString(R.string.error_unknown)
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
                 )
             }
 
             is ApiResponse.Error.NetworkError -> {
-                AppResponse.failed(NetworkException)
+                AppResponse.failed(AppException.NetworkException)
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    GeneralException,
+                    AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }

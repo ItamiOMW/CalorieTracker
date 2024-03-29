@@ -7,7 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.R
-import com.itami.calorie_tracker.core.domain.exceptions.InvalidAgeException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
+import com.itami.calorie_tracker.core.domain.exceptions.UserInfoException
 import com.itami.calorie_tracker.core.domain.repository.UserManager
 import com.itami.calorie_tracker.core.domain.use_case.SetAgeUseCase
 import com.itami.calorie_tracker.core.utils.AppResponse
@@ -68,16 +69,16 @@ class AgeViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = result.exception, message = result.message)
+                    handleException(appException = result.appException, message = result.message)
                 }
             }
             state = state.copy(isLoading = false)
         }
     }
 
-    private fun handleException(exception: Exception, message: String?) {
-        when (exception) {
-            is InvalidAgeException -> {
+    private fun handleException(appException: AppException, message: String?) {
+        when (appException) {
+            is UserInfoException.InvalidAgeException -> {
                 sendUiEvent(
                     uiEvent = AgeUiEvent.ShowSnackbar(
                         message = application.getString(R.string.error_invalid_age)

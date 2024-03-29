@@ -10,9 +10,7 @@ import com.itami.calorie_tracker.authentication_feature.domain.repository.AuthRe
 import com.itami.calorie_tracker.core.data.auth.AuthManager
 import com.itami.calorie_tracker.core.data.mapper.toUser
 import com.itami.calorie_tracker.core.data.remote.response.ApiResponse
-import com.itami.calorie_tracker.core.domain.exceptions.GeneralException
-import com.itami.calorie_tracker.core.domain.exceptions.NetworkException
-import com.itami.calorie_tracker.core.domain.exceptions.UnauthorizedException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
 import com.itami.calorie_tracker.core.domain.repository.UserManager
 import com.itami.calorie_tracker.core.utils.AppResponse
 import com.itami.calorie_tracker.core.utils.Constants
@@ -39,34 +37,48 @@ class AuthRepositoryImpl @Inject constructor(
                 return AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
                 when (response.code) {
                     HttpStatusCode.Conflict.value -> {
                         AppResponse.failed(
-                            exception = GeneralException,
+                            appException = AppException.GeneralException,
                             message = context.getString(R.string.error_user_already_exists)
+                        )
+                    }
+
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
                         )
                     }
 
                     else -> {
                         AppResponse.failed(
-                            exception = GeneralException,
+                            appException = AppException.GeneralException,
                             message = response.errorBody?.errorMessage
                         )
                     }
                 }
             }
 
+            is ApiResponse.Error.HttpServerError -> {
+                AppResponse.failed(
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
+                )
+            }
+
             is ApiResponse.Error.NetworkError -> {
                 AppResponse.failed(
-                    exception = NetworkException,
+                    appException = AppException.NetworkException,
                     message = context.getString(R.string.error_network)
                 )
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    exception = GeneralException,
+                    appException = AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }
@@ -83,34 +95,48 @@ class AuthRepositoryImpl @Inject constructor(
                 return AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
                 when (response.code) {
                     HttpStatusCode.Unauthorized.value -> {
                         AppResponse.failed(
-                            exception = UnauthorizedException,
+                            appException = AppException.UnauthorizedException,
                             message = context.getString(R.string.error_google_unauthorized)
+                        )
+                    }
+
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
                         )
                     }
 
                     else -> {
                         AppResponse.failed(
-                            exception = GeneralException,
+                            appException = AppException.GeneralException,
                             message = response.errorBody?.errorMessage
                         )
                     }
                 }
             }
 
+            is ApiResponse.Error.HttpServerError -> {
+                AppResponse.failed(
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
+                )
+            }
+
             is ApiResponse.Error.NetworkError -> {
                 AppResponse.failed(
-                    exception = NetworkException,
+                    appException = AppException.NetworkException,
                     message = context.getString(R.string.error_network)
                 )
             }
 
             is ApiResponse.Error.SerializationError -> {
                 AppResponse.failed(
-                    exception = GeneralException,
+                    appException = AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }
@@ -118,7 +144,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isAuthenticated(): AppResponse<Unit> {
-        val token = jwtToken ?: return AppResponse.failed(UnauthorizedException)
+        val token = jwtToken ?: return AppResponse.failed(AppException.UnauthorizedException)
         val storedUser = userManager.getUser()
         return when (val response = authApiService.authenticate(token = token)) {
             is ApiResponse.Success -> {
@@ -127,24 +153,38 @@ class AuthRepositoryImpl @Inject constructor(
                 return AppResponse.success(Unit)
             }
 
-            is ApiResponse.Error.HttpError -> {
+            is ApiResponse.Error.HttpClientError -> {
                 when (response.code) {
                     HttpStatusCode.Unauthorized.value -> {
                         userManager.setUser(null)
                         authManager.setToken(null)
                         AppResponse.failed(
-                            exception = UnauthorizedException,
+                            appException = AppException.UnauthorizedException,
                             message = context.getString(R.string.error_google_unauthorized)
+                        )
+                    }
+
+                    HttpStatusCode.TooManyRequests.value -> {
+                        AppResponse.failed(
+                            appException = AppException.TooManyRequestsException,
+                            message = context.getString(R.string.error_too_many_requests)
                         )
                     }
 
                     else -> {
                         AppResponse.failed(
-                            exception = GeneralException,
+                            appException = AppException.GeneralException,
                             message = response.errorBody?.errorMessage
                         )
                     }
                 }
+            }
+
+            is ApiResponse.Error.HttpServerError -> {
+                AppResponse.failed(
+                    appException = AppException.ServerError,
+                    message = context.getString(R.string.error_server)
+                )
             }
 
             is ApiResponse.Error.NetworkError -> {
@@ -153,7 +193,7 @@ class AuthRepositoryImpl @Inject constructor(
                     return AppResponse.success(Unit)
                 }
                 AppResponse.failed(
-                    exception = NetworkException,
+                    appException = AppException.NetworkException,
                     message = context.getString(R.string.error_network)
                 )
             }
@@ -164,7 +204,7 @@ class AuthRepositoryImpl @Inject constructor(
                     return AppResponse.success(Unit)
                 }
                 AppResponse.failed(
-                    exception = GeneralException,
+                    appException = AppException.GeneralException,
                     message = context.getString(R.string.error_unknown)
                 )
             }

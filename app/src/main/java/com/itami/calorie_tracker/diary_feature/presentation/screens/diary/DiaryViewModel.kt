@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.R
-import com.itami.calorie_tracker.core.domain.exceptions.NetworkException
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
 import com.itami.calorie_tracker.core.domain.repository.UserManager
 import com.itami.calorie_tracker.core.utils.AppResponse
@@ -107,7 +107,7 @@ class DiaryViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = result.exception, message = result.message)
+                    handleException(appException = result.appException, message = result.message)
                 }
             }
             state = state.copy(isLoading = false)
@@ -123,7 +123,7 @@ class DiaryViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = result.exception, message = result.message)
+                    handleException(appException = result.appException, message = result.message)
                 }
             }
             state = state.copy(isLoading = false)
@@ -175,7 +175,7 @@ class DiaryViewModel @Inject constructor(
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(exception = result.exception, message = result.message)
+                    handleException(appException = result.appException, message = result.message)
                 }
             }
             state = state.copy(isLoadingMeals = false)
@@ -198,9 +198,9 @@ class DiaryViewModel @Inject constructor(
         }
     }
 
-    private fun handleException(exception: Exception, message: String?) {
-        when (exception) {
-            is NetworkException -> {
+    private fun handleException(appException: AppException, message: String?) {
+        when (appException) {
+            is AppException.NetworkException -> {
                 val messageError = application.getString(R.string.error_network)
                 state = state.copy(messageError = messageError)
                 sendUiEvent(DiaryUiEvent.ShowSnackbar(messageError))
