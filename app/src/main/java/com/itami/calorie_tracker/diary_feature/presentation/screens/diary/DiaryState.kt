@@ -7,7 +7,7 @@ import com.itami.calorie_tracker.diary_feature.presentation.model.MealUi
 import java.time.ZonedDateTime
 
 data class DiaryState(
-    val user: User? = null,
+    val user: User = User.DEFAULT,
     val date: ZonedDateTime = DateTimeUtil.getCurrentZonedDateTime(),
 
     val meals: List<MealUi> = emptyList(),

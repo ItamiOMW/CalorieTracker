@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
@@ -27,6 +28,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,6 +61,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryScreen(
     onNavigateToMeal: (mealId: Int) -> Unit,
@@ -103,16 +106,22 @@ fun DiaryScreen(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
-            if (state.user != null) {
-                TopBarSection(
-                    user = state.user,
-                    date = state.date,
-                    onShowDatePicker = { show ->
-                        onEvent(DiaryEvent.ShowDatePicker(show = show))
-                    },
-                    onProfileImageClick = onNavigateToProfile
-                )
-            }
+            CenterAlignedTopAppBar(
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = CalorieTrackerTheme.colors.background,
+                    titleContentColor = CalorieTrackerTheme.colors.onBackground
+                ),
+                title = {
+                    TopBarContent(
+                        user = state.user,
+                        date = state.date,
+                        onShowDatePicker = { show ->
+                            onEvent(DiaryEvent.ShowDatePicker(show = show))
+                        },
+                        onProfileImageClick = onNavigateToProfile
+                    )
+                }
+            )
         }
     ) {
         Box(
@@ -122,48 +131,46 @@ fun DiaryScreen(
                 .pullRefresh(refreshState, enabled = !state.isRefreshingMeals),
             contentAlignment = Alignment.Center,
         ) {
-            if (state.user != null) {
-                Column(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .fillMaxWidth()
-                        .verticalScroll(scrollState)
-                        .padding(
-                            start = CalorieTrackerTheme.padding.default,
-                            end = CalorieTrackerTheme.padding.default,
-                            top = CalorieTrackerTheme.padding.large
-                        ),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.medium),
-                ) {
-                    NutrientsSection(
-                        proteinsConsumed = state.consumedProteins,
-                        fatsConsumed = state.consumedFats,
-                        carbsConsumed = state.consumedCarbs,
-                        caloriesConsumed = state.consumedCalories,
-                        dailyNutrientsGoal = state.user.dailyNutrientsGoal,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    WaterIntakeSection(
-                        consumedWater = state.consumedWater,
-                        dailyNutrientsGoal = state.user.dailyNutrientsGoal,
-                        onAddWater = {
-                            onEvent(DiaryEvent.AddConsumedWater)
-                        },
-                        onRemoveWater = {
-                            onEvent(DiaryEvent.RemoveConsumedWater)
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    MealsSection(
-                        meals = state.meals,
-                        onMealClick = onNavigateToMeal,
-                        onAddMealClick = {
-                            onNavigateToNewMeal(state.date.toString())
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth()
+                    .verticalScroll(scrollState)
+                    .padding(
+                        start = CalorieTrackerTheme.padding.default,
+                        end = CalorieTrackerTheme.padding.default,
+                        top = CalorieTrackerTheme.padding.large
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.medium),
+            ) {
+                NutrientsSection(
+                    proteinsConsumed = state.consumedProteins,
+                    fatsConsumed = state.consumedFats,
+                    carbsConsumed = state.consumedCarbs,
+                    caloriesConsumed = state.consumedCalories,
+                    dailyNutrientsGoal = state.user.dailyNutrientsGoal,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                WaterIntakeSection(
+                    consumedWater = state.consumedWater,
+                    dailyNutrientsGoal = state.user.dailyNutrientsGoal,
+                    onAddWater = {
+                        onEvent(DiaryEvent.AddConsumedWater)
+                    },
+                    onRemoveWater = {
+                        onEvent(DiaryEvent.RemoveConsumedWater)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                MealsSection(
+                    meals = state.meals,
+                    onMealClick = onNavigateToMeal,
+                    onAddMealClick = {
+                        onNavigateToNewMeal(state.date.toString())
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
             if (state.isLoading) {
                 CircularProgressIndicator(color = CalorieTrackerTheme.colors.primary)
@@ -325,7 +332,7 @@ private fun NutrientsSection(
 }
 
 @Composable
-private fun TopBarSection(
+private fun TopBarContent(
     user: User,
     date: ZonedDateTime,
     onShowDatePicker: (show: Boolean) -> Unit,
@@ -344,11 +351,7 @@ private fun TopBarSection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                top = CalorieTrackerTheme.padding.small,
-                start = CalorieTrackerTheme.padding.medium,
-                end = CalorieTrackerTheme.padding.medium,
-            ),
+            .padding(horizontal = CalorieTrackerTheme.padding.small),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

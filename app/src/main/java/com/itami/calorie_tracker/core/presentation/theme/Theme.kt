@@ -51,8 +51,8 @@ private val darkTheme = CalorieTrackerColors(
     onSurfaceVariant = Color(0xFF808080),
     outline = Color(0xFF666666),
     outlineVariant = Color(0xFF242833),
-    bottomBarContainer = Color(0xFF0D0D0D),
-    navigationItem = Color(0xFF90A6BA),
+    bottomBarContainer = Color(0xFF073622),
+    navigationItem = Color(0xFF49D199),
     red = Color(0xFFB24F58),
     orange = Color(0xFFCB7F5B),
     lightGreen = Color(0xFF41FFBB),
@@ -66,38 +66,38 @@ private val shapes = CalorieTrackerShapes()
 private val spacing = CalorieTrackerSpacing()
 private val padding = CalorieTrackerPadding()
 
-private val CalorieTrackerColorsProvider = staticCompositionLocalOf { lightTheme }
-private val CalorieTrackerTypographyProvider = staticCompositionLocalOf { typography }
-private val CalorieTrackerShapesProvider = staticCompositionLocalOf { shapes }
-private val CalorieTrackerSpacingProvider = staticCompositionLocalOf { spacing }
-private val CalorieTrackerPaddingProvider = staticCompositionLocalOf { padding }
-private val IsDarkThemeProvider = staticCompositionLocalOf { false }
+private val LocalCalorieTrackerColorsProvider = staticCompositionLocalOf { lightTheme }
+private val LocalCalorieTrackerTypographyProvider = staticCompositionLocalOf { typography }
+private val LocalCalorieTrackerShapesProvider = staticCompositionLocalOf { shapes }
+private val LocalCalorieTrackerSpacingProvider = staticCompositionLocalOf { spacing }
+private val LocalCalorieTrackerPaddingProvider = staticCompositionLocalOf { padding }
+private val LocalIsDarkThemeProvider = staticCompositionLocalOf { false }
 
 object CalorieTrackerTheme {
 
     val colors: CalorieTrackerColors
         @Composable
-        get() = CalorieTrackerColorsProvider.current
+        get() = LocalCalorieTrackerColorsProvider.current
 
     val typography: CalorieTrackerTypography
         @Composable
-        get() = CalorieTrackerTypographyProvider.current
+        get() = LocalCalorieTrackerTypographyProvider.current
 
     val shapes: CalorieTrackerShapes
         @Composable
-        get() = CalorieTrackerShapesProvider.current
+        get() = LocalCalorieTrackerShapesProvider.current
 
     val spacing: CalorieTrackerSpacing
         @Composable
-        get() = CalorieTrackerSpacingProvider.current
+        get() = LocalCalorieTrackerSpacingProvider.current
 
     val padding: CalorieTrackerPadding
         @Composable
-        get() = CalorieTrackerPaddingProvider.current
+        get() = LocalCalorieTrackerPaddingProvider.current
 
     val isDarkTheme: Boolean
         @Composable
-        get() = IsDarkThemeProvider.current
+        get() = LocalIsDarkThemeProvider.current
 }
 
 @Composable
@@ -121,12 +121,12 @@ fun CalorieTrackerTheme(
     }
 
     CompositionLocalProvider(
-        CalorieTrackerColorsProvider provides if (isDarkTheme) darkTheme else lightTheme,
-        CalorieTrackerTypographyProvider provides typography,
-        CalorieTrackerShapesProvider provides shapes,
-        CalorieTrackerSpacingProvider provides spacing,
-        CalorieTrackerPaddingProvider provides padding,
-        IsDarkThemeProvider provides isDarkTheme,
+        LocalCalorieTrackerColorsProvider provides if (isDarkTheme) darkTheme else lightTheme,
+        LocalCalorieTrackerTypographyProvider provides typography,
+        LocalCalorieTrackerShapesProvider provides shapes,
+        LocalCalorieTrackerSpacingProvider provides spacing,
+        LocalCalorieTrackerPaddingProvider provides padding,
+        LocalIsDarkThemeProvider provides isDarkTheme,
         content = content
     )
 }
