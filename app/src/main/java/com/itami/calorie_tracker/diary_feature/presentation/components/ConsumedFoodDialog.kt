@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.presentation.components.NutrientAmountItem
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.core.utils.Constants
 import com.itami.calorie_tracker.diary_feature.domain.model.ConsumedFood

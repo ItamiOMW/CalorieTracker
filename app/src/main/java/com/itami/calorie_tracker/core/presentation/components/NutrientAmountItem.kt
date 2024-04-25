@@ -1,4 +1,4 @@
-package com.itami.calorie_tracker.diary_feature.presentation.components
+package com.itami.calorie_tracker.core.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

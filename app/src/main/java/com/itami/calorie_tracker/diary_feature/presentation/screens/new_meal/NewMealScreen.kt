@@ -43,7 +43,7 @@ import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.diary_feature.domain.model.ConsumedFood
 import com.itami.calorie_tracker.diary_feature.presentation.components.ConsumedFoodComponent
 import com.itami.calorie_tracker.diary_feature.presentation.components.ConsumedFoodDialog
-import com.itami.calorie_tracker.diary_feature.presentation.components.NutrientAmountItem
+import com.itami.calorie_tracker.core.presentation.components.NutrientAmountItem
 import kotlinx.coroutines.flow.Flow
 import kotlin.math.roundToInt
 
