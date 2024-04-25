@@ -13,11 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -68,6 +69,7 @@ fun MealScreen(
             }
         }
     }
+
 
     BackHandler {
         onEvent(MealEvent.ShowExitDialog(true))
@@ -248,6 +250,7 @@ private fun TopBarSection(
 
     Column(
         modifier = Modifier
+            .systemBarsPadding()
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -343,6 +346,9 @@ private fun TopBarSection(
             )
         }
         Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.default))
-        Divider(modifier = Modifier.fillMaxWidth(), color = CalorieTrackerTheme.colors.outline)
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            color = CalorieTrackerTheme.colors.outline
+        )
     }
 }

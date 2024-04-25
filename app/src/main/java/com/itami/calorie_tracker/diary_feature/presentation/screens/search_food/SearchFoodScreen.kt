@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -179,6 +180,7 @@ private fun TopBarSection(
 ) {
     Row(
         modifier = Modifier
+            .systemBarsPadding()
             .fillMaxWidth()
             .padding(
                 start = CalorieTrackerTheme.padding.default,

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -47,7 +48,8 @@ fun MainScreen(
         contentColor = CalorieTrackerTheme.colors.onBackground,
         snackbarHost = {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 SnackbarHost(snackbarHostState) { snackbarData ->
@@ -70,6 +72,7 @@ fun MainScreen(
         it
         RootNavGraph(
             modifier = Modifier
+                .navigationBarsPadding()
                 .fillMaxSize()
                 .padding(PaddingValues()),
             navState = navState,
@@ -108,6 +111,7 @@ private fun BottomBar(
                     end = CalorieTrackerTheme.padding.small,
                     bottom = CalorieTrackerTheme.padding.small,
                 )
+                .navigationBarsPadding()
                 .height(84.dp)
                 .fillMaxWidth(),
             selectedIndex = selectedNavigationItemIndex,

@@ -104,9 +104,6 @@ dependencies {
     kapt("androidx.hilt:hilt-compiler:1.2.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-    //System UI controller
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.27.0")
-
     //Ktor client
     implementation("io.ktor:ktor-client-core:2.3.5")
     implementation("io.ktor:ktor-client-cio:2.3.5")

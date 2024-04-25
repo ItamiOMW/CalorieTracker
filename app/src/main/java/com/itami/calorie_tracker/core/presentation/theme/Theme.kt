@@ -1,12 +1,15 @@
 package com.itami.calorie_tracker.core.presentation.theme
 
+import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import com.itami.calorie_tracker.core.domain.model.Theme
 
 private val lightTheme = CalorieTrackerColors(
@@ -105,19 +108,20 @@ fun CalorieTrackerTheme(
     theme: Theme = Theme.SYSTEM_THEME,
     content: @Composable () -> Unit,
 ) {
-    val isDarkTheme = when(theme) {
+    val isDarkTheme = when (theme) {
         Theme.DARK_THEME -> true
         Theme.LIGHT_THEME -> false
         Theme.SYSTEM_THEME -> isSystemInDarkTheme()
     }
 
-    val systemUiController = rememberSystemUiController()
-    DisposableEffect(key1 = systemUiController, key2 = isDarkTheme) {
-        systemUiController.setSystemBarsColor(
-            darkIcons = !isDarkTheme,
-            color = if (isDarkTheme) darkTheme.background else lightTheme.background,
-        )
-        onDispose { }
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = Color.Transparent.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
+            WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !isDarkTheme
+        }
     }
 
     CompositionLocalProvider(

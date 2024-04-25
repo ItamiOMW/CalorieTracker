@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -13,7 +14,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -42,7 +43,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.times
 import coil.compose.AsyncImage
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.DailyNutrientsGoal
@@ -223,15 +223,20 @@ private fun MealsSection(
         }
         if (meals.isNotEmpty()) {
             val mealComponentHeight = 90.dp
+            val bottomSpacerHeight = 116.dp
+
+            val lazyColumnHeight = remember(meals.size) {
+                mealComponentHeight * meals.size + bottomSpacerHeight
+            }
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = meals.size * mealComponentHeight),
+                    .heightIn(max = lazyColumnHeight),
                 verticalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.small),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 userScrollEnabled = false,
             ) {
-                items(items = meals, key = { it.id }) { meal ->
+                itemsIndexed(items = meals, key = { _, meal -> meal.id }) { index, meal ->
                     MealItem(
                         meal = meal,
                         onMealClick = { onMealClick(meal.id) },
@@ -240,6 +245,9 @@ private fun MealsSection(
                             .height(mealComponentHeight)
                             .animateItemPlacement(),
                     )
+                    if (index == meals.size - 1) {
+                        Spacer(modifier = Modifier.height(bottomSpacerHeight))
+                    }
                 }
             }
         } else {
