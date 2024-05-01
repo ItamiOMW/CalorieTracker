@@ -122,6 +122,7 @@
     <string name="grams_and_calories">%1$s g • %2$s Cal</string>
     <string name="cal_per_100_grams">%1$s Cal / 100 g</string>
     <string name="cal_amount">%1$s Cal</string>
+    <string name="minutes_number_short">%1$s min</string>
     <string name="desc_icon_navigate_back">Icon navigate back</string>
     <string name="profile">Profile</string>
     <string name="my_info">My Info</string>
@@ -138,4 +139,18 @@
     <string name="desc_filter_icon">Filter icon</string>
     <string name="error_too_many_requests">Too many requests, try again later.</string>
     <string name="error_server">Server failed, try again later.</string>
+    <string name="desc_recipe_image">Recipe image</string>
+    <string name="desc_time_icon">Time icon</string>
+    <string name="desc_refresh_icon">Refresh icon</string>
+    <string name="calories_per_serving">Calories per serving</string>
+    <string name="filter_less_than_100cal">Less than 100</string>
+    <string name="filter_between_100_and_250cal">100–250</string>
+    <string name="filter_between_250_and_500cal">250–500</string>
+    <string name="filter_more_than_500cal">More than 500</string>
+    <string name="filter_less_than_15min">Less than 15 min</string>
+    <string name="filter_between_15_and_30min">15–30 min</string>
+    <string name="filter_between_30_and_60min">30–60 min</string>
+    <string name="filter_more_than_60min">More than 60 min</string>
+    <string name="time_cooking">Time cooking</string>
+    <string name="done">Done</string>
 </resources>
