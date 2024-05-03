@@ -2,7 +2,7 @@
 
 Calorie tracker helps you to keep track of your diet according to your personal goal.\
 [Figma design](https://www.figma.com/file/DJ5C3WdVFr8uNEJFUOAhUU/Calorie-Tracker?type=design&node-id=0%3A1&mode=design&t=rMj47XB9ZHeac5w0-1)\
-[Ktor backend](https://github.com/ItamiOWM/CalorieTrackerBackend)
+[Ktor backend](https://github.com/ItamiOMW/CalorieTrackerBackend)
 
 ![Calorie Tracker Thumbnail](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/thumbnail.png)
 
