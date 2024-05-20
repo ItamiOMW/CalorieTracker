@@ -1,16 +1,14 @@
 package com.itami.calorie_tracker.reports_feature.presentation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
+import com.itami.calorie_tracker.reports_feature.presentation.screens.reports.ReportsScreen
+import com.itami.calorie_tracker.reports_feature.presentation.screens.reports.ReportsViewModel
 
 fun NavGraphBuilder.reportsGraph(
     navState: NavigationState,
@@ -21,12 +19,21 @@ fun NavGraphBuilder.reportsGraph(
         startDestination = ReportsGraphScreen.Reports.fullRoute
     ) {
         composable(route = ReportsGraphScreen.Reports.fullRoute) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(text = "Reports screen")
-            }
+            val viewModel: ReportsViewModel = hiltViewModel()
+            ReportsScreen(
+                onShowSnackbar = onShowSnackbar,
+                state = viewModel.state,
+                uiEvent = viewModel.uiEvent,
+                onEvent = viewModel::onEvent,
+                onNavigateToProfile = {
+                    navState.navigateToGraph(
+                        graph = Graph.Profile.route,
+                        popUpInclusive = false,
+                        saveState = false,
+                        restoreState = false
+                    )
+                }
+            )
         }
     }
 }
