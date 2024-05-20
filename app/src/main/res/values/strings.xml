@@ -153,4 +153,9 @@
     <string name="filter_more_than_60min">More than 60 min</string>
     <string name="time_cooking">Time cooking</string>
     <string name="done">Done</string>
+    <string name="error_failed_to_load_weight_report">Failed to load weight report</string>
+    <string name="weight_chart_label">Weight</string>
+    <string name="results_label">Results</string>
+    <string name="add">Add</string>
+    <string name="label_weight">Weight</string>
 </resources>

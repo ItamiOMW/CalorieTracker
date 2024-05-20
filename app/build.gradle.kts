@@ -39,11 +39,19 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "GOOGLE_CLIENT_ID", "\"${localProperties.getProperty("GOOGLE_CLIENT_ID")}\"")
+            buildConfigField(
+                "String",
+                "GOOGLE_CLIENT_ID",
+                "\"${localProperties.getProperty("GOOGLE_CLIENT_ID")}\""
+            )
             buildConfigField("String", "BASE_URL", "\"${localProperties.getProperty("BASE_URL")}\"")
         }
         debug {
-            buildConfigField("String", "GOOGLE_CLIENT_ID", "\"${localProperties.getProperty("GOOGLE_CLIENT_ID")}\"")
+            buildConfigField(
+                "String",
+                "GOOGLE_CLIENT_ID",
+                "\"${localProperties.getProperty("GOOGLE_CLIENT_ID")}\""
+            )
             buildConfigField("String", "BASE_URL", "\"${localProperties.getProperty("BASE_URL")}\"")
         }
     }
@@ -70,10 +78,10 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.13.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
     implementation("androidx.activity:activity-compose:1.9.0")
-    implementation(platform("androidx.compose:compose-bom:2024.04.01"))
+    implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
@@ -81,16 +89,30 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2024.04.01"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.05.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    
+
+    // Chart Library
+    // For Jetpack Compose.
+    implementation("com.patrykandpatrick.vico:compose:2.0.0-alpha.19")
+
+    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
+    implementation("com.patrykandpatrick.vico:compose-m3:2.0.0-alpha.19")
+
+    // Houses the core logic for charts and other elements. Included in all other modules.
+    implementation("com.patrykandpatrick.vico:core:2.0.0-alpha.19")
+
+
+
     //Google Auth
-    implementation("com.google.android.gms:play-services-auth:21.1.0")
+    implementation("com.google.android.gms:play-services-auth:21.1.1")
 
     //Kotlinx Serialization
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
     //Compose Navigation, keep it 2.7.5 since updating to newer version breaks navigation for some reason
     implementation("androidx.navigation:navigation-compose:2.7.5")
@@ -120,8 +142,8 @@ dependencies {
     implementation("androidx.room:room-ktx:2.6.1")
 
     //Data Store Preferences
-    implementation("androidx.datastore:datastore-preferences:1.1.0")
-    implementation("androidx.datastore:datastore:1.1.0")
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.datastore:datastore:1.1.1")
 
     //Encrypted Shared Preferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")

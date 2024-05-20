@@ -24,7 +24,15 @@ fun NavGraphBuilder.reportsGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onEvent = viewModel::onEvent,
+                onNavigateToProfile = {
+                    navState.navigateToGraph(
+                        graph = Graph.Profile.route,
+                        popUpInclusive = false,
+                        saveState = false,
+                        restoreState = false
+                    )
+                }
             )
         }
     }
