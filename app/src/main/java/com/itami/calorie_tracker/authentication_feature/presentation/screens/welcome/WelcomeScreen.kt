@@ -47,6 +47,7 @@ import kotlinx.coroutines.flow.Flow
 fun WelcomeScreen(
     onNavigateToDiary: () -> Unit,
     onNavigateToGoal: () -> Unit,
+    onNavigateToLoginEmail: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
     state: WelcomeState,
     uiEvent: Flow<WelcomeUiEvent>,
@@ -99,10 +100,10 @@ fun WelcomeScreen(
                     showBottomSheet = false
                     onEvent(event)
                 },
-                onShowSnackbar = { message ->
+                onLoginEmailButtonClick = {
                     showBottomSheet = false
-                    onShowSnackbar(message)
-                }
+                    onNavigateToLoginEmail()
+                },
             )
         }
     }
@@ -236,7 +237,7 @@ private fun BottomSheetContent(
     modifier: Modifier,
     isLoading: Boolean,
     onEvent: (event: WelcomeEvent) -> Unit,
-    onShowSnackbar: (message: String) -> Unit,
+    onLoginEmailButtonClick: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -282,7 +283,7 @@ private fun BottomSheetContent(
                 .fillMaxWidth()
                 .padding(horizontal = CalorieTrackerTheme.padding.medium),
             onClick = {
-                onShowSnackbar("Not implemented yet")
+                onLoginEmailButtonClick()
             }
         ) {
             Row(

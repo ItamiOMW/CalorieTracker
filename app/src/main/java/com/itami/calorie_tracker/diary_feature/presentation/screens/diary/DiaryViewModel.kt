@@ -213,4 +213,5 @@ class DiaryViewModel @Inject constructor(
             }
         }
     }
+
 }

@@ -31,6 +31,7 @@
     <string name="sign_in_with_google">Sign In with Google</string>
     <string name="continue_with_google">Continue with Google</string>
     <string name="sign_in_with_email">Sign In with Email</string>
+    <string name="continue_with_email">Continue with Email</string>
     <string name="desc_icon_mail">Mail icon</string>
 
     <string name="goal_screen_title">What\'s your goal?</string>
@@ -158,4 +159,31 @@
     <string name="results_label">Results</string>
     <string name="add">Add</string>
     <string name="label_weight">Weight</string>
+    <string name="login">Login</string>
+    <string name="error_empty_field">Empty field</string>
+    <string name="error_invalid_email">Invalid email</string>
+    <string name="label_email">Email</string>
+    <string name="label_name">Name</string>
+    <string name="label_password">Password</string>
+    <string name="label_repeat_password">Repeat password</string>
+    <string name="register">Register</string>
+    <string name="forgot_password_qm">Forgot password?</string>
+    <string name="desc_visibility_icon">Visibility icon</string>
+    <string name="go_to_login">Go to Login</string>
+    <string name="sent_activation_link">We have sent an account activation link to your email, %1$s. Please activate your account before logging in.</string>
+    <string name="sent_activation_link_success">Account activation link has been sent successfully.</string>
+    <string name="error_invalid_email_or_password">Invalid email or password</string>
+    <string name="desc_chosen_profile_picture">Chosen profile picture</string>
+    <string name="desc_add_photo_icon">Add photo icon</string>
+    <string name="error_short_password">Password should contain at least 8 characters</string>
+    <string name="resend">Resend</string>
+    <string name="reset_code_has_been_sent">Reset code has been sent.</string>
+    <string name="error_passwords_do_not_match">Passwords do not match.</string>
+    <string name="error_invalid_reset_code">Invalid reset code.</string>
+    <string name="send_code">Send code</string>
+    <string name="title_forgot_password">Forgot password</string>
+    <string name="we_will_send_reset_code">We will send a password reset code to your email account.</string>
+    <string name="you_successfully_changed_password">You have successfully changed your password</string>
+    <string name="reset">Reset</string>
+    <string name="enter_password_reset_code">Please enter the password reset code that we have sent to your email, %1$s</string>
 </resources>

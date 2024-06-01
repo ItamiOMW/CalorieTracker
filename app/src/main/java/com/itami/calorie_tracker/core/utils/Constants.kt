@@ -38,7 +38,6 @@ object Constants {
     const val MIN_AGE = 7
     const val MAX_AGE = 130
 
-    const val MAX_CALORIES_PER_SERVING = 1500
-    const val MAX_TIME_COOKING_MIN = 180
+    const val MIN_PASSWORD_LENGTH = 8
 
 }

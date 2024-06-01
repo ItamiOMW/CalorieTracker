@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 fun RecommendedNutrientsScreen(
     onNavigateToDiary: () -> Unit,
+    onNavigateToRegisterEmail: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
     state: RecommendedNutrientsState,
     uiEvent: Flow<RecommendedNutrientUiEvent>,
@@ -93,9 +94,12 @@ fun RecommendedNutrientsScreen(
                         .fillMaxWidth()
                         .padding(horizontal = CalorieTrackerTheme.padding.medium)
                         .padding(bottom = CalorieTrackerTheme.padding.large),
-                    isLoading = { state.isLoading },
-                    onShowGoogleOneTap = { show ->
-                        onEvent(RecommendedNutrientEvent.ShowGoogleOneTap(show = show))
+                    isLoading = state.isLoading,
+                    onContinueWithGoogle = {
+                        onEvent(RecommendedNutrientEvent.ShowGoogleOneTap(show = true))
+                    },
+                    onContinueWithEmail = {
+                        onNavigateToRegisterEmail()
                     }
                 )
             }
@@ -109,34 +113,65 @@ fun RecommendedNutrientsScreen(
 @Composable
 private fun BottomSection(
     modifier: Modifier,
-    isLoading: () -> Boolean,
-    onShowGoogleOneTap: (show: Boolean) -> Unit,
+    isLoading: Boolean,
+    onContinueWithGoogle: () -> Unit,
+    onContinueWithEmail: () -> Unit,
 ) {
-    OutlinedButton(
-        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Unspecified),
-        border = BorderStroke(1.dp, CalorieTrackerTheme.colors.outline),
-        shape = CalorieTrackerTheme.shapes.small,
-        enabled = !isLoading(),
-        contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
+    Column(
         modifier = modifier,
-        onClick = {
-            onShowGoogleOneTap(true)
-        }
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.extraSmall)
+        OutlinedButton(
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Unspecified),
+            border = BorderStroke(1.dp, CalorieTrackerTheme.colors.outline),
+            shape = CalorieTrackerTheme.shapes.small,
+            enabled = !isLoading,
+            contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onContinueWithGoogle
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_google),
-                contentDescription = stringResource(R.string.desc_google_icon),
-                modifier = Modifier.size(20.dp)
-            )
-            Text(
-                text = stringResource(R.string.continue_with_google),
-                color = CalorieTrackerTheme.colors.onBackground,
-                style = CalorieTrackerTheme.typography.bodyMedium,
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.extraSmall)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_google),
+                    contentDescription = stringResource(R.string.desc_google_icon),
+                    modifier = Modifier.size(20.dp),
+                )
+                Text(
+                    text = stringResource(R.string.continue_with_google),
+                    color = CalorieTrackerTheme.colors.onBackground,
+                    style = CalorieTrackerTheme.typography.bodyMedium,
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.default))
+        OutlinedButton(
+            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Unspecified),
+            border = BorderStroke(1.dp, CalorieTrackerTheme.colors.outline),
+            shape = CalorieTrackerTheme.shapes.small,
+            enabled = !isLoading,
+            contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
+            modifier = Modifier.fillMaxWidth(),
+            onClick = onContinueWithEmail
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.extraSmall)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_mail),
+                    contentDescription = stringResource(R.string.desc_icon_mail),
+                    tint = CalorieTrackerTheme.colors.onBackground,
+                    modifier = Modifier.size(20.dp)
+                )
+                Text(
+                    text = stringResource(R.string.continue_with_email),
+                    color = CalorieTrackerTheme.colors.onBackground,
+                    style = CalorieTrackerTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }

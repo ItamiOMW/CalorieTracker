@@ -64,6 +64,22 @@ class NavigationState(
         }
     }
 
+    fun navigateToScreen(
+        route: String,
+        saveState: Boolean = true,
+        restoreState: Boolean = true,
+        launchSingleTop: Boolean = true,
+        popUpToRoute: String,
+    ) {
+        navHostController.navigate(route) {
+            popUpTo(popUpToRoute) {
+                this.saveState = saveState
+            }
+            this.restoreState = restoreState
+            this.launchSingleTop = launchSingleTop
+        }
+    }
+
     fun navigateBack(
         route: String,
         inclusive: Boolean = false,
