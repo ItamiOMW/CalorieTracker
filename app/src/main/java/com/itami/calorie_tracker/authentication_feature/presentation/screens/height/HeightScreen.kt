@@ -38,7 +38,7 @@ fun HeightScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: HeightState,
     uiEvent: Flow<HeightUiEvent>,
-    onEvent: (HeightEvent) -> Unit,
+    onAction: (HeightAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -78,16 +78,16 @@ fun HeightScreen(
                 centimeters = state.heightCm,
                 heightUnit = state.selectedHeightUnit,
                 onValueChange = { centimeters ->
-                    onEvent(HeightEvent.ChangeHeight(centimeters))
+                    onAction(HeightAction.ChangeHeight(centimeters))
                 },
                 onHeightUnitChange = { heightUnit ->
-                    onEvent(HeightEvent.ChangeHeightUnit(heightUnit))
+                    onAction(HeightAction.ChangeHeightUnit(heightUnit))
                 },
                 modifier = Modifier.padding(start = CalorieTrackerTheme.padding.large)
             )
             BottomSection(
                 onFABClick = {
-                    onEvent(HeightEvent.SaveHeight)
+                    onAction(HeightAction.SaveHeight)
                 },
                 onNavigateBack = onNavigateBack,
                 isLoading = state.isLoading,

@@ -77,7 +77,7 @@ fun RecipesScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: RecipesState,
     uiEvent: Flow<RecipesUiEvent>,
-    onEvent: (event: RecipesEvent) -> Unit,
+    onAction: (action: RecipesAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -93,14 +93,14 @@ fun RecipesScreen(
 
     LaunchedEffect(key1 = recipesLazyListState.canScrollForward) {
         if (!recipesLazyListState.canScrollForward && !state.isLoadingNextRecipes && !state.endReached && !state.isRefreshingRecipes) {
-            onEvent(RecipesEvent.LoadNextRecipes)
+            onAction(RecipesAction.LoadNextRecipes)
         }
     }
 
     val refreshState = rememberPullRefreshState(
         refreshing = state.isRefreshingRecipes,
         onRefresh = {
-            onEvent(RecipesEvent.Refresh)
+            onAction(RecipesAction.Refresh)
         }
     )
 
@@ -141,7 +141,7 @@ fun RecipesScreen(
                 containerColor = CalorieTrackerTheme.colors.surfacePrimary,
                 contentColor = CalorieTrackerTheme.colors.onSurfacePrimary,
                 onDismissRequest = {
-                    onEvent(RecipesEvent.ShowFilterOverlay(show = false))
+                    onAction(RecipesAction.ShowFilterOverlay(show = false))
                 }
             ) {
                 BottomSheetContent(
@@ -151,8 +151,8 @@ fun RecipesScreen(
                     caloriesFilters = state.caloriesFilters,
                     timeFilters = state.timeFilters,
                     onConfirm = { caloriesFilters, timeFilters ->
-                        onEvent(RecipesEvent.ShowFilterOverlay(show = false))
-                        onEvent(RecipesEvent.UpdateFilters(timeFilters, caloriesFilters))
+                        onAction(RecipesAction.ShowFilterOverlay(show = false))
+                        onAction(RecipesAction.UpdateFilters(timeFilters, caloriesFilters))
                         coroutineScope.launch {
                             bottomSheetState.hide()
                         }
@@ -179,10 +179,10 @@ fun RecipesScreen(
                     modifier = Modifier.fillMaxWidth(),
                     queryState = state.searchQuery,
                     onQueryChange = { newValue ->
-                        onEvent(RecipesEvent.SearchQueryChange(newValue))
+                        onAction(RecipesAction.SearchQueryChange(newValue))
                     },
                     onFilterClick = {
-                        onEvent(RecipesEvent.ShowFilterOverlay(show = true))
+                        onAction(RecipesAction.ShowFilterOverlay(show = true))
                         coroutineScope.launch {
                             bottomSheetState.show()
                         }

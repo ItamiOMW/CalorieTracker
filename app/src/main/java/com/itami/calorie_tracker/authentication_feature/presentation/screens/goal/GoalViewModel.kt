@@ -28,14 +28,14 @@ class GoalViewModel @Inject constructor(
         getGoalState()
     }
 
-    fun onEvent(event: GoalEvent) {
-        when (event) {
-            is GoalEvent.SaveGoal -> {
+    fun onAction(action: GoalAction) {
+        when (action) {
+            is GoalAction.SaveGoal -> {
                 saveGoal(state.selectedGoal)
             }
 
-            is GoalEvent.SelectGoal -> {
-                state = state.copy(selectedGoal = event.weightGoal)
+            is GoalAction.SelectGoal -> {
+                state = state.copy(selectedGoal = action.weightGoal)
             }
         }
     }

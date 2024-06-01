@@ -35,14 +35,14 @@ class AgeViewModel @Inject constructor(
         getAge()
     }
 
-    fun onEvent(event: AgeEvent) {
-        when (event) {
-            is AgeEvent.SaveAge -> {
+    fun onAction(action: AgeAction) {
+        when (action) {
+            is AgeAction.SaveAge -> {
                 saveAge(age = state.age.toInt())
             }
 
-            is AgeEvent.AgeValueChange -> {
-                state = state.copy(age = event.age)
+            is AgeAction.AgeValueChange -> {
+                state = state.copy(age = action.age)
             }
         }
     }

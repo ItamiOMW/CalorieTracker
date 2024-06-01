@@ -43,7 +43,7 @@ fun GenderScreen(
     onNavigateBack: () -> Unit,
     state: GenderState,
     uiEvent: Flow<GenderUiEvent>,
-    onEvent: (GenderEvent) -> Unit,
+    onAction: (GenderAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -80,12 +80,12 @@ fun GenderScreen(
                     .fillMaxWidth(),
                 selectedGender = state.selectedGender,
                 onGenderClick = { gender ->
-                    onEvent(GenderEvent.SelectGender(gender = gender))
+                    onAction(GenderAction.SelectGender(gender = gender))
                 }
             )
             BottomSection(
                 onFABClick = {
-                    onEvent(GenderEvent.SaveGender)
+                    onAction(GenderAction.SaveGender)
                 },
                 onNavigateBack = onNavigateBack,
                 isLoading = state.isLoading,

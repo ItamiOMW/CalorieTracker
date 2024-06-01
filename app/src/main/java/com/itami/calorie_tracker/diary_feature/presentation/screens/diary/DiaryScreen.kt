@@ -70,7 +70,7 @@ fun DiaryScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: DiaryState,
     uiEvent: Flow<DiaryUiEvent>,
-    onEvent: (event: DiaryEvent) -> Unit,
+    onAction: (action: DiaryAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -86,10 +86,10 @@ fun DiaryScreen(
         showDatePicker = state.showDatePicker,
         date = state.date,
         onShowDatePicker = { show ->
-            onEvent(DiaryEvent.ShowDatePicker(show = show))
+            onAction(DiaryAction.ShowDatePicker(show = show))
         },
         onChangeDate = { date ->
-            onEvent(DiaryEvent.ChangeDate(date = date))
+            onAction(DiaryAction.ChangeDate(date = date))
         }
     )
 
@@ -98,7 +98,7 @@ fun DiaryScreen(
     val refreshState = rememberPullRefreshState(
         refreshing = state.isRefreshingMeals,
         onRefresh = {
-            onEvent(DiaryEvent.Refresh)
+            onAction(DiaryAction.Refresh)
         }
     )
 
@@ -116,7 +116,7 @@ fun DiaryScreen(
                         user = state.user,
                         date = state.date,
                         onShowDatePicker = { show ->
-                            onEvent(DiaryEvent.ShowDatePicker(show = show))
+                            onAction(DiaryAction.ShowDatePicker(show = show))
                         },
                         onProfileImageClick = onNavigateToProfile
                     )
@@ -156,10 +156,10 @@ fun DiaryScreen(
                     consumedWater = state.consumedWater,
                     dailyNutrientsGoal = state.user.dailyNutrientsGoal,
                     onAddWater = {
-                        onEvent(DiaryEvent.AddConsumedWater)
+                        onAction(DiaryAction.AddConsumedWater)
                     },
                     onRemoveWater = {
-                        onEvent(DiaryEvent.RemoveConsumedWater)
+                        onAction(DiaryAction.RemoveConsumedWater)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )

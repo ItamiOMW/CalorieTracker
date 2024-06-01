@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun OnboardingScreen(
     onNavigateToAuthGraph: () -> Unit,
-    onEvent: (OnboardingEvent) -> Unit,
+    onAction: (OnboardingAction) -> Unit,
     uiEvent: Flow<OnboardingUiEvent>,
 ) {
     LaunchedEffect(key1 = true) {
@@ -82,7 +82,7 @@ fun OnboardingScreen(
         bottomBar = {
             BottomSection(
                 pagerState = pagerState,
-                onEvent = onEvent,
+                onEvent = onAction,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -149,7 +149,7 @@ private fun OnboardingPager(
 @Composable
 private fun BottomSection(
     pagerState: PagerState,
-    onEvent: (event: OnboardingEvent) -> Unit,
+    onEvent: (event: OnboardingAction) -> Unit,
     modifier: Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -162,7 +162,7 @@ private fun BottomSection(
             modifier = Modifier.align(Alignment.Bottom),
             onClick = {
                 if (!pagerState.canScrollBackward) {
-                    onEvent(OnboardingEvent.ChangeShowOnboardingState(show = false))
+                    onEvent(OnboardingAction.ChangeShowOnboardingState(show = false))
                 } else {
                     if (!pagerState.isScrollInProgress && pagerState.canScrollBackward) {
                         coroutineScope.launch {
@@ -189,7 +189,7 @@ private fun BottomSection(
             contentColor = CalorieTrackerTheme.colors.onPrimary,
             onClick = {
                 if (!pagerState.canScrollForward) {
-                    onEvent(OnboardingEvent.ChangeShowOnboardingState(show = false))
+                    onEvent(OnboardingAction.ChangeShowOnboardingState(show = false))
                 } else {
                     if (!pagerState.isScrollInProgress && pagerState.canScrollForward) {
                         coroutineScope.launch {

@@ -39,17 +39,17 @@ class HeightViewModel @Inject constructor(
         getHeightUnit()
     }
 
-    fun onEvent(event: HeightEvent) {
-        when (event) {
-            is HeightEvent.ChangeHeightUnit -> {
-                state = state.copy(selectedHeightUnit = event.heightUnit)
+    fun onAction(action: HeightAction) {
+        when (action) {
+            is HeightAction.ChangeHeightUnit -> {
+                state = state.copy(selectedHeightUnit = action.heightUnit)
             }
 
-            is HeightEvent.ChangeHeight -> {
-                state = state.copy(heightCm = event.centimeters)
+            is HeightAction.ChangeHeight -> {
+                state = state.copy(heightCm = action.centimeters)
             }
 
-            is HeightEvent.SaveHeight -> {
+            is HeightAction.SaveHeight -> {
                 saveHeight(heightCm = state.heightCm, heightUnit = state.selectedHeightUnit)
             }
         }

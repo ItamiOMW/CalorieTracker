@@ -50,36 +50,36 @@ class ReportsViewModel @Inject constructor(
         getWeights()
     }
 
-    fun onEvent(event: ReportsEvent) {
-        when (event) {
-            is ReportsEvent.ReloadWeights -> {
+    fun onAction(action: ReportsAction) {
+        when (action) {
+            is ReportsAction.ReloadWeights -> {
                 state = state.copy(errorMessage = null)
                 getWeights()
             }
 
-            is ReportsEvent.ChangeWeightUnit -> {
-                changeWeightUnit(event.weightUnit)
+            is ReportsAction.ChangeWeightUnit -> {
+                changeWeightUnit(action.weightUnit)
             }
 
-            is ReportsEvent.ShowAddWeightDialog -> {
-                state = state.copy(showAddWeightDialog = event.show)
+            is ReportsAction.ShowAddWeightDialog -> {
+                state = state.copy(showAddWeightDialog = action.show)
             }
 
-            is ReportsEvent.ShowEditWeightDialog -> {
-                state = state.copy(weightToEdit = event.weightToEdit)
+            is ReportsAction.ShowEditWeightDialog -> {
+                state = state.copy(weightToEdit = action.weightToEdit)
             }
 
-            is ReportsEvent.AddWeight -> {
+            is ReportsAction.AddWeight -> {
                 addWeight(
-                    weightGrams = event.weightGrams,
+                    weightGrams = action.weightGrams,
                     datetime = DateTimeUtil.getCurrentDateTimeString()
                 )
             }
 
-            is ReportsEvent.EditWeight -> {
+            is ReportsAction.EditWeight -> {
                 editWeight(
-                    weightId = event.weightId,
-                    weightGrams = event.weightGrams
+                    weightId = action.weightId,
+                    weightGrams = action.weightGrams
                 )
             }
         }

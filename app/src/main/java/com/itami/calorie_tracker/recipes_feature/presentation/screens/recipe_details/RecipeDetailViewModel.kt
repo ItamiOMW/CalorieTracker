@@ -38,9 +38,9 @@ class RecipeDetailViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: RecipeDetailEvent) {
-        when (event) {
-            is RecipeDetailEvent.Retry -> {
+    fun onAction(action: RecipeDetailAction) {
+        when (action) {
+            is RecipeDetailAction.Retry -> {
                 state = state.copy(errorMessage = null)
                 getRecipe(recipeId)
             }

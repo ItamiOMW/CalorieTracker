@@ -66,7 +66,7 @@ fun NavGraphBuilder.authGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(route = AuthGraphScreen.Goal.fullRoute) {
@@ -77,7 +77,7 @@ fun NavGraphBuilder.authGraph(
                 },
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(route = AuthGraphScreen.Gender.fullRoute) {
@@ -91,7 +91,7 @@ fun NavGraphBuilder.authGraph(
                 },
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(route = AuthGraphScreen.Lifestyle.fullRoute) {
@@ -105,7 +105,7 @@ fun NavGraphBuilder.authGraph(
                 },
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(route = AuthGraphScreen.Height.fullRoute) {
@@ -120,7 +120,7 @@ fun NavGraphBuilder.authGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(route = AuthGraphScreen.Weight.fullRoute) {
@@ -135,7 +135,7 @@ fun NavGraphBuilder.authGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(route = AuthGraphScreen.Age.fullRoute) {
@@ -150,7 +150,7 @@ fun NavGraphBuilder.authGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(route = AuthGraphScreen.RecommendedNutrients.fullRoute) {
@@ -168,7 +168,7 @@ fun NavGraphBuilder.authGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(route = AuthGraphScreen.LoginEmail.fullRoute) {

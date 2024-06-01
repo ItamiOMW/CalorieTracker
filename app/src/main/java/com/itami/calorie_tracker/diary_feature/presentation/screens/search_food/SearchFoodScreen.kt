@@ -46,12 +46,12 @@ fun SearchFoodScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: SearchFoodState,
     uiEvent: Flow<SearchFoodUiEvent>,
-    onEvent: (event: SearchFoodEvent) -> Unit,
+    onAction: (action: SearchFoodAction) -> Unit,
 ) {
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.isRefreshing,
         onRefresh = {
-            onEvent(SearchFoodEvent.Refresh)
+            onAction(SearchFoodAction.Refresh)
         }
     )
 
@@ -69,7 +69,7 @@ fun SearchFoodScreen(
 
     LaunchedEffect(key1 = lazyListState.canScrollForward) {
         if (!lazyListState.canScrollForward && !state.isLoadingNextPage && !state.endReached && !state.isRefreshing) {
-            onEvent(SearchFoodEvent.LoadNextPage)
+            onAction(SearchFoodAction.LoadNextPage)
         }
     }
 
@@ -79,10 +79,10 @@ fun SearchFoodScreen(
             consumedFood = consumedFood,
             onConfirm = { weightGrams ->
                 onNavigateBack(consumedFood.copy(grams = weightGrams))
-                onEvent(SearchFoodEvent.SetSelectedFood(null))
+                onAction(SearchFoodAction.SetSelectedFood(null))
             },
             onDismiss = {
-                onEvent(SearchFoodEvent.SetSelectedFood(null))
+                onAction(SearchFoodAction.SetSelectedFood(null))
             }
         )
     }
@@ -94,10 +94,10 @@ fun SearchFoodScreen(
             TopBarSection(
                 searchQuery = state.searchQuery,
                 onSearchQueryChange = { newValue ->
-                    onEvent(SearchFoodEvent.SearchQueryChange(newValue))
+                    onAction(SearchFoodAction.SearchQueryChange(newValue))
                 },
                 onClearQuery = {
-                    onEvent(SearchFoodEvent.ClearSearchQuery)
+                    onAction(SearchFoodAction.ClearSearchQuery)
                 },
                 onNavigateBack = {
                     onNavigateBack(null)
@@ -119,7 +119,7 @@ fun SearchFoodScreen(
                     .padding(top = CalorieTrackerTheme.padding.extraSmall),
                 foods = state.foods,
                 onFoodClick = { food ->
-                    onEvent(SearchFoodEvent.SetSelectedFood(food))
+                    onAction(SearchFoodAction.SetSelectedFood(food))
                 },
                 isLoadingNextPage = state.isLoadingNextPage,
                 lazyListState = lazyListState

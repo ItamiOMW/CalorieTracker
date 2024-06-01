@@ -39,7 +39,7 @@ fun WeightScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: WeightState,
     uiEvent: Flow<WeightUiEvent>,
-    onEvent: (WeightEvent) -> Unit,
+    onAction: (WeightAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -78,11 +78,11 @@ fun WeightScreen(
             WeightPicker(
                 weight = state.weight,
                 onValueChange = { weight ->
-                    onEvent(WeightEvent.WeightValueChange(weight))
+                    onAction(WeightAction.WeightValueChange(weight))
                 },
                 weightUnit = state.selectedWeightUnit,
                 onChangeWeightUnit = { weightUnit ->
-                    onEvent(WeightEvent.ChangeWeightUnit(weightUnit))
+                    onAction(WeightAction.ChangeWeightUnit(weightUnit))
                 },
                 modifier = Modifier
                     .widthIn(max = 200.dp)
@@ -90,7 +90,7 @@ fun WeightScreen(
             )
             BottomSection(
                 onFABClick = {
-                    onEvent(WeightEvent.SaveWeight)
+                    onAction(WeightAction.SaveWeight)
                 },
                 onNavigateBack = onNavigateBack,
                 isLoading = state.isLoading,

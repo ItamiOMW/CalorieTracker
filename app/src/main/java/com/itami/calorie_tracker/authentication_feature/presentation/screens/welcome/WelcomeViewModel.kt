@@ -28,14 +28,14 @@ class WelcomeViewModel @Inject constructor(
     var state by mutableStateOf(WelcomeState())
         private set
 
-    fun onEvent(event: WelcomeEvent) {
-        when (event) {
-            is WelcomeEvent.ShowGoogleOneTap -> {
-                state = state.copy(showGoogleOneTap = event.show)
+    fun onAction(action: WelcomeAction) {
+        when (action) {
+            is WelcomeAction.ShowGoogleOneTap -> {
+                state = state.copy(showGoogleOneTap = action.show)
             }
 
-            is WelcomeEvent.SignInWithGoogle -> {
-                signInWithGoogle(idToken = event.idToken)
+            is WelcomeAction.SignInWithGoogle -> {
+                signInWithGoogle(idToken = action.idToken)
             }
         }
     }

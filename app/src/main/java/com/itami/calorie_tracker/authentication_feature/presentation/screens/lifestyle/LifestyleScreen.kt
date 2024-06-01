@@ -43,7 +43,7 @@ fun LifestyleScreen(
     onNavigateBack: () -> Unit,
     state: LifestyleState,
     uiEvent: Flow<LifestyleUiEvent>,
-    onEvent: (LifestyleEvent) -> Unit,
+    onAction: (LifestyleAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -80,12 +80,12 @@ fun LifestyleScreen(
                     .fillMaxWidth(),
                 selectedLifestyle = state.selectedLifestyle,
                 onLifestyleClick = { lifestyle ->
-                    onEvent(LifestyleEvent.SelectLifestyle(lifestyle = lifestyle))
+                    onAction(LifestyleAction.SelectLifestyle(lifestyle = lifestyle))
                 }
             )
             BottomSection(
                 onFABClick = {
-                    onEvent(LifestyleEvent.SaveLifestyle)
+                    onAction(LifestyleAction.SaveLifestyle)
                 },
                 onNavigateBack = onNavigateBack,
                 isLoading = state.isLoading,

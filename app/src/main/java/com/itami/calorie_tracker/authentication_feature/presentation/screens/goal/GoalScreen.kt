@@ -40,7 +40,7 @@ fun GoalScreen(
     onNavigateToGender: () -> Unit,
     state: GoalState,
     uiEvent: Flow<GoalUiEvent>,
-    onEvent: (GoalEvent) -> Unit,
+    onAction: (GoalAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -77,12 +77,12 @@ fun GoalScreen(
                     .fillMaxWidth(),
                 selectedWeightGoal = state.selectedGoal,
                 onWeightGoalClick = { goal ->
-                    onEvent(GoalEvent.SelectGoal(weightGoal = goal))
+                    onAction(GoalAction.SelectGoal(weightGoal = goal))
                 }
             )
             BottomSection(
                 onFABClick = {
-                    onEvent(GoalEvent.SaveGoal)
+                    onAction(GoalAction.SaveGoal)
                 },
                 isLoading = state.isLoading,
                 modifier = Modifier

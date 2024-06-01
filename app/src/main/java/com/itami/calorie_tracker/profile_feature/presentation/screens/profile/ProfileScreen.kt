@@ -51,7 +51,7 @@ fun ProfileScreen(
     onNavigateToAboutApp: () -> Unit,
     onNavigateBack: () -> Unit,
     state: ProfileState,
-    onEvent: (ProfileEvent) -> Unit,
+    onAction: (ProfileAction) -> Unit,
 ) {
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
@@ -97,7 +97,7 @@ fun ProfileScreen(
                 onNavigateToAboutApp = onNavigateToAboutApp,
                 onNavigateToSettings = onNavigateToSettings,
                 onChangeTheme = { theme ->
-                    onEvent(ProfileEvent.ChangeTheme(theme))
+                    onAction(ProfileAction.ChangeTheme(theme))
                 }
             )
         }

@@ -70,7 +70,7 @@ fun NavGraphBuilder.profileGraph(
                     navState.navigateBack()
                 },
                 state = viewModel.state,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
     }

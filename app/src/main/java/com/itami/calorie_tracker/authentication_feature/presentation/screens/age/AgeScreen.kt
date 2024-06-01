@@ -44,7 +44,7 @@ fun AgeScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: AgeState,
     uiEvent: Flow<AgeUiEvent>,
-    onEvent: (AgeEvent) -> Unit,
+    onAction: (AgeAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -83,7 +83,7 @@ fun AgeScreen(
             AgeSection(
                 age = state.age,
                 onValueChange = { age ->
-                    onEvent(AgeEvent.AgeValueChange(age))
+                    onAction(AgeAction.AgeValueChange(age))
                 },
                 modifier = Modifier
                     .widthIn(max = 200.dp)
@@ -91,7 +91,7 @@ fun AgeScreen(
             )
             BottomSection(
                 onFABClick = {
-                    onEvent(AgeEvent.SaveAge)
+                    onAction(AgeAction.SaveAge)
                 },
                 onNavigateBack = onNavigateBack,
                 isLoading = state.isLoading,

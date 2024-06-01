@@ -42,7 +42,7 @@ fun RecommendedNutrientsScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: RecommendedNutrientsState,
     uiEvent: Flow<RecommendedNutrientUiEvent>,
-    onEvent: (RecommendedNutrientEvent) -> Unit,
+    onAction: (RecommendedNutrientAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -62,11 +62,11 @@ fun RecommendedNutrientsScreen(
         opened = state.showGoogleOneTap,
         clientId = BuildConfig.GOOGLE_CLIENT_ID,
         onIdTokenReceived = { idToken ->
-            onEvent(RecommendedNutrientEvent.ShowGoogleOneTap(false))
-            onEvent(RecommendedNutrientEvent.SignUpWithGoogle(idToken))
+            onAction(RecommendedNutrientAction.ShowGoogleOneTap(false))
+            onAction(RecommendedNutrientAction.SignUpWithGoogle(idToken))
         },
         onDialogDismissed = { errorMessage ->
-            onEvent(RecommendedNutrientEvent.ShowGoogleOneTap(false))
+            onAction(RecommendedNutrientAction.ShowGoogleOneTap(false))
             errorMessage?.let(onShowSnackbar)
         }
     )
@@ -96,7 +96,7 @@ fun RecommendedNutrientsScreen(
                         .padding(bottom = CalorieTrackerTheme.padding.large),
                     isLoading = state.isLoading,
                     onContinueWithGoogle = {
-                        onEvent(RecommendedNutrientEvent.ShowGoogleOneTap(show = true))
+                        onAction(RecommendedNutrientAction.ShowGoogleOneTap(show = true))
                     },
                     onContinueWithEmail = {
                         onNavigateToRegisterEmail()

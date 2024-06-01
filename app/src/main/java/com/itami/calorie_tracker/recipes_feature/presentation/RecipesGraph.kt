@@ -40,7 +40,7 @@ fun NavGraphBuilder.recipesGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(
@@ -57,7 +57,7 @@ fun NavGraphBuilder.recipesGraph(
                     navState.navigateBack()
                 },
                 state = viewModel.state,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
     }

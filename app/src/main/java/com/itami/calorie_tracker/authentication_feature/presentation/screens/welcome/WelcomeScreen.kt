@@ -51,7 +51,7 @@ fun WelcomeScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: WelcomeState,
     uiEvent: Flow<WelcomeUiEvent>,
-    onEvent: (event: WelcomeEvent) -> Unit,
+    onAction: (action: WelcomeAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -71,11 +71,11 @@ fun WelcomeScreen(
         opened = state.showGoogleOneTap,
         clientId = BuildConfig.GOOGLE_CLIENT_ID,
         onIdTokenReceived = { idToken ->
-            onEvent(WelcomeEvent.ShowGoogleOneTap(show = false))
-            onEvent(WelcomeEvent.SignInWithGoogle(idToken))
+            onAction(WelcomeAction.ShowGoogleOneTap(show = false))
+            onAction(WelcomeAction.SignInWithGoogle(idToken))
         },
         onDialogDismissed = { message ->
-            onEvent(WelcomeEvent.ShowGoogleOneTap(show = false))
+            onAction(WelcomeAction.ShowGoogleOneTap(show = false))
             message?.let(onShowSnackbar)
         }
     )
@@ -98,7 +98,7 @@ fun WelcomeScreen(
                 isLoading = state.isLoading,
                 onEvent = { event ->
                     showBottomSheet = false
-                    onEvent(event)
+                    onAction(event)
                 },
                 onLoginEmailButtonClick = {
                     showBottomSheet = false
@@ -236,7 +236,7 @@ private fun BottomSection(
 private fun BottomSheetContent(
     modifier: Modifier,
     isLoading: Boolean,
-    onEvent: (event: WelcomeEvent) -> Unit,
+    onEvent: (event: WelcomeAction) -> Unit,
     onLoginEmailButtonClick: () -> Unit,
 ) {
     Column(
@@ -253,7 +253,7 @@ private fun BottomSheetContent(
                 .fillMaxWidth()
                 .padding(horizontal = CalorieTrackerTheme.padding.medium),
             onClick = {
-                onEvent(WelcomeEvent.ShowGoogleOneTap(show = true))
+                onEvent(WelcomeAction.ShowGoogleOneTap(show = true))
             }
         ) {
             Row(

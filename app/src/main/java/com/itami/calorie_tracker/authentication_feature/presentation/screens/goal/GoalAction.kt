@@ -2,10 +2,10 @@ package com.itami.calorie_tracker.authentication_feature.presentation.screens.go
 
 import com.itami.calorie_tracker.core.domain.model.WeightGoal
 
-sealed class GoalEvent {
+sealed class GoalAction {
 
-    data class SelectGoal(val weightGoal: WeightGoal) : GoalEvent()
+    data class SelectGoal(val weightGoal: WeightGoal) : GoalAction()
 
-    data object SaveGoal : GoalEvent()
+    data object SaveGoal : GoalAction()
 
 }

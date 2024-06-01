@@ -63,28 +63,28 @@ class DiaryViewModel @Inject constructor(
         loadMealsWithWater(date = dateString)
     }
 
-    fun onEvent(event: DiaryEvent) {
-        when (event) {
-            is DiaryEvent.ChangeDate -> {
-                state = state.copy(date = event.date)
+    fun onAction(action: DiaryAction) {
+        when (action) {
+            is DiaryAction.ChangeDate -> {
+                state = state.copy(date = action.date)
                 loadMealsWithWater(date = dateString)
                 getMeals(date = dateString)
                 getConsumedWater(date = dateString)
             }
 
-            is DiaryEvent.AddConsumedWater -> {
+            is DiaryAction.AddConsumedWater -> {
                 addConsumedWater(waterServingSize, dateString)
             }
 
-            is DiaryEvent.RemoveConsumedWater -> {
+            is DiaryAction.RemoveConsumedWater -> {
                 removeConsumedWater(waterServingSize, dateString)
             }
 
-            is DiaryEvent.ShowDatePicker -> {
-                state = state.copy(showDatePicker = event.show)
+            is DiaryAction.ShowDatePicker -> {
+                state = state.copy(showDatePicker = action.show)
             }
 
-            is DiaryEvent.Refresh -> {
+            is DiaryAction.Refresh -> {
                 state = state.copy(isRefreshingMeals = true)
                 loadMealsWithWater(date = dateString)
                 state = state.copy(isRefreshingMeals = false)

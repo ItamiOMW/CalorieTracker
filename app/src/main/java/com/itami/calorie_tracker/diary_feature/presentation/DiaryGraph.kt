@@ -60,7 +60,7 @@ fun NavGraphBuilder.diaryGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(
@@ -107,7 +107,7 @@ fun NavGraphBuilder.diaryGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(
@@ -154,7 +154,7 @@ fun NavGraphBuilder.diaryGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
         composable(
@@ -188,7 +188,7 @@ fun NavGraphBuilder.diaryGraph(
                 onShowSnackbar = onShowSnackbar,
                 state = viewModel.state,
                 uiEvent = viewModel.uiEvent,
-                onEvent = viewModel::onEvent
+                onAction = viewModel::onAction
             )
         }
     }

@@ -26,10 +26,10 @@ class ProfileViewModel @Inject constructor(
         getUser()
     }
 
-    fun onEvent(event: ProfileEvent) {
-        when (event) {
-            is ProfileEvent.ChangeTheme -> {
-                changeTheme(event.theme)
+    fun onAction(action: ProfileAction) {
+        when (action) {
+            is ProfileAction.ChangeTheme -> {
+                changeTheme(action.theme)
             }
         }
     }

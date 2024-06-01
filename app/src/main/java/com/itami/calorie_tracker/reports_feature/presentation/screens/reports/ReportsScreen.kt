@@ -85,7 +85,7 @@ fun ReportsScreen(
     onNavigateToProfile: () -> Unit,
     state: ReportsState,
     uiEvent: Flow<ReportsUiEvent>,
-    onEvent: (event: ReportsEvent) -> Unit,
+    onAction: (action: ReportsAction) -> Unit,
 ) {
     LaunchedEffect(Unit) {
         uiEvent.collect { event ->
@@ -104,14 +104,14 @@ fun ReportsScreen(
             selectedWeightUnit = state.weightUnit,
             onShowErrorMessage = onShowSnackbar,
             onChangeWeightUnit = {
-                onEvent(ReportsEvent.ChangeWeightUnit(it))
+                onAction(ReportsAction.ChangeWeightUnit(it))
             },
             onConfirm = {
-                onEvent(ReportsEvent.AddWeight(it))
-                onEvent(ReportsEvent.ShowAddWeightDialog(show = false))
+                onAction(ReportsAction.AddWeight(it))
+                onAction(ReportsAction.ShowAddWeightDialog(show = false))
             },
             onDismiss = {
-                onEvent(ReportsEvent.ShowAddWeightDialog(show = false))
+                onAction(ReportsAction.ShowAddWeightDialog(show = false))
             }
         )
     }
@@ -124,14 +124,14 @@ fun ReportsScreen(
             startWeightGrams = weight.weightGrams,
             onShowErrorMessage = onShowSnackbar,
             onChangeWeightUnit = {
-                onEvent(ReportsEvent.ChangeWeightUnit(it))
+                onAction(ReportsAction.ChangeWeightUnit(it))
             },
             onConfirm = { weightGrams ->
-                onEvent(ReportsEvent.EditWeight(weightGrams = weightGrams, weightId = weight.id))
-                onEvent(ReportsEvent.ShowEditWeightDialog(weightToEdit = null))
+                onAction(ReportsAction.EditWeight(weightGrams = weightGrams, weightId = weight.id))
+                onAction(ReportsAction.ShowEditWeightDialog(weightToEdit = null))
             },
             onDismiss = {
-                onEvent(ReportsEvent.ShowEditWeightDialog(weightToEdit = null))
+                onAction(ReportsAction.ShowEditWeightDialog(weightToEdit = null))
             }
         )
     }
@@ -176,7 +176,7 @@ fun ReportsScreen(
                         weights = state.weights,
                         selectedWeightUnit = state.weightUnit,
                         changeWeightUnit = { unit ->
-                            onEvent(ReportsEvent.ChangeWeightUnit(unit))
+                            onAction(ReportsAction.ChangeWeightUnit(unit))
                         }
                     )
                     Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
@@ -184,10 +184,10 @@ fun ReportsScreen(
                         weights = state.weights,
                         selectedWeightUnit = state.weightUnit,
                         onAddWeightClick = {
-                            onEvent(ReportsEvent.ShowAddWeightDialog(show = true))
+                            onAction(ReportsAction.ShowAddWeightDialog(show = true))
                         },
                         onWeightItemClick = { weight ->
-                            onEvent(ReportsEvent.ShowEditWeightDialog(weightToEdit = weight))
+                            onAction(ReportsAction.ShowEditWeightDialog(weightToEdit = weight))
                         }
                     )
                 }
@@ -202,7 +202,7 @@ fun ReportsScreen(
                 Error(
                     errorMessage = state.errorMessage,
                     onRetryClick = {
-                        onEvent(ReportsEvent.ReloadWeights)
+                        onAction(ReportsAction.ReloadWeights)
                     }
                 )
             }

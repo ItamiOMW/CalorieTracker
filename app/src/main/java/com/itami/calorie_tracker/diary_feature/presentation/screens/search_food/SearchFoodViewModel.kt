@@ -56,29 +56,29 @@ class SearchFoodViewModel @Inject constructor(
 
     private var searchQueryJob: Job? = null
 
-    fun onEvent(event: SearchFoodEvent) {
-        when (event) {
-            is SearchFoodEvent.SearchQueryChange -> {
-                state = state.copy(searchQuery = event.newValue)
+    fun onAction(action: SearchFoodAction) {
+        when (action) {
+            is SearchFoodAction.SearchQueryChange -> {
+                state = state.copy(searchQuery = action.newValue)
                 refreshFoodPaginator(delayMillis = 750)
             }
 
-            is SearchFoodEvent.ClearSearchQuery -> {
+            is SearchFoodAction.ClearSearchQuery -> {
                 state = state.copy(searchQuery = "")
                 refreshFoodPaginator(delayMillis = 1000)
             }
 
-            is SearchFoodEvent.SetSelectedFood -> {
+            is SearchFoodAction.SetSelectedFood -> {
                 state = state.copy(
-                    selectedFood = event.food?.let { ConsumedFood(food = it) }
+                    selectedFood = action.food?.let { ConsumedFood(food = it) }
                 )
             }
 
-            is SearchFoodEvent.LoadNextPage -> {
+            is SearchFoodAction.LoadNextPage -> {
                 loadNextPage()
             }
 
-            is SearchFoodEvent.Refresh -> {
+            is SearchFoodAction.Refresh -> {
                 refreshFoodPaginator(delayMillis = 0)
             }
         }

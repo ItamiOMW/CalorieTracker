@@ -39,24 +39,24 @@ class WeightViewModel @Inject constructor(
         getWeight()
     }
 
-    fun onEvent(event: WeightEvent) {
-        when (event) {
-            is WeightEvent.SaveWeight -> {
+    fun onAction(action: WeightAction) {
+        when (action) {
+            is WeightAction.SaveWeight -> {
                 saveWeight(
                     weight = state.weight.toFloat(),
                     weightUnit = state.selectedWeightUnit
                 )
             }
 
-            is WeightEvent.WeightValueChange -> {
-                state = state.copy(weight = event.weight)
+            is WeightAction.WeightValueChange -> {
+                state = state.copy(weight = action.weight)
             }
 
-            is WeightEvent.ChangeWeightUnit -> {
+            is WeightAction.ChangeWeightUnit -> {
                 changeWeightUnit(
                     weight = state.weight,
                     fromWeightUnit = state.selectedWeightUnit,
-                    toWeightUnit = event.weightUnit
+                    toWeightUnit = action.weightUnit
                 )
             }
         }

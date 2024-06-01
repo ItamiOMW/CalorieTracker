@@ -49,17 +49,17 @@ class NewMealViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: NewMealEvent) {
-        when (event) {
-            is NewMealEvent.AddConsumedFood -> {
-                addConsumedFood(event.consumedFood)
+    fun onAction(action: NewMealAction) {
+        when (action) {
+            is NewMealAction.AddConsumedFood -> {
+                addConsumedFood(action.consumedFood)
             }
 
-            is NewMealEvent.MealNameChange -> {
-                state = state.copy(mealName = event.newValue)
+            is NewMealAction.MealNameChange -> {
+                state = state.copy(mealName = action.newValue)
             }
 
-            is NewMealEvent.SaveMeal -> {
+            is NewMealAction.SaveMeal -> {
                 createMeal(
                     name = state.mealName,
                     consumedFoods = state.consumedFoods,
@@ -67,20 +67,20 @@ class NewMealViewModel @Inject constructor(
                 )
             }
 
-            is NewMealEvent.ShowExitDialog -> {
-                state = state.copy(showExitDialog = event.show)
+            is NewMealAction.ShowExitDialog -> {
+                state = state.copy(showExitDialog = action.show)
             }
 
-            is NewMealEvent.DeleteConsumedFood -> {
-                deleteConsumedFood(event.index)
+            is NewMealAction.DeleteConsumedFood -> {
+                deleteConsumedFood(action.index)
             }
 
-            is NewMealEvent.UpdateConsumedFood -> {
-                editConsumedFood(event.index, event.weightGrams)
+            is NewMealAction.UpdateConsumedFood -> {
+                editConsumedFood(action.index, action.weightGrams)
             }
 
-            is NewMealEvent.SelectConsumedFood -> {
-                state = state.copy(selectedConsumedFoodIndex = event.index)
+            is NewMealAction.SelectConsumedFood -> {
+                state = state.copy(selectedConsumedFoodIndex = action.index)
             }
         }
     }

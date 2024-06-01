@@ -40,15 +40,15 @@ class RecommendedNutrientsViewModel @Inject constructor(
         getUserAndCalculateNutrients()
     }
 
-    fun onEvent(event: RecommendedNutrientEvent) {
-        when (event) {
-            is RecommendedNutrientEvent.ShowGoogleOneTap -> {
-                state = state.copy(showGoogleOneTap = event.show)
+    fun onAction(action: RecommendedNutrientAction) {
+        when (action) {
+            is RecommendedNutrientAction.ShowGoogleOneTap -> {
+                state = state.copy(showGoogleOneTap = action.show)
             }
 
-            is RecommendedNutrientEvent.SignUpWithGoogle -> {
+            is RecommendedNutrientAction.SignUpWithGoogle -> {
                 signUpWithGoogle(
-                    idToken = event.idToken,
+                    idToken = action.idToken,
                     user = user,
                 )
             }

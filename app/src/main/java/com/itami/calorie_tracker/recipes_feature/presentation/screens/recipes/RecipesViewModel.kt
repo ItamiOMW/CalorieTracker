@@ -62,14 +62,14 @@ class RecipesViewModel @Inject constructor(
         getUser()
     }
 
-    fun onEvent(event: RecipesEvent) {
-        when (event) {
-            is RecipesEvent.Refresh -> {
+    fun onAction(action: RecipesAction) {
+        when (action) {
+            is RecipesAction.Refresh -> {
                 refreshRecipes()
             }
 
-            is RecipesEvent.SearchQueryChange -> {
-                state = state.copy(searchQuery = event.newValue)
+            is RecipesAction.SearchQueryChange -> {
+                state = state.copy(searchQuery = action.newValue)
                 loadRecipesJob?.cancel()
                 loadRecipesJob = viewModelScope.launch {
                     delay(1000L)
@@ -77,18 +77,18 @@ class RecipesViewModel @Inject constructor(
                 }
             }
 
-            is RecipesEvent.ShowFilterOverlay -> {
-                state = state.copy(showFilterOverlay = event.show)
+            is RecipesAction.ShowFilterOverlay -> {
+                state = state.copy(showFilterOverlay = action.show)
             }
 
-            is RecipesEvent.LoadNextRecipes -> {
+            is RecipesAction.LoadNextRecipes -> {
                 loadNextRecipes()
             }
 
-            is RecipesEvent.UpdateFilters -> {
+            is RecipesAction.UpdateFilters -> {
                 state = state.copy(
-                    timeFilters = event.timeFilters,
-                    caloriesFilters = event.caloriesFilters
+                    timeFilters = action.timeFilters,
+                    caloriesFilters = action.caloriesFilters
                 )
                 loadRecipesJob?.cancel()
                 loadRecipesJob = viewModelScope.launch {

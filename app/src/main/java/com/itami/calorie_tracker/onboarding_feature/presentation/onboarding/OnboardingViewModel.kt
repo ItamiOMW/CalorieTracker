@@ -17,10 +17,10 @@ class OnboardingViewModel @Inject constructor(
     private val _uiEvent = Channel<OnboardingUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
-    fun onEvent(event: OnboardingEvent) {
-        when(event) {
-            is OnboardingEvent.ChangeShowOnboardingState -> {
-                changeShowOnboardingState(show = event.show)
+    fun onAction(action: OnboardingAction) {
+        when(action) {
+            is OnboardingAction.ChangeShowOnboardingState -> {
+                changeShowOnboardingState(show = action.show)
             }
         }
     }

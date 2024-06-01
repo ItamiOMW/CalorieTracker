@@ -41,7 +41,7 @@ import com.itami.calorie_tracker.recipes_feature.domain.model.Recipe
 fun RecipeDetailsScreen(
     onNavigateBack: () -> Unit,
     state: RecipeDetailState,
-    onEvent: (RecipeDetailEvent) -> Unit,
+    onAction: (RecipeDetailAction) -> Unit,
 ) {
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
@@ -89,7 +89,7 @@ fun RecipeDetailsScreen(
                 Error(
                     errorMessage = state.errorMessage,
                     onRetryClick = {
-                        onEvent(RecipeDetailEvent.Retry)
+                        onAction(RecipeDetailAction.Retry)
                     }
                 )
             }

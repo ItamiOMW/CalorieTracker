@@ -54,7 +54,7 @@ fun MealScreen(
     onShowSnackbar: (message: String) -> Unit,
     state: MealState,
     uiEvent: Flow<MealUiEvent>,
-    onEvent: (event: MealEvent) -> Unit,
+    onAction: (action: MealAction) -> Unit,
 ) {
     LaunchedEffect(key1 = true) {
         uiEvent.collect { event ->
@@ -72,7 +72,7 @@ fun MealScreen(
 
 
     BackHandler {
-        onEvent(MealEvent.ShowExitDialog(true))
+        onAction(MealAction.ShowExitDialog(true))
     }
 
     if (state.showExitDialog) {
@@ -82,11 +82,11 @@ fun MealScreen(
             cancelText = stringResource(R.string.cancel),
             confirmText = stringResource(R.string.exit),
             onConfirm = {
-                onEvent(MealEvent.ShowExitDialog(false))
+                onAction(MealAction.ShowExitDialog(false))
                 onNavigateBack()
             },
             onDismiss = {
-                onEvent(MealEvent.ShowExitDialog(false))
+                onAction(MealAction.ShowExitDialog(false))
             }
         )
     }
@@ -97,15 +97,15 @@ fun MealScreen(
             ConsumedFoodDialog(
                 consumedFood = consumedFood,
                 onConfirm = { weightGrams ->
-                    onEvent(
-                        MealEvent.UpdateConsumedFood(
+                    onAction(
+                        MealAction.UpdateConsumedFood(
                             index = index,
                             weightGrams = weightGrams
                         )
                     )
                 },
                 onDismiss = {
-                    onEvent(MealEvent.SelectConsumedFood(null))
+                    onAction(MealAction.SelectConsumedFood(null))
                 }
             )
         }
@@ -118,16 +118,16 @@ fun MealScreen(
             TopBarSection(
                 mealName = state.mealName,
                 onMealNameChange = { newValue ->
-                    onEvent(MealEvent.MealNameChange(newValue))
+                    onAction(MealAction.MealNameChange(newValue))
                 },
                 consumedFoods = state.consumedFoods,
                 onCloseIconClick = {
-                    onEvent(MealEvent.ShowExitDialog(true))
+                    onAction(MealAction.ShowExitDialog(true))
                 },
                 onAddIconClick = {
                     onNavigateSearchFood { consumedFoodResult ->
                         consumedFoodResult?.let { consumedFood ->
-                            onEvent(MealEvent.AddConsumedFood(consumedFood))
+                            onAction(MealAction.AddConsumedFood(consumedFood))
                         }
                     }
                 },
@@ -151,7 +151,7 @@ fun MealScreen(
                     vertical = CalorieTrackerTheme.padding.default
                 ),
                 onClick = {
-                    onEvent(MealEvent.SaveMeal)
+                    onAction(MealAction.SaveMeal)
                 },
             ) {
                 Text(
@@ -176,13 +176,13 @@ fun MealScreen(
                     .align(Alignment.TopCenter),
                 consumedFoods = state.consumedFoods,
                 onConsumedFoodClick = { index ->
-                    onEvent(MealEvent.SelectConsumedFood(index))
+                    onAction(MealAction.SelectConsumedFood(index))
                 },
                 onEditConsumedFood = { index ->
-                    onEvent(MealEvent.SelectConsumedFood(index))
+                    onAction(MealAction.SelectConsumedFood(index))
                 },
                 onDeleteConsumedFood = { index ->
-                    onEvent(MealEvent.DeleteConsumedFood(index))
+                    onAction(MealAction.DeleteConsumedFood(index))
                 }
             )
             if (state.isLoading) {

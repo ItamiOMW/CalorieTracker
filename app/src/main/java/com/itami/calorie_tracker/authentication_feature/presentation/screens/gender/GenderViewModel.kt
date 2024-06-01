@@ -28,14 +28,14 @@ class GenderViewModel @Inject constructor(
         getGender()
     }
 
-    fun onEvent(event: GenderEvent) {
-        when (event) {
-            is GenderEvent.SaveGender -> {
+    fun onAction(action: GenderAction) {
+        when (action) {
+            is GenderAction.SaveGender -> {
                 saveGender(state.selectedGender)
             }
 
-            is GenderEvent.SelectGender -> {
-                state = state.copy(selectedGender = event.gender)
+            is GenderAction.SelectGender -> {
+                state = state.copy(selectedGender = action.gender)
             }
         }
     }

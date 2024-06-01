@@ -28,14 +28,14 @@ class LifestyleViewModel @Inject constructor(
         getGender()
     }
 
-    fun onEvent(event: LifestyleEvent) {
-        when (event) {
-            is LifestyleEvent.SaveLifestyle -> {
+    fun onAction(action: LifestyleAction) {
+        when (action) {
+            is LifestyleAction.SaveLifestyle -> {
                 saveLifestyle(state.selectedLifestyle)
             }
 
-            is LifestyleEvent.SelectLifestyle -> {
-                state = state.copy(selectedLifestyle = event.lifestyle)
+            is LifestyleAction.SelectLifestyle -> {
+                state = state.copy(selectedLifestyle = action.lifestyle)
             }
         }
     }

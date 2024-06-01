@@ -2,10 +2,10 @@ package com.itami.calorie_tracker.authentication_feature.presentation.screens.ge
 
 import com.itami.calorie_tracker.core.domain.model.Gender
 
-sealed class GenderEvent {
+sealed class GenderAction {
 
-    data class SelectGender(val gender: Gender) : GenderEvent()
+    data class SelectGender(val gender: Gender) : GenderAction()
 
-    data object SaveGender : GenderEvent()
+    data object SaveGender : GenderAction()
 
 }

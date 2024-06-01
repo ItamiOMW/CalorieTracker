@@ -30,7 +30,7 @@ fun NavGraphBuilder.onboardingGraph(
                         popUpInclusive = true
                     )
                 },
-                onEvent = viewModel::onEvent,
+                onAction = viewModel::onAction,
                 uiEvent = viewModel.uiEvent
             )
         }
