@@ -1,9 +1,76 @@
 package com.itami.calorie_tracker.core.domain.utils
 
+import android.util.Patterns
+import com.itami.calorie_tracker.core.domain.exceptions.AppException
+import com.itami.calorie_tracker.core.domain.exceptions.UserCredentialsException
 import com.itami.calorie_tracker.core.domain.exceptions.UserInfoException
 import com.itami.calorie_tracker.core.utils.Constants
 
 object ValidationUtil {
+
+    fun validateResetCode(code: Int): AppException? {
+        if (code < 100000 || code > 999999) {
+            return UserCredentialsException.InvalidResetCodeException
+        }
+
+        return null
+    }
+
+    fun validateName(name: String): UserCredentialsException? {
+        val trimmedName = name.trim()
+
+        if (trimmedName.isBlank()) {
+            return UserCredentialsException.EmptyNameFieldException
+        }
+
+        return null
+    }
+
+    fun validateEmail(email: String): UserCredentialsException? {
+        val trimmedEmail = email.trim()
+
+        if (trimmedEmail.isBlank()) {
+            return UserCredentialsException.EmptyEmailFieldException
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(trimmedEmail).matches()) {
+            return UserCredentialsException.InvalidEmailException
+        }
+
+        return null
+    }
+
+    fun validatePassword(password: String): AppException? {
+        val trimmedPassword = password.trim()
+
+        if (trimmedPassword.isBlank()) {
+            return UserCredentialsException.EmptyPasswordFieldException
+        }
+
+        if (trimmedPassword.length < Constants.MIN_PASSWORD_LENGTH) {
+            return UserCredentialsException.ShortPasswordException
+        }
+
+        return null
+    }
+
+    fun validatePasswords(
+        password: String,
+        repeatPassword: String
+    ): AppException? {
+        val trimmedPassword = password.trim()
+        val trimmedRepeatPassword = repeatPassword.trim()
+
+        if (trimmedRepeatPassword.isBlank()) {
+            return UserCredentialsException.EmptyRepeatPasswordFieldException
+        }
+
+        if (trimmedPassword != trimmedRepeatPassword) {
+            return UserCredentialsException.PasswordsDoNotMatchException
+        }
+
+        return null
+    }
 
     fun validateHeight(heightCm: Int): UserInfoException? {
         if (heightCm > Constants.MAX_HEIGHT_CM || heightCm < Constants.MIN_HEIGHT_CM) {

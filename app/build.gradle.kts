@@ -44,7 +44,11 @@ android {
                 "GOOGLE_CLIENT_ID",
                 "\"${localProperties.getProperty("GOOGLE_CLIENT_ID")}\""
             )
-            buildConfigField("String", "BASE_URL", "\"${localProperties.getProperty("BASE_URL")}\"")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${localProperties.getProperty("BASE_URL")}\""
+            )
         }
         debug {
             buildConfigField(
@@ -52,7 +56,11 @@ android {
                 "GOOGLE_CLIENT_ID",
                 "\"${localProperties.getProperty("GOOGLE_CLIENT_ID")}\""
             )
-            buildConfigField("String", "BASE_URL", "\"${localProperties.getProperty("BASE_URL")}\"")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "\"${localProperties.getProperty("BASE_URL")}\""
+            )
         }
     }
     compileOptions {
@@ -79,7 +87,7 @@ android {
 dependencies {
 
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.1")
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation(platform("androidx.compose:compose-bom:2024.05.00"))
     implementation("androidx.compose.ui:ui")
@@ -94,57 +102,48 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    
-
     // Chart Library
-    // For Jetpack Compose.
     implementation("com.patrykandpatrick.vico:compose:2.0.0-alpha.19")
-
-    // For `compose`. Creates a `ChartStyle` based on an M3 Material Theme.
     implementation("com.patrykandpatrick.vico:compose-m3:2.0.0-alpha.19")
-
-    // Houses the core logic for charts and other elements. Included in all other modules.
     implementation("com.patrykandpatrick.vico:core:2.0.0-alpha.19")
 
+    // Google Auth
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 
-
-    //Google Auth
-    implementation("com.google.android.gms:play-services-auth:21.1.1")
-
-    //Kotlinx Serialization
+    // Kotlinx Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
-    //Compose Navigation, keep it 2.7.5 since updating to newer version breaks navigation for some reason
+    // Compose Navigation, keep it 2.7.5 since updating to newer version breaks navigation for some reason
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
-    //Splash Screen Api
+    // Splash Screen Api
     implementation("androidx.core:core-splashscreen:1.0.1")
 
-    //Dagger-Hilt
+    // Dagger-Hilt
     implementation("com.google.dagger:hilt-android:2.49")
     kapt("com.google.dagger:hilt-android-compiler:2.49")
     kapt("androidx.hilt:hilt-compiler:1.2.0")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-    //Ktor client
+    // Ktor client
     implementation("io.ktor:ktor-client-core:2.3.5")
     implementation("io.ktor:ktor-client-cio:2.3.5")
     implementation("io.ktor:ktor-client-logging:2.3.5")
     implementation("io.ktor:ktor-client-content-negotiation:2.3.5")
     implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.5")
 
-    //Coil Async Image
+    // Coil Async Image
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    //Room Database
+    // Room Database
     implementation("androidx.room:room-runtime:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
 
-    //Data Store Preferences
+    // Data Store Preferences
     implementation("androidx.datastore:datastore-preferences:1.1.1")
     implementation("androidx.datastore:datastore:1.1.1")
 
-    //Encrypted Shared Preferences
+    // Encrypted Shared Preferences
     implementation("androidx.security:security-crypto:1.1.0-alpha06")
 }
