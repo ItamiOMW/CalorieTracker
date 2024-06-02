@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,35 +33,60 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun EmailActivationScreen(
-    onNavigateToLoginEmail: () -> Unit,
+    onNavigateToLogin: () -> Unit,
     onNavigateBack: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: EmailActivationState,
-    uiEvent: Flow<EmailActivationUiEvent>,
-    onAction: (EmailActivationAction) -> Unit,
+    viewModel: EmailActivationViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = Unit) {
-        uiEvent.collect { event ->
-            when (event) {
-                is EmailActivationUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is EmailActivationUiEvent.NavigateBack -> onNavigateBack()
+            is EmailActivationUiEvent.NavigateToLogin -> onNavigateToLogin()
+            is EmailActivationUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
         }
     }
 
+    EmailActivationScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun RegisterEmailScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        EmailActivationScreenContent(
+            state = EmailActivationState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun EmailActivationScreenContent(
+    state: EmailActivationState,
+    onAction: (EmailActivationAction) -> Unit,
+) {
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
-            TopBarSection(onNavigateBack = onNavigateBack)
+            TopBarSection(
+                onNavigateBack = {
+                    onAction(EmailActivationAction.OnNavigateBackClick)
+                }
+            )
         },
     ) { scaffoldPadding ->
         Box(
@@ -75,9 +99,11 @@ fun EmailActivationScreen(
             ActivationTextSection(email = state.email)
             BottomSection(
                 isLoading = state.isLoading,
-                onGoToLoginClicked = onNavigateToLoginEmail,
+                onGoToLoginClicked = {
+                    onAction(EmailActivationAction.OnGoToLoginClick)
+                },
                 onResendEmailClicked = {
-                    onAction(EmailActivationAction.OnResendConfirmationEmail)
+                    onAction(EmailActivationAction.OnResendConfirmationEmailClick)
                 }
             )
             if (state.isLoading) {

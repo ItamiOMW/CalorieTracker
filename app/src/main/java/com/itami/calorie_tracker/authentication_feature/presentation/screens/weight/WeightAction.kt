@@ -8,6 +8,8 @@ sealed class WeightAction {
 
     data class WeightValueChange(val weight: String) : WeightAction()
 
-    data object SaveWeight : WeightAction()
+    data object NavigateNextClick : WeightAction()
+
+    data object NavigateBackClick : WeightAction()
 
 }

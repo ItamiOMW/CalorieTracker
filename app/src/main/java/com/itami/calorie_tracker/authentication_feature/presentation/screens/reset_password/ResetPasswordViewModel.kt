@@ -87,17 +87,21 @@ class ResetPasswordViewModel @Inject constructor(
                 )
             }
 
-            is ResetPasswordAction.ResendResetCode -> {
+            is ResetPasswordAction.ResendResetCodeClick -> {
                 sendPasswordResetEmail(state.email)
             }
 
-            is ResetPasswordAction.ResetPassword -> {
+            is ResetPasswordAction.ResetPasswordClick -> {
                 resetPassword(
                     password = state.passwordState.text,
                     repeatPassword = state.repeatPasswordState.text,
                     email = state.email,
                     code = state.codeState.text.toInt()
                 )
+            }
+
+            is ResetPasswordAction.NavigateBackClick -> {
+                sendUiEvent(ResetPasswordUiEvent.NavigateBack)
             }
         }
     }

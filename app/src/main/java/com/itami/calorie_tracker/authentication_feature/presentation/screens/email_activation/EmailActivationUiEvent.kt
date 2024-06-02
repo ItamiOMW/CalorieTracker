@@ -2,6 +2,10 @@ package com.itami.calorie_tracker.authentication_feature.presentation.screens.em
 
 sealed class EmailActivationUiEvent {
 
-    data class ShowSnackbar(val message: String): EmailActivationUiEvent()
+    data class ShowSnackbar(val message: String) : EmailActivationUiEvent()
+
+    data object NavigateToLogin : EmailActivationUiEvent()
+
+    data object NavigateBack : EmailActivationUiEvent()
 
 }

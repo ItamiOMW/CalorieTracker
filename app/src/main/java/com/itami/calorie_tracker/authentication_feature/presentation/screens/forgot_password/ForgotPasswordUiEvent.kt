@@ -6,4 +6,6 @@ sealed class ForgotPasswordUiEvent {
 
     data class ResetCodeSentSuccessfully(val email: String) : ForgotPasswordUiEvent()
 
+    data object NavigateBack : ForgotPasswordUiEvent()
+
 }

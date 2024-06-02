@@ -7,7 +7,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -22,14 +21,9 @@ import com.itami.calorie_tracker.core.presentation.navigation.util.popBackStackW
 import com.itami.calorie_tracker.core.utils.Constants
 import com.itami.calorie_tracker.core.utils.DateTimeUtil
 import com.itami.calorie_tracker.diary_feature.presentation.screens.diary.DiaryScreen
-import com.itami.calorie_tracker.diary_feature.presentation.screens.diary.DiaryViewModel
 import com.itami.calorie_tracker.diary_feature.presentation.screens.meal.MealScreen
-import com.itami.calorie_tracker.diary_feature.presentation.screens.meal.MealViewModel
 import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.NewMealScreen
-import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.NewMealViewModel
 import com.itami.calorie_tracker.diary_feature.presentation.screens.search_food.SearchFoodScreen
-import com.itami.calorie_tracker.diary_feature.presentation.screens.search_food.SearchFoodViewModel
-
 
 fun NavGraphBuilder.diaryGraph(
     navState: NavigationState,
@@ -40,7 +34,6 @@ fun NavGraphBuilder.diaryGraph(
         startDestination = DiaryGraphScreens.Diary.fullRoute
     ) {
         composable(DiaryGraphScreens.Diary.fullRoute) {
-            val viewModel: DiaryViewModel = hiltViewModel()
             DiaryScreen(
                 onNavigateToMeal = { mealId ->
                     navState.navigateToScreen(DiaryGraphScreens.Meal.routeWithArgs(mealId))
@@ -58,9 +51,6 @@ fun NavGraphBuilder.diaryGraph(
                     )
                 },
                 onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
             )
         }
         composable(
@@ -93,7 +83,6 @@ fun NavGraphBuilder.diaryGraph(
                 ) + fadeOut(animationSpec = tween(750))
             }
         ) {
-            val viewModel: NewMealViewModel = hiltViewModel()
             NewMealScreen(
                 onNavigateSearchFood = { navCallback ->
                     navState.navHostController.navigateForResult(
@@ -101,13 +90,13 @@ fun NavGraphBuilder.diaryGraph(
                         navResultCallback = navCallback,
                     )
                 },
+                onMealSaved = {
+                    navState.navigateBack()
+                },
                 onNavigateBack = {
                     navState.navigateBack()
                 },
                 onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
             )
         }
         composable(
@@ -140,7 +129,6 @@ fun NavGraphBuilder.diaryGraph(
                 ) + fadeOut(animationSpec = tween(750))
             }
         ) {
-            val viewModel: MealViewModel = hiltViewModel()
             MealScreen(
                 onNavigateSearchFood = { navCallback ->
                     navState.navHostController.navigateForResult(
@@ -148,13 +136,13 @@ fun NavGraphBuilder.diaryGraph(
                         navResultCallback = navCallback,
                     )
                 },
+                onMealSaved = {
+                    navState.navigateBack()
+                },
                 onNavigateBack = {
                     navState.navigateBack()
                 },
                 onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
             )
         }
         composable(
@@ -180,15 +168,14 @@ fun NavGraphBuilder.diaryGraph(
                 ).plus(fadeIn(tween(750)))
             },
         ) {
-            val viewModel: SearchFoodViewModel = hiltViewModel()
             SearchFoodScreen(
-                onNavigateBack = { consumedFood ->
+                onNavigateBackWithFood = { consumedFood ->
                     navState.navHostController.popBackStackWithResult(consumedFood)
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onNavigateBack = {
+                    navState.navigateBack()
+                },
+                onShowSnackbar = onShowSnackbar
             )
         }
     }

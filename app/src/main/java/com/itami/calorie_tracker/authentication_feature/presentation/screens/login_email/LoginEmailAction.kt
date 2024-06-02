@@ -8,6 +8,10 @@ sealed class LoginEmailAction {
 
     data class PasswordVisibilityChange(val isVisible: Boolean) : LoginEmailAction()
 
-    data object Login : LoginEmailAction()
+    data object LoginClick : LoginEmailAction()
+
+    data object ForgotPasswordClick : LoginEmailAction()
+
+    data object NavigateBackClick : LoginEmailAction()
 
 }

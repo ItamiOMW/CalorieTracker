@@ -6,6 +6,8 @@ sealed class LifestyleAction {
 
     data class SelectLifestyle(val lifestyle: Lifestyle) : LifestyleAction()
 
-    data object SaveLifestyle : LifestyleAction()
+    data object NavigateNextClick : LifestyleAction()
+
+    data object NavigateBackClick : LifestyleAction()
 
 }

@@ -8,6 +8,8 @@ sealed class HeightAction {
 
     data class ChangeHeightUnit(val heightUnit: HeightUnit) : HeightAction()
 
-    data object SaveHeight : HeightAction()
+    data object NavigateNextClick : HeightAction()
+
+    data object NavigateBackClick : HeightAction()
 
 }

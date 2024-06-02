@@ -30,12 +30,24 @@ class WelcomeViewModel @Inject constructor(
 
     fun onAction(action: WelcomeAction) {
         when (action) {
-            is WelcomeAction.ShowGoogleOneTap -> {
-                state = state.copy(showGoogleOneTap = action.show)
+            is WelcomeAction.GoogleIdTokenReceived -> {
+                signInWithGoogle(idToken = action.idToken)
             }
 
-            is WelcomeAction.SignInWithGoogle -> {
-                signInWithGoogle(idToken = action.idToken)
+            is WelcomeAction.OnSignInWithEmailClick -> {
+                sendUiEvent(WelcomeUiEvent.NavigateToLoginEmail)
+            }
+
+            is WelcomeAction.OnStartClick -> {
+                sendUiEvent(WelcomeUiEvent.Start)
+            }
+
+            is WelcomeAction.OnSignInWithGoogleClick -> {
+                state = state.copy(showGoogleOneTap = true)
+            }
+
+            is WelcomeAction.DismissGoogleOneTap -> {
+                state = state.copy(showGoogleOneTap = false)
             }
         }
     }
@@ -51,11 +63,14 @@ class WelcomeViewModel @Inject constructor(
         viewModelScope.launch {
             when (val response = loginGoogleUseCase(idToken)) {
                 is AppResponse.Success -> {
-                    sendUiEvent(WelcomeUiEvent.SignInSuccessful)
+                    sendUiEvent(WelcomeUiEvent.GoogleLoginSuccessful)
                 }
 
                 is AppResponse.Failed -> {
-                    handleException(appException = response.appException, message = response.message)
+                    handleException(
+                        appException = response.appException,
+                        message = response.message
+                    )
                 }
             }
             state = state.copy(isLoading = false)
@@ -75,7 +90,8 @@ class WelcomeViewModel @Inject constructor(
             is AppException.UnauthorizedException -> {
                 sendUiEvent(
                     WelcomeUiEvent.ShowSnackbar(
-                        message = message ?: application.getString(R.string.error_google_unauthorized)
+                        message = message
+                            ?: application.getString(R.string.error_google_unauthorized)
                     )
                 )
             }

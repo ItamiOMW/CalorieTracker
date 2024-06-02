@@ -6,4 +6,6 @@ sealed class RegisterEmailUiEvent {
 
     data class RegisterSuccessful(val registeredEmail: String) : RegisterEmailUiEvent()
 
+    data object NavigateBack : RegisterEmailUiEvent()
+
 }

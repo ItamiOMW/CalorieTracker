@@ -6,6 +6,6 @@ sealed class GoalAction {
 
     data class SelectGoal(val weightGoal: WeightGoal) : GoalAction()
 
-    data object SaveGoal : GoalAction()
+    data object NavigateNextClick : GoalAction()
 
 }

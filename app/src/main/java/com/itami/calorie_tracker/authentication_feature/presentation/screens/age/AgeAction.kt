@@ -4,6 +4,8 @@ sealed class AgeAction {
 
     data class AgeValueChange(val age: String) : AgeAction()
 
-    data object SaveAge : AgeAction()
+    data object NavigateNextClick : AgeAction()
+
+    data object NavigateBackClick : AgeAction()
 
 }

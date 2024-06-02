@@ -51,7 +51,7 @@ class NewMealViewModel @Inject constructor(
 
     fun onAction(action: NewMealAction) {
         when (action) {
-            is NewMealAction.AddConsumedFood -> {
+            is NewMealAction.AddConsumedFoodRequest -> {
                 addConsumedFood(action.consumedFood)
             }
 
@@ -59,16 +59,12 @@ class NewMealViewModel @Inject constructor(
                 state = state.copy(mealName = action.newValue)
             }
 
-            is NewMealAction.SaveMeal -> {
+            is NewMealAction.SaveMealClick -> {
                 createMeal(
                     name = state.mealName,
                     consumedFoods = state.consumedFoods,
                     datetime = datetime
                 )
-            }
-
-            is NewMealAction.ShowExitDialog -> {
-                state = state.copy(showExitDialog = action.show)
             }
 
             is NewMealAction.DeleteConsumedFood -> {
@@ -81,6 +77,23 @@ class NewMealViewModel @Inject constructor(
 
             is NewMealAction.SelectConsumedFood -> {
                 state = state.copy(selectedConsumedFoodIndex = action.index)
+            }
+
+            is NewMealAction.AddFoodIconClick -> {
+                sendUiEvent(NewMealUiEvent.NavigateToSearchFood)
+            }
+
+            is NewMealAction.NavigateBackClick -> {
+                state = state.copy(showExitDialog = true)
+            }
+
+            is NewMealAction.NavigateBackConfirmClick -> {
+                state = state.copy(showExitDialog = false)
+                sendUiEvent(NewMealUiEvent.NavigateBack)
+            }
+
+            is NewMealAction.NavigateBackDenyClick -> {
+                state = state.copy(showExitDialog = false)
             }
         }
     }

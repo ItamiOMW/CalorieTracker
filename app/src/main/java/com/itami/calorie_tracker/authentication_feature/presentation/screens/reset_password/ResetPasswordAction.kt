@@ -12,8 +12,10 @@ sealed class ResetPasswordAction {
 
     data class RepeatPasswordVisibilityChange(val isVisible: Boolean): ResetPasswordAction()
 
-    data object ResendResetCode : ResetPasswordAction()
+    data object ResendResetCodeClick : ResetPasswordAction()
 
-    data object ResetPassword : ResetPasswordAction()
+    data object ResetPasswordClick : ResetPasswordAction()
+
+    data object NavigateBackClick : ResetPasswordAction()
 
 }

@@ -4,4 +4,8 @@ sealed class RecipesUiEvent {
 
     data class ShowSnackbar(val message: String): RecipesUiEvent()
 
+    data class NavigateToRecipeDetails(val recipeId: Int): RecipesUiEvent()
+
+    data object NavigateToProfile: RecipesUiEvent()
+
 }

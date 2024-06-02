@@ -6,4 +6,8 @@ sealed class LoginEmailUiEvent {
 
     data object LoginSuccessful: LoginEmailUiEvent()
 
+    data object NavigateToForgotPassword: LoginEmailUiEvent()
+
+    data object NavigateBack: LoginEmailUiEvent()
+
 }

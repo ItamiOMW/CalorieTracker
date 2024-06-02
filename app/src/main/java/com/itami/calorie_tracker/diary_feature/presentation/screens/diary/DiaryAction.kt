@@ -4,14 +4,20 @@ import java.time.ZonedDateTime
 
 sealed class DiaryAction {
 
-    data class ShowDatePicker(val show: Boolean): DiaryAction()
+    data class ShowDatePicker(val show: Boolean) : DiaryAction()
 
-    data class ChangeDate(val date: ZonedDateTime): DiaryAction()
+    data class ChangeDate(val date: ZonedDateTime) : DiaryAction()
 
-    data object AddConsumedWater: DiaryAction()
+    data object AddConsumedWaterClick : DiaryAction()
 
-    data object RemoveConsumedWater: DiaryAction()
+    data object RemoveConsumedWaterClick : DiaryAction()
 
-    data object Refresh: DiaryAction()
+    data object Refresh : DiaryAction()
+
+    data class MealClick(val mealId: Int) : DiaryAction()
+
+    data object NewMealClick : DiaryAction()
+
+    data object ProfilePictureClick : DiaryAction()
 
 }

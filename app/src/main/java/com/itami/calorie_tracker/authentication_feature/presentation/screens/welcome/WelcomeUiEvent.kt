@@ -2,7 +2,11 @@ package com.itami.calorie_tracker.authentication_feature.presentation.screens.we
 
 sealed class WelcomeUiEvent {
 
-    data object SignInSuccessful: WelcomeUiEvent()
+    data object GoogleLoginSuccessful: WelcomeUiEvent()
+
+    data object Start: WelcomeUiEvent()
+
+    data object NavigateToLoginEmail: WelcomeUiEvent()
 
     data class ShowSnackbar(val message: String): WelcomeUiEvent()
 

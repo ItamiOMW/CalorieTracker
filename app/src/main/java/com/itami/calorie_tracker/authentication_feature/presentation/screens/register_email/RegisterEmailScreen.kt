@@ -26,7 +26,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -35,38 +34,55 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.presentation.components.ImagePickerComponent
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.OutlinedTextField
 import com.itami.calorie_tracker.core.presentation.state.PasswordTextFieldState
 import com.itami.calorie_tracker.core.presentation.state.StandardTextFieldState
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun RegisterEmailScreen(
-    onNavigateToEmailConfirmation: (email: String) -> Unit,
+    onEmailRegisterSuccess: (email: String) -> Unit,
     onNavigateBack: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: RegisterEmailState,
-    uiEvent: Flow<RegisterEmailUiEvent>,
-    onAction: (RegisterEmailAction) -> Unit,
+    viewModel: RegisterEmailViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = Unit) {
-        uiEvent.collect { event ->
-            when (event) {
-                is RegisterEmailUiEvent.RegisterSuccessful -> {
-                    onNavigateToEmailConfirmation(event.registeredEmail)
-                }
-
-                is RegisterEmailUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is RegisterEmailUiEvent.NavigateBack -> onNavigateBack()
+            is RegisterEmailUiEvent.RegisterSuccessful -> onEmailRegisterSuccess(event.registeredEmail)
+            is RegisterEmailUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
         }
     }
 
+    RegisterEmailScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun RegisterEmailScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        RegisterEmailScreenContent(
+            state = RegisterEmailState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun RegisterEmailScreenContent(
+    state: RegisterEmailState,
+    onAction: (RegisterEmailAction) -> Unit,
+) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri -> uri?.let { onAction(RegisterEmailAction.PictureUriChange(it)) } }
@@ -75,7 +91,11 @@ fun RegisterEmailScreen(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
-            TopBarSection(onNavigateBack = onNavigateBack)
+            TopBarSection(
+                onNavigateBack = {
+                    onAction(RegisterEmailAction.NavigateBackClick)
+                }
+            )
         },
     ) { scaffoldPadding ->
         Box(
@@ -127,7 +147,7 @@ fun RegisterEmailScreen(
             RegisterButtonSection(
                 isLoading = state.isLoading,
                 onRegisterClick = {
-                    onAction(RegisterEmailAction.Register)
+                    onAction(RegisterEmailAction.RegisterClick)
                 }
             )
             if (state.isLoading) {

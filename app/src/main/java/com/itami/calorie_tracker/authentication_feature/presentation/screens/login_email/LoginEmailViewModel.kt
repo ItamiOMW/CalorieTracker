@@ -57,8 +57,16 @@ class LoginEmailViewModel @Inject constructor(
                 )
             }
 
-            is LoginEmailAction.Login -> {
+            is LoginEmailAction.LoginClick -> {
                 login(email = state.emailState.text, password = state.passwordState.text)
+            }
+
+            is LoginEmailAction.ForgotPasswordClick -> {
+                sendUiEvent(LoginEmailUiEvent.NavigateToForgotPassword)
+            }
+
+            is LoginEmailAction.NavigateBackClick -> {
+                sendUiEvent(LoginEmailUiEvent.NavigateBack)
             }
         }
     }

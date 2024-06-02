@@ -4,4 +4,6 @@ sealed class GenderUiEvent {
 
     data object GenderSaved: GenderUiEvent()
 
+    data object NavigateBack: GenderUiEvent()
+
 }

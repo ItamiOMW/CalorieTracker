@@ -4,7 +4,6 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -12,7 +11,6 @@ import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 import com.itami.calorie_tracker.profile_feature.presentation.screens.profile.ProfileScreen
-import com.itami.calorie_tracker.profile_feature.presentation.screens.profile.ProfileViewModel
 
 fun NavGraphBuilder.profileGraph(
     navState: NavigationState,
@@ -46,7 +44,6 @@ fun NavGraphBuilder.profileGraph(
                 ) + fadeOut(animationSpec = tween(750))
             }
         ) {
-            val viewModel: ProfileViewModel = hiltViewModel()
             ProfileScreen(
                 onNavigateToMyInfo = {
                     onShowSnackbar("Not implemented yet")
@@ -69,8 +66,6 @@ fun NavGraphBuilder.profileGraph(
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                state = viewModel.state,
-                onAction = viewModel::onAction
             )
         }
     }

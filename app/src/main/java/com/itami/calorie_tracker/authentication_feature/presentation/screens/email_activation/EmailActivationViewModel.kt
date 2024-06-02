@@ -41,8 +41,16 @@ class EmailActivationViewModel @Inject constructor(
 
     fun onAction(action: EmailActivationAction) {
         when (action) {
-            is EmailActivationAction.OnResendConfirmationEmail -> {
+            is EmailActivationAction.OnResendConfirmationEmailClick -> {
                 resendEmail(state.email)
+            }
+
+            is EmailActivationAction.OnNavigateBackClick -> {
+                sendUiEvent(EmailActivationUiEvent.NavigateToLogin)
+            }
+
+            is EmailActivationAction.OnGoToLoginClick -> {
+                sendUiEvent(EmailActivationUiEvent.NavigateToLogin)
             }
         }
     }

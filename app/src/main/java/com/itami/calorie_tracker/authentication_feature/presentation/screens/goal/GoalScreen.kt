@@ -19,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,29 +28,48 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.model.WeightGoal
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun GoalScreen(
-    onNavigateToGender: () -> Unit,
-    state: GoalState,
-    uiEvent: Flow<GoalUiEvent>,
-    onAction: (GoalAction) -> Unit,
+    onGoalSaved: () -> Unit,
+    viewModel: GoalViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                GoalUiEvent.GoalSaved -> {
-                    onNavigateToGender()
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            GoalUiEvent.GoalSaved -> onGoalSaved()
         }
     }
 
+    GoalScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun GoalScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        GoalScreenContent(
+            state = GoalState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun GoalScreenContent(
+    state: GoalState,
+    onAction: (GoalAction) -> Unit,
+) {
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground
@@ -82,7 +100,7 @@ fun GoalScreen(
             )
             BottomSection(
                 onFABClick = {
-                    onAction(GoalAction.SaveGoal)
+                    onAction(GoalAction.NavigateNextClick)
                 },
                 isLoading = state.isLoading,
                 modifier = Modifier
@@ -124,7 +142,7 @@ private fun TopSection(
 @Composable
 private fun WeightGoalsSection(
     modifier: Modifier,
-    selectedWeightGoal:  WeightGoal,
+    selectedWeightGoal: WeightGoal,
     onWeightGoalClick: (weightGoal: WeightGoal) -> Unit,
 ) {
     val weightGoals = remember {

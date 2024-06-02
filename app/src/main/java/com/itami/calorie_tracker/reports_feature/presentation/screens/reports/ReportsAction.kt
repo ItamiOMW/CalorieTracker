@@ -5,16 +5,22 @@ import com.itami.calorie_tracker.reports_feature.presentation.model.WeightUi
 
 sealed class ReportsAction {
 
-    data object ReloadWeights: ReportsAction()
+    data object ReloadWeights : ReportsAction()
 
-    data class ChangeWeightUnit(val weightUnit: WeightUnit): ReportsAction()
+    data class ChangeWeightUnit(val weightUnit: WeightUnit) : ReportsAction()
 
-    data class ShowAddWeightDialog(val show: Boolean): ReportsAction()
+    data class AddWeight(val weightGrams: Int) : ReportsAction()
 
-    data class ShowEditWeightDialog(val weightToEdit: WeightUi?): ReportsAction()
+    data class EditWeight(val weightGrams: Int, val weightId: Int) : ReportsAction()
 
-    data class AddWeight(val weightGrams: Int): ReportsAction()
+    data object ProfilePictureClick : ReportsAction()
 
-    data class EditWeight(val weightGrams: Int, val weightId: Int): ReportsAction()
+    data object AddWeightClick : ReportsAction()
+
+    data object DismissAddWeightDialog : ReportsAction()
+
+    data class WeightClick(val weight: WeightUi) : ReportsAction()
+
+    data object DismissEditWeightDialog : ReportsAction()
 
 }

@@ -2,6 +2,8 @@ package com.itami.calorie_tracker.recipes_feature.presentation.screens.recipe_de
 
 sealed class RecipeDetailAction {
 
-    data object Retry: RecipeDetailAction()
+    data object RetryClick: RecipeDetailAction()
+
+    data object NavigateBackClick: RecipeDetailAction()
 
 }

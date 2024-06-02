@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -31,43 +30,65 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.OutlinedTextField
 import com.itami.calorie_tracker.core.presentation.state.PasswordTextFieldState
 import com.itami.calorie_tracker.core.presentation.state.StandardTextFieldState
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun LoginEmailScreen(
-    onNavigateToDiary: () -> Unit,
-    onNavigateBack: () -> Unit,
+    onLoginSuccess: () -> Unit,
     onNavigateToForgotPassword: () -> Unit,
+    onNavigateBack: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: LoginEmailState,
-    uiEvent: Flow<LoginEmailUiEvent>,
-    onAction: (LoginEmailAction) -> Unit,
+    viewModel: LoginEmailViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = Unit) {
-        uiEvent.collect { event ->
-            when (event) {
-                is LoginEmailUiEvent.LoginSuccessful -> {
-                    onNavigateToDiary()
-                }
-
-                is LoginEmailUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is LoginEmailUiEvent.LoginSuccessful -> onLoginSuccess()
+            is LoginEmailUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
+            is LoginEmailUiEvent.NavigateBack -> onNavigateBack()
+            is LoginEmailUiEvent.NavigateToForgotPassword -> onNavigateToForgotPassword()
         }
     }
 
+    LoginEmailScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun LoginScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        LoginEmailScreenContent(
+            state = LoginEmailState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun LoginEmailScreenContent(
+    state: LoginEmailState,
+    onAction: (LoginEmailAction) -> Unit,
+) {
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
-            TopBarSection(onNavigateBack = onNavigateBack)
+            TopBarSection(
+                onNavigateBack = {
+                    onAction(LoginEmailAction.NavigateBackClick)
+                }
+            )
         },
     ) { scaffoldPadding ->
         Box(
@@ -101,9 +122,11 @@ fun LoginEmailScreen(
                     .padding(bottom = CalorieTrackerTheme.padding.large),
                 isLoading = state.isLoading,
                 onLoginButtonClick = {
-                    onAction(LoginEmailAction.Login)
+                    onAction(LoginEmailAction.LoginClick)
                 },
-                onForgotPasswordClick = onNavigateToForgotPassword
+                onForgotPasswordClick = {
+                    onAction(LoginEmailAction.ForgotPasswordClick)
+                }
             )
             if (state.isLoading) {
                 CircularProgressIndicator(color = CalorieTrackerTheme.colors.primary)

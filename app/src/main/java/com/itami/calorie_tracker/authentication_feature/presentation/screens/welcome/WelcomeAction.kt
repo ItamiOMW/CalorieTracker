@@ -2,8 +2,14 @@ package com.itami.calorie_tracker.authentication_feature.presentation.screens.we
 
 sealed class WelcomeAction {
 
-    data class SignInWithGoogle(val idToken: String): WelcomeAction()
+    data class GoogleIdTokenReceived(val idToken: String) : WelcomeAction()
 
-    data class ShowGoogleOneTap(val show: Boolean): WelcomeAction()
+    data object DismissGoogleOneTap : WelcomeAction()
+
+    data object OnSignInWithEmailClick : WelcomeAction()
+
+    data object OnSignInWithGoogleClick : WelcomeAction()
+
+    data object OnStartClick : WelcomeAction()
 
 }

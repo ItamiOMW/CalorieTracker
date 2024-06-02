@@ -40,8 +40,12 @@ class ForgotPasswordViewModel @Inject constructor(
                 )
             }
 
-            is ForgotPasswordAction.SendPasswordResetCode -> {
+            is ForgotPasswordAction.SendResetCodeClick -> {
                 sendPasswordResetEmail(email = state.emailState.text)
+            }
+
+            is ForgotPasswordAction.NavigateBackClick -> {
+                sendUiEvent(ForgotPasswordUiEvent.NavigateBack)
             }
         }
     }

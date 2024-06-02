@@ -14,14 +14,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,30 +29,50 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.Lifestyle
+import com.itami.calorie_tracker.core.domain.model.Theme
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun LifestyleScreen(
-    onNavigateToHeight: () -> Unit,
+    onLifestyleSaved: () -> Unit,
     onNavigateBack: () -> Unit,
-    state: LifestyleState,
-    uiEvent: Flow<LifestyleUiEvent>,
-    onAction: (LifestyleAction) -> Unit,
+    viewModel: LifestyleViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                LifestyleUiEvent.LifestyleSaved -> {
-                    onNavigateToHeight()
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            LifestyleUiEvent.LifestyleSaved -> onLifestyleSaved()
+            LifestyleUiEvent.NavigateBack -> onNavigateBack()
         }
     }
 
+    LifestyleScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun LifestyleScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        LifestyleScreenContent(
+            state = LifestyleState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun LifestyleScreenContent(
+    state: LifestyleState,
+    onAction: (LifestyleAction) -> Unit,
+) {
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground
@@ -85,9 +103,11 @@ fun LifestyleScreen(
             )
             BottomSection(
                 onFABClick = {
-                    onAction(LifestyleAction.SaveLifestyle)
+                    onAction(LifestyleAction.NavigateNextClick)
                 },
-                onNavigateBack = onNavigateBack,
+                onNavigateBack = {
+                    onAction(LifestyleAction.NavigateBackClick)
+                },
                 isLoading = state.isLoading,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -205,7 +225,6 @@ private fun BottomSection(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun LifestyleItem(
     selected: Boolean,

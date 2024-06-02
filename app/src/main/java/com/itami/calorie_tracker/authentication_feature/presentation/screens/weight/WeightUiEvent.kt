@@ -4,6 +4,8 @@ sealed class WeightUiEvent {
 
     data object WeightSaved : WeightUiEvent()
 
+    data object NavigateBack : WeightUiEvent()
+
     data class ShowSnackbar(val message: String) : WeightUiEvent()
 
 }

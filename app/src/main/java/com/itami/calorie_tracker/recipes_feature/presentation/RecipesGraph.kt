@@ -1,6 +1,5 @@
 package com.itami.calorie_tracker.recipes_feature.presentation
 
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
@@ -10,10 +9,8 @@ import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 import com.itami.calorie_tracker.core.presentation.navigation.util.appendParams
-import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipe_details.RecipeDetailViewModel
 import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipe_details.RecipeDetailsScreen
 import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes.RecipesScreen
-import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes.RecipesViewModel
 
 fun NavGraphBuilder.recipesGraph(
     navState: NavigationState,
@@ -24,7 +21,6 @@ fun NavGraphBuilder.recipesGraph(
         startDestination = RecipesGraphScreen.Recipes.fullRoute
     ) {
         composable(route = RecipesGraphScreen.Recipes.fullRoute) {
-            val viewModel: RecipesViewModel = hiltViewModel()
             RecipesScreen(
                 onNavigateToRecipeDetail = { recipeId ->
                     navState.navigateToScreen(RecipesGraphScreen.RecipeDetail.routeWithArgs(recipeId))
@@ -38,9 +34,6 @@ fun NavGraphBuilder.recipesGraph(
                     )
                 },
                 onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
             )
         }
         composable(
@@ -51,13 +44,10 @@ fun NavGraphBuilder.recipesGraph(
                 }
             )
         ) {
-            val viewModel: RecipeDetailViewModel = hiltViewModel()
             RecipeDetailsScreen(
                 onNavigateBack = {
                     navState.navigateBack()
-                },
-                state = viewModel.state,
-                onAction = viewModel::onAction
+                }
             )
         }
     }

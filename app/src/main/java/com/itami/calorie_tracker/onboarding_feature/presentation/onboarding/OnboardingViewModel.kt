@@ -19,8 +19,12 @@ class OnboardingViewModel @Inject constructor(
 
     fun onAction(action: OnboardingAction) {
         when(action) {
-            is OnboardingAction.ChangeShowOnboardingState -> {
-                changeShowOnboardingState(show = action.show)
+            is OnboardingAction.NavigateNextClick -> {
+                changeShowOnboardingState(show = false)
+            }
+
+            is OnboardingAction.SkipClick -> {
+                changeShowOnboardingState(show = false)
             }
         }
     }

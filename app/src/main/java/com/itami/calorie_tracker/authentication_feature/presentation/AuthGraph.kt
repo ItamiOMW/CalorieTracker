@@ -1,38 +1,24 @@
 package com.itami.calorie_tracker.authentication_feature.presentation
 
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.age.AgeScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.age.AgeViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.email_activation.EmailActivationScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.email_activation.EmailActivationViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.forgot_password.ForgotPasswordScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.forgot_password.ForgotPasswordViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.gender.GenderScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.gender.GenderViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.goal.GoalScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.goal.GoalViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.height.HeightScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.height.HeightViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.lifestyle.LifestyleScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.lifestyle.LifestyleViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.login_email.LoginEmailScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.login_email.LoginEmailViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.recommended_nutrients.RecommendedNutrientsScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.recommended_nutrients.RecommendedNutrientsViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.register_email.RegisterEmailScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.register_email.RegisterEmailViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.reset_password.ResetPasswordScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.reset_password.ResetPasswordViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.reset_password_success.ResetPasswordSuccessScreen
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.weight.WeightScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.weight.WeightViewModel
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.welcome.WelcomeScreen
-import com.itami.calorie_tracker.authentication_feature.presentation.screens.welcome.WelcomeViewModel
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
@@ -46,12 +32,12 @@ fun NavGraphBuilder.authGraph(
         route = Graph.Auth.route,
         startDestination = AuthGraphScreen.Welcome.fullRoute
     ) {
-        composable(
-            route = AuthGraphScreen.Welcome.fullRoute,
-        ) {
-            val viewModel: WelcomeViewModel = hiltViewModel()
+        composable(route = AuthGraphScreen.Welcome.fullRoute) {
             WelcomeScreen(
-                onNavigateToDiary = {
+                onStart = {
+                    navState.navigateToScreen(route = AuthGraphScreen.Goal.fullRoute)
+                },
+                onGoogleLoginSuccessful = {
                     navState.navigateToGraph(
                         graph = Graph.Diary.route,
                         popUpInclusive = true,
@@ -60,103 +46,72 @@ fun NavGraphBuilder.authGraph(
                 onNavigateToLoginEmail = {
                     navState.navigateToScreen(route = AuthGraphScreen.LoginEmail.fullRoute)
                 },
-                onNavigateToGoal = {
-                    navState.navigateToScreen(route = AuthGraphScreen.Goal.fullRoute)
-                },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(route = AuthGraphScreen.Goal.fullRoute) {
-            val viewModel: GoalViewModel = hiltViewModel()
             GoalScreen(
-                onNavigateToGender = {
+                onGoalSaved = {
                     navState.navigateToScreen(route = AuthGraphScreen.Gender.fullRoute)
-                },
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                }
             )
         }
         composable(route = AuthGraphScreen.Gender.fullRoute) {
-            val viewModel: GenderViewModel = hiltViewModel()
             GenderScreen(
-                onNavigateToLifestyle = {
+                onGenderSaved = {
                     navState.navigateToScreen(route = AuthGraphScreen.Lifestyle.fullRoute)
                 },
                 onNavigateBack = {
                     navState.navigateBack()
-                },
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                }
             )
         }
         composable(route = AuthGraphScreen.Lifestyle.fullRoute) {
-            val viewModel: LifestyleViewModel = hiltViewModel()
             LifestyleScreen(
-                onNavigateToHeight = {
+                onLifestyleSaved = {
                     navState.navigateToScreen(AuthGraphScreen.Height.fullRoute)
                 },
                 onNavigateBack = {
                     navState.navigateBack()
-                },
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                }
             )
         }
         composable(route = AuthGraphScreen.Height.fullRoute) {
-            val viewModel: HeightViewModel = hiltViewModel()
             HeightScreen(
-                onNavigateToWeight = {
+                onHeightSaved = {
                     navState.navigateToScreen(AuthGraphScreen.Weight.fullRoute)
                 },
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(route = AuthGraphScreen.Weight.fullRoute) {
-            val viewModel: WeightViewModel = hiltViewModel()
             WeightScreen(
-                onNavigateToAge = {
+                onWeightSaved = {
                     navState.navigateToScreen(route = AuthGraphScreen.Age.fullRoute)
                 },
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(route = AuthGraphScreen.Age.fullRoute) {
-            val viewModel: AgeViewModel = hiltViewModel()
             AgeScreen(
-                onNavigateToRecommendedPFC = {
+                onAgeSaved = {
                     navState.navigateToScreen(route = AuthGraphScreen.RecommendedNutrients.fullRoute)
                 },
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(route = AuthGraphScreen.RecommendedNutrients.fullRoute) {
-            val viewModel: RecommendedNutrientsViewModel = hiltViewModel()
             RecommendedNutrientsScreen(
-                onNavigateToDiary = {
+                onGoogleRegisterSuccess = {
                     navState.navigateToGraph(
                         graph = Graph.Diary.route,
                         popUpInclusive = true
@@ -165,16 +120,12 @@ fun NavGraphBuilder.authGraph(
                 onNavigateToRegisterEmail = {
                     navState.navigateToScreen(route = AuthGraphScreen.RegisterEmail.fullRoute)
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(route = AuthGraphScreen.LoginEmail.fullRoute) {
-            val viewModel: LoginEmailViewModel = hiltViewModel()
             LoginEmailScreen(
-                onNavigateToDiary = {
+                onLoginSuccess = {
                     navState.navigateToGraph(
                         graph = Graph.Diary.route,
                         popUpInclusive = true,
@@ -186,16 +137,12 @@ fun NavGraphBuilder.authGraph(
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(route = AuthGraphScreen.ForgotPassword.fullRoute) {
-            val viewModel: ForgotPasswordViewModel = hiltViewModel()
             ForgotPasswordScreen(
-                onNavigateToResetPassword = { email ->
+                onResetCodeSent = { email ->
                     navState.navigateToScreen(
                         route = AuthGraphScreen.ResetPassword.routeWithArgs(
                             email
@@ -205,10 +152,7 @@ fun NavGraphBuilder.authGraph(
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(
@@ -219,9 +163,8 @@ fun NavGraphBuilder.authGraph(
                 }
             )
         ) {
-            val viewModel: ResetPasswordViewModel = hiltViewModel()
             ResetPasswordScreen(
-                onNavigateToResetPasswordSuccess = {
+                onPasswordResetSuccess = {
                     navState.navigateToScreen(
                         route = AuthGraphScreen.ResetPasswordSuccess.fullRoute,
                         popUpToRoute = AuthGraphScreen.LoginEmail.fullRoute
@@ -230,10 +173,7 @@ fun NavGraphBuilder.authGraph(
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(route = AuthGraphScreen.ResetPasswordSuccess.fullRoute) {
@@ -247,9 +187,8 @@ fun NavGraphBuilder.authGraph(
             )
         }
         composable(route = AuthGraphScreen.RegisterEmail.fullRoute) {
-            val viewModel: RegisterEmailViewModel = hiltViewModel()
             RegisterEmailScreen(
-                onNavigateToEmailConfirmation = { email ->
+                onEmailRegisterSuccess = { email ->
                     navState.navigateToScreen(
                         route = AuthGraphScreen.EmailActivation.routeWithArgs(email),
                         popUpToRoute = AuthGraphScreen.Welcome.fullRoute
@@ -258,10 +197,7 @@ fun NavGraphBuilder.authGraph(
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
         composable(
@@ -272,9 +208,8 @@ fun NavGraphBuilder.authGraph(
                 }
             )
         ) {
-            val viewModel: EmailActivationViewModel = hiltViewModel()
             EmailActivationScreen(
-                onNavigateToLoginEmail = {
+                onNavigateToLogin = {
                     navState.navigateToScreen(
                         route = AuthGraphScreen.LoginEmail.fullRoute,
                         popUpToRoute = AuthGraphScreen.Welcome.fullRoute
@@ -283,10 +218,7 @@ fun NavGraphBuilder.authGraph(
                 onNavigateBack = {
                     navState.navigateBack()
                 },
-                onShowSnackbar = onShowSnackbar,
-                state = viewModel.state,
-                uiEvent = viewModel.uiEvent,
-                onAction = viewModel::onAction
+                onShowSnackbar = onShowSnackbar
             )
         }
     }

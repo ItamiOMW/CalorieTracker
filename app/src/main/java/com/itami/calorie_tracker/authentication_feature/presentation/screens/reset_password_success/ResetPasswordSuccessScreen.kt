@@ -22,12 +22,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 
 @Composable
 fun ResetPasswordSuccessScreen(
+    onNavigateToLogin: () -> Unit,
+    onNavigateBack: () -> Unit,
+) {
+    ResetPasswordSuccessScreenContent(
+        onNavigateToLogin = onNavigateToLogin,
+        onNavigateBack = onNavigateBack
+    )
+}
+
+@Preview
+@Composable
+fun ResetPasswordSuccessScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        ResetPasswordSuccessScreenContent(
+            onNavigateToLogin = {},
+            onNavigateBack = {}
+        )
+    }
+}
+
+@Composable
+private fun ResetPasswordSuccessScreenContent(
     onNavigateToLogin: () -> Unit,
     onNavigateBack: () -> Unit,
 ) {

@@ -72,11 +72,11 @@ class DiaryViewModel @Inject constructor(
                 getConsumedWater(date = dateString)
             }
 
-            is DiaryAction.AddConsumedWater -> {
+            is DiaryAction.AddConsumedWaterClick -> {
                 addConsumedWater(waterServingSize, dateString)
             }
 
-            is DiaryAction.RemoveConsumedWater -> {
+            is DiaryAction.RemoveConsumedWaterClick -> {
                 removeConsumedWater(waterServingSize, dateString)
             }
 
@@ -88,6 +88,18 @@ class DiaryViewModel @Inject constructor(
                 state = state.copy(isRefreshingMeals = true)
                 loadMealsWithWater(date = dateString)
                 state = state.copy(isRefreshingMeals = false)
+            }
+
+            is DiaryAction.MealClick -> {
+                sendUiEvent(DiaryUiEvent.NavigateToMeal(action.mealId))
+            }
+
+            is DiaryAction.NewMealClick -> {
+                sendUiEvent(DiaryUiEvent.NavigateToNewMeal(state.date.toString()))
+            }
+
+            is DiaryAction.ProfilePictureClick -> {
+                sendUiEvent(DiaryUiEvent.NavigateToProfile)
             }
         }
     }

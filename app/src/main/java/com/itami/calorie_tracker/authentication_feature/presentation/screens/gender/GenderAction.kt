@@ -6,6 +6,8 @@ sealed class GenderAction {
 
     data class SelectGender(val gender: Gender) : GenderAction()
 
-    data object SaveGender : GenderAction()
+    data object NavigateNextClick : GenderAction()
+
+    data object NavigateBackClick : GenderAction()
 
 }

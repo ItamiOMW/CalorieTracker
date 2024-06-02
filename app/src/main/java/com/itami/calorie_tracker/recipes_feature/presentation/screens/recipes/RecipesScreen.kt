@@ -49,10 +49,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.model.User
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.SelectableButton
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.PullRefreshIndicator
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.pullRefresh
@@ -62,28 +66,45 @@ import com.itami.calorie_tracker.recipes_feature.domain.model.CaloriesFilter
 import com.itami.calorie_tracker.recipes_feature.domain.model.Recipe
 import com.itami.calorie_tracker.recipes_feature.domain.model.TimeFilter
 import com.itami.calorie_tracker.recipes_feature.presentation.components.RecipeItem
-import kotlinx.coroutines.flow.Flow
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecipesScreen(
     onNavigateToRecipeDetail: (recipeId: Int) -> Unit,
     onNavigateToProfile: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: RecipesState,
-    uiEvent: Flow<RecipesUiEvent>,
-    onAction: (action: RecipesAction) -> Unit,
+    viewModel: RecipesViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                is RecipesUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is RecipesUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
+            is RecipesUiEvent.NavigateToProfile -> onNavigateToProfile()
+            is RecipesUiEvent.NavigateToRecipeDetails -> onNavigateToRecipeDetail(event.recipeId)
         }
     }
 
+    RecipesScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun RecipesScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        RecipesScreenContent(
+            state = RecipesState(),
+            onAction = {}
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RecipesScreenContent(
+    state: RecipesState,
+    onAction: (action: RecipesAction) -> Unit,
+) {
     val recipesLazyListState = rememberLazyListState()
 
     LaunchedEffect(key1 = recipesLazyListState.canScrollForward) {
@@ -103,12 +124,12 @@ fun RecipesScreen(
 
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    if (state.showFilterOverlay) {
+    if (state.showFilterSheet) {
         ModalBottomSheet(
             containerColor = CalorieTrackerTheme.colors.surfacePrimary,
             sheetState = bottomSheetState,
             onDismissRequest = {
-                onAction(RecipesAction.ShowFilterOverlay(false))
+                onAction(RecipesAction.DismissFilterSheet)
             }
         ) {
             BottomSheetContent(
@@ -118,7 +139,6 @@ fun RecipesScreen(
                 caloriesFilters = state.caloriesFilters,
                 timeFilters = state.timeFilters,
                 onConfirm = { caloriesFilters, timeFilters ->
-                    onAction(RecipesAction.ShowFilterOverlay(show = false))
                     onAction(RecipesAction.UpdateFilters(timeFilters, caloriesFilters))
                 }
             )
@@ -140,7 +160,9 @@ fun RecipesScreen(
                 title = {
                     TopBarContent(
                         user = state.user,
-                        onProfileImageClick = onNavigateToProfile,
+                        onProfileImageClick = {
+                            onAction(RecipesAction.ProfilePictureClick)
+                        },
                     )
                 }
             )
@@ -167,7 +189,7 @@ fun RecipesScreen(
                         onAction(RecipesAction.SearchQueryChange(newValue))
                     },
                     onFilterClick = {
-                        onAction(RecipesAction.ShowFilterOverlay(show = true))
+                        onAction(RecipesAction.FilterIconClick)
                     }
                 )
                 Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
@@ -177,7 +199,7 @@ fun RecipesScreen(
                     isLoadingNextRecipes = state.isLoadingNextRecipes,
                     modifier = Modifier.fillMaxWidth(),
                     onRecipeClick = { recipe ->
-                        onNavigateToRecipeDetail(recipe.id)
+                        onAction(RecipesAction.RecipeClick(recipe))
                     }
                 )
             }
@@ -448,7 +470,8 @@ private fun TopBarContent(
             AsyncImage(
                 model = user.profilePictureUrl,
                 contentDescription = stringResource(R.string.desc_user_profile_picture),
-                error = painterResource(id = R.drawable.icon_account_circle),
+                error = painterResource(id = R.drawable.unknown_person),
+                placeholder = painterResource(id = R.drawable.unknown_person),
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .size(40.dp)

@@ -49,8 +49,12 @@ class HeightViewModel @Inject constructor(
                 state = state.copy(heightCm = action.centimeters)
             }
 
-            is HeightAction.SaveHeight -> {
+            is HeightAction.NavigateNextClick -> {
                 saveHeight(heightCm = state.heightCm, heightUnit = state.selectedHeightUnit)
+            }
+
+            is HeightAction.NavigateBackClick -> {
+                sendUiEvent(HeightUiEvent.NavigateBack)
             }
         }
     }

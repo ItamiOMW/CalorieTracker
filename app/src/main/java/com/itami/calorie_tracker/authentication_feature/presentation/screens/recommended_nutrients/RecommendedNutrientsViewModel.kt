@@ -28,7 +28,7 @@ class RecommendedNutrientsViewModel @Inject constructor(
     private val application: Application,
 ) : ViewModel() {
 
-    private val _uiEvent = Channel<RecommendedNutrientUiEvent>()
+    private val _uiEvent = Channel<RecommendedNutrientsUiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
 
     var state by mutableStateOf(RecommendedNutrientsState())
@@ -40,17 +40,24 @@ class RecommendedNutrientsViewModel @Inject constructor(
         getUserAndCalculateNutrients()
     }
 
-    fun onAction(action: RecommendedNutrientAction) {
+    fun onAction(action: RecommendedNutrientsAction) {
         when (action) {
-            is RecommendedNutrientAction.ShowGoogleOneTap -> {
-                state = state.copy(showGoogleOneTap = action.show)
-            }
-
-            is RecommendedNutrientAction.SignUpWithGoogle -> {
+            is RecommendedNutrientsAction.GoogleIdTokenReceived -> {
                 signUpWithGoogle(
                     idToken = action.idToken,
                     user = user,
                 )
+            }
+
+            is RecommendedNutrientsAction.ContinueWithEmailClick -> {
+                sendUiEvent(RecommendedNutrientsUiEvent.NavigateToRegisterEmail)
+            }
+
+            is RecommendedNutrientsAction.ContinueWithGoogleClick -> {
+                state = state.copy(showGoogleOneTap = true)
+            }
+            is RecommendedNutrientsAction.DismissGoogleOneTap -> {
+                state = state.copy(showGoogleOneTap = false)
             }
         }
     }
@@ -73,7 +80,7 @@ class RecommendedNutrientsViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEvent(uiEvent: RecommendedNutrientUiEvent) {
+    private fun sendUiEvent(uiEvent: RecommendedNutrientsUiEvent) {
         viewModelScope.launch {
             _uiEvent.send(uiEvent)
         }
@@ -97,7 +104,7 @@ class RecommendedNutrientsViewModel @Inject constructor(
             )
             when (val response = registerGoogleUseCase(createUser)) {
                 is AppResponse.Success -> {
-                    sendUiEvent(RecommendedNutrientUiEvent.SignUpSuccessful)
+                    sendUiEvent(RecommendedNutrientsUiEvent.GoogleRegisterSuccessful)
                 }
 
                 is AppResponse.Failed -> {
@@ -112,7 +119,7 @@ class RecommendedNutrientsViewModel @Inject constructor(
         when (appException) {
             is AppException.NetworkException -> {
                 sendUiEvent(
-                    RecommendedNutrientUiEvent.ShowSnackbar(
+                    RecommendedNutrientsUiEvent.ShowSnackbar(
                         application.getString(R.string.error_network)
                     )
                 )
@@ -120,7 +127,7 @@ class RecommendedNutrientsViewModel @Inject constructor(
 
             is AppException.UnauthorizedException -> {
                 sendUiEvent(
-                    RecommendedNutrientUiEvent.ShowSnackbar(
+                    RecommendedNutrientsUiEvent.ShowSnackbar(
                         message = message ?: application.getString(R.string.error_google_unauthorized)
                     )
                 )
@@ -128,7 +135,7 @@ class RecommendedNutrientsViewModel @Inject constructor(
 
             else -> {
                 sendUiEvent(
-                    RecommendedNutrientUiEvent.ShowSnackbar(
+                    RecommendedNutrientsUiEvent.ShowSnackbar(
                         message = message ?: application.getString(R.string.error_unknown)
                     )
                 )

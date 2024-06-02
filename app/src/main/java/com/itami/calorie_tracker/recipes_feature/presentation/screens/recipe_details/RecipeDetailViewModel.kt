@@ -13,7 +13,10 @@ import com.itami.calorie_tracker.core.utils.AppResponse
 import com.itami.calorie_tracker.core.utils.Constants
 import com.itami.calorie_tracker.recipes_feature.domain.use_case.GetRecipeByIdUseCase
 import com.itami.calorie_tracker.recipes_feature.presentation.RecipesGraphScreen
+import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes.RecipeDetailsUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,6 +26,9 @@ class RecipeDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val application: Application,
 ) : ViewModel() {
+
+    private val _uiEvent = Channel<RecipeDetailsUiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     var state by mutableStateOf(RecipeDetailState())
         private set
@@ -40,10 +46,20 @@ class RecipeDetailViewModel @Inject constructor(
 
     fun onAction(action: RecipeDetailAction) {
         when (action) {
-            is RecipeDetailAction.Retry -> {
+            is RecipeDetailAction.RetryClick -> {
                 state = state.copy(errorMessage = null)
                 getRecipe(recipeId)
             }
+
+            is RecipeDetailAction.NavigateBackClick -> {
+                sendUiEvent(RecipeDetailsUiEvent.NavigateBack)
+            }
+        }
+    }
+
+    private fun sendUiEvent(event: RecipeDetailsUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(event)
         }
     }
 

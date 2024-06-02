@@ -41,7 +41,7 @@ class WeightViewModel @Inject constructor(
 
     fun onAction(action: WeightAction) {
         when (action) {
-            is WeightAction.SaveWeight -> {
+            is WeightAction.NavigateNextClick -> {
                 saveWeight(
                     weight = state.weight.toFloat(),
                     weightUnit = state.selectedWeightUnit
@@ -58,6 +58,10 @@ class WeightViewModel @Inject constructor(
                     fromWeightUnit = state.selectedWeightUnit,
                     toWeightUnit = action.weightUnit
                 )
+            }
+
+            is WeightAction.NavigateBackClick -> {
+                sendUiEvent(WeightUiEvent.NavigateBack)
             }
         }
     }

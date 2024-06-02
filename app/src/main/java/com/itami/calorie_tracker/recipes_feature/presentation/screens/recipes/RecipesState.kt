@@ -16,5 +16,5 @@ data class RecipesState(
     val endReached: Boolean = false,
     val timeFilters: List<TimeFilter> = emptyList(),
     val caloriesFilters: List<CaloriesFilter> = emptyList(),
-    val showFilterOverlay: Boolean = false,
+    val showFilterSheet: Boolean = false,
 )

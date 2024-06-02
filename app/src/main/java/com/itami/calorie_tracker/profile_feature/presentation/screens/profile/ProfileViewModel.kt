@@ -9,7 +9,9 @@ import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
 import com.itami.calorie_tracker.core.domain.repository.UserManager
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,6 +20,9 @@ class ProfileViewModel @Inject constructor(
     private val appSettingsManager: AppSettingsManager,
     private val userManager: UserManager,
 ) : ViewModel() {
+
+    private val _uiEvent = Channel<ProfileUiEvent>()
+    val uiEvent = _uiEvent.receiveAsFlow()
 
     var state by mutableStateOf(ProfileState())
         private set
@@ -31,6 +36,40 @@ class ProfileViewModel @Inject constructor(
             is ProfileAction.ChangeTheme -> {
                 changeTheme(action.theme)
             }
+
+            is ProfileAction.AboutClick -> {
+                sendUiEvent(ProfileUiEvent.NavigateToAbout)
+            }
+
+            is ProfileAction.CalorieIntakeClick -> {
+                sendUiEvent(ProfileUiEvent.NavigateToCalorieIntake)
+            }
+
+            is ProfileAction.ContactUsClick -> {
+                sendUiEvent(ProfileUiEvent.NavigateToContactsUs)
+            }
+
+            is ProfileAction.MyInfoClick -> {
+                sendUiEvent(ProfileUiEvent.NavigateToAbout)
+            }
+
+            is ProfileAction.SettingsClick -> {
+                sendUiEvent(ProfileUiEvent.NavigateToSettings)
+            }
+
+            is ProfileAction.WaterIntakeClick -> {
+                sendUiEvent(ProfileUiEvent.NavigateToWaterIntake)
+            }
+
+            is ProfileAction.NavigateBackClick -> {
+                sendUiEvent(ProfileUiEvent.NavigateBack)
+            }
+        }
+    }
+
+    private fun sendUiEvent(event: ProfileUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(event)
         }
     }
 

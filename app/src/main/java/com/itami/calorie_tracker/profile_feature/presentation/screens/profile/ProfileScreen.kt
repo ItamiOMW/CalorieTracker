@@ -33,11 +33,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.model.User
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.OptionItem
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 
@@ -50,6 +53,39 @@ fun ProfileScreen(
     onNavigateToContactUs: () -> Unit,
     onNavigateToAboutApp: () -> Unit,
     onNavigateBack: () -> Unit,
+    viewModel: ProfileViewModel = hiltViewModel(),
+) {
+    ObserveAsEvents(viewModel.uiEvent) { uiEvent ->
+        when (uiEvent) {
+            ProfileUiEvent.NavigateBack -> onNavigateBack()
+            ProfileUiEvent.NavigateToAbout -> onNavigateToAboutApp()
+            ProfileUiEvent.NavigateToCalorieIntake -> onNavigateToCalorieIntake()
+            ProfileUiEvent.NavigateToContactsUs -> onNavigateToContactUs()
+            ProfileUiEvent.NavigateToMyInfo -> onNavigateToMyInfo()
+            ProfileUiEvent.NavigateToSettings -> onNavigateToSettings()
+            ProfileUiEvent.NavigateToWaterIntake -> onNavigateToWaterIntake()
+        }
+    }
+
+    ProfileScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun ProfileScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        ProfileScreenContent(
+            state = ProfileState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun ProfileScreenContent(
     state: ProfileState,
     onAction: (ProfileAction) -> Unit,
 ) {
@@ -57,7 +93,11 @@ fun ProfileScreen(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
-            TopBarSection(onNavigateBack = onNavigateBack)
+            TopBarSection(
+                onNavigateBack = {
+                    onAction(ProfileAction.NavigateBackClick)
+                }
+            )
         }
     ) {
         Column(
@@ -79,9 +119,15 @@ fun ProfileScreen(
                     .padding(horizontal = CalorieTrackerTheme.padding.default)
                     .fillMaxWidth(),
                 user = state.user,
-                onMyInfoClicked = onNavigateToMyInfo,
-                onCalorieIntakeClick = onNavigateToCalorieIntake,
-                onWaterIntakeClick = onNavigateToWaterIntake
+                onMyInfoClicked = {
+                    onAction(ProfileAction.MyInfoClick)
+                },
+                onCalorieIntakeClick = {
+                    onAction(ProfileAction.CalorieIntakeClick)
+                },
+                onWaterIntakeClick = {
+                    onAction(ProfileAction.WaterIntakeClick)
+                }
             )
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
             HorizontalDivider(
@@ -93,9 +139,15 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.small))
             OptionsSection(
                 modifier = Modifier.fillMaxWidth(),
-                onNavigateToContactUs = onNavigateToContactUs,
-                onNavigateToAboutApp = onNavigateToAboutApp,
-                onNavigateToSettings = onNavigateToSettings,
+                onContactUsClick = {
+                    onAction(ProfileAction.ContactUsClick)
+                },
+                onAboutAppClick = {
+                    onAction(ProfileAction.AboutClick)
+                },
+                onSettingsClick = {
+                    onAction(ProfileAction.SettingsClick)
+                },
                 onChangeTheme = { theme ->
                     onAction(ProfileAction.ChangeTheme(theme))
                 }
@@ -108,9 +160,9 @@ fun ProfileScreen(
 private fun OptionsSection(
     modifier: Modifier,
     onChangeTheme: (theme: Theme) -> Unit,
-    onNavigateToContactUs: () -> Unit,
-    onNavigateToAboutApp: () -> Unit,
-    onNavigateToSettings: () -> Unit,
+    onContactUsClick: () -> Unit,
+    onAboutAppClick: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -168,7 +220,7 @@ private fun OptionsSection(
                     modifier = Modifier.size(24.dp),
                 )
             },
-            onClick = onNavigateToContactUs
+            onClick = onContactUsClick
         )
         OptionItem(
             modifier = Modifier
@@ -184,7 +236,7 @@ private fun OptionsSection(
                     modifier = Modifier.size(24.dp),
                 )
             },
-            onClick = onNavigateToAboutApp
+            onClick = onAboutAppClick
         )
         OptionItem(
             modifier = Modifier
@@ -200,7 +252,7 @@ private fun OptionsSection(
                     modifier = Modifier.size(24.dp),
                 )
             },
-            onClick = onNavigateToSettings
+            onClick = onSettingsClick
         )
     }
 }
@@ -322,7 +374,8 @@ private fun ProfileInfoSection(
         AsyncImage(
             model = user.profilePictureUrl,
             contentDescription = stringResource(R.string.desc_user_profile_picture),
-            error = painterResource(id = R.drawable.icon_account_circle),
+            error = painterResource(id = R.drawable.unknown_person),
+            placeholder = painterResource(id = R.drawable.unknown_person),
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .size(90.dp)

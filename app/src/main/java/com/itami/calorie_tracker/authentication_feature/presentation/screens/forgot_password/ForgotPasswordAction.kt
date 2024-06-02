@@ -4,6 +4,8 @@ sealed class ForgotPasswordAction {
 
     data class EmailInputChange(val newValue: String): ForgotPasswordAction()
 
-    data object SendPasswordResetCode: ForgotPasswordAction()
+    data object SendResetCodeClick: ForgotPasswordAction()
+
+    data object NavigateBackClick: ForgotPasswordAction()
 
 }

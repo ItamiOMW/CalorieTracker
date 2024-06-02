@@ -4,6 +4,8 @@ sealed class HeightUiEvent {
 
     data object HeightSaved: HeightUiEvent()
 
+    data object NavigateBack: HeightUiEvent()
+
     data class ShowSnackbar(val message: String): HeightUiEvent()
 
 }

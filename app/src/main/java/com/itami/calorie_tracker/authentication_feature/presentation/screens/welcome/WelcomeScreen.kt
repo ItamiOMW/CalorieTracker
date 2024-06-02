@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,47 +34,66 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.BuildConfig
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.authentication_feature.presentation.utils.OneTapSignInWithGoogle
+import com.itami.calorie_tracker.core.domain.model.Theme
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
+
+@Composable
+fun WelcomeScreen(
+    onStart: () -> Unit,
+    onGoogleLoginSuccessful: () -> Unit,
+    onNavigateToLoginEmail: () -> Unit,
+    onShowSnackbar: (message: String) -> Unit,
+    viewModel: WelcomeViewModel = hiltViewModel(),
+) {
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is WelcomeUiEvent.Start -> onStart()
+            is WelcomeUiEvent.GoogleLoginSuccessful -> onGoogleLoginSuccessful()
+            is WelcomeUiEvent.NavigateToLoginEmail -> onNavigateToLoginEmail()
+            is WelcomeUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
+        }
+    }
+    WelcomeScreenContent(
+        onShowSnackbar = onShowSnackbar,
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun WelcomeScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        WelcomeScreenContent(
+            onShowSnackbar = {},
+            state = WelcomeState(),
+            onAction = {}
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WelcomeScreen(
-    onNavigateToDiary: () -> Unit,
-    onNavigateToGoal: () -> Unit,
-    onNavigateToLoginEmail: () -> Unit,
+private fun WelcomeScreenContent(
     onShowSnackbar: (message: String) -> Unit,
     state: WelcomeState,
-    uiEvent: Flow<WelcomeUiEvent>,
     onAction: (action: WelcomeAction) -> Unit,
 ) {
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                is WelcomeUiEvent.SignInSuccessful -> {
-                    onNavigateToDiary()
-                }
-
-                is WelcomeUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-            }
-        }
-    }
-
     OneTapSignInWithGoogle(
         opened = state.showGoogleOneTap,
         clientId = BuildConfig.GOOGLE_CLIENT_ID,
         onIdTokenReceived = { idToken ->
-            onAction(WelcomeAction.ShowGoogleOneTap(show = false))
-            onAction(WelcomeAction.SignInWithGoogle(idToken))
+            onAction(WelcomeAction.GoogleIdTokenReceived(idToken))
         },
         onDialogDismissed = { message ->
-            onAction(WelcomeAction.ShowGoogleOneTap(show = false))
+            onAction(WelcomeAction.DismissGoogleOneTap)
             message?.let(onShowSnackbar)
         }
     )
@@ -96,14 +114,14 @@ fun WelcomeScreen(
                     .fillMaxWidth()
                     .padding(bottom = CalorieTrackerTheme.padding.extraLarge),
                 isLoading = state.isLoading,
-                onEvent = { event ->
+                onSignInWithEmailButtonClick = {
                     showBottomSheet = false
-                    onAction(event)
+                    onAction(WelcomeAction.OnSignInWithEmailClick)
                 },
-                onLoginEmailButtonClick = {
+                onSignInWithGoogleButtonClick = {
                     showBottomSheet = false
-                    onNavigateToLoginEmail()
-                },
+                    onAction(WelcomeAction.OnSignInWithGoogleClick)
+                }
             )
         }
     }
@@ -122,7 +140,7 @@ fun WelcomeScreen(
             BottomSection(
                 isLoading = { state.isLoading },
                 onStartClick = {
-                    onNavigateToGoal()
+                    onAction(WelcomeAction.OnStartClick)
                 },
                 onSignInClick = { showBottomSheet = true },
                 modifier = Modifier
@@ -236,8 +254,8 @@ private fun BottomSection(
 private fun BottomSheetContent(
     modifier: Modifier,
     isLoading: Boolean,
-    onEvent: (event: WelcomeAction) -> Unit,
-    onLoginEmailButtonClick: () -> Unit,
+    onSignInWithGoogleButtonClick: () -> Unit,
+    onSignInWithEmailButtonClick: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -253,7 +271,7 @@ private fun BottomSheetContent(
                 .fillMaxWidth()
                 .padding(horizontal = CalorieTrackerTheme.padding.medium),
             onClick = {
-                onEvent(WelcomeAction.ShowGoogleOneTap(show = true))
+                onSignInWithGoogleButtonClick()
             }
         ) {
             Row(
@@ -283,7 +301,7 @@ private fun BottomSheetContent(
                 .fillMaxWidth()
                 .padding(horizontal = CalorieTrackerTheme.padding.medium),
             onClick = {
-                onLoginEmailButtonClick()
+                onSignInWithEmailButtonClick()
             }
         ) {
             Row(

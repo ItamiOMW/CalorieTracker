@@ -31,6 +31,8 @@ class SearchFoodViewModel @Inject constructor(
     var state by mutableStateOf(SearchFoodState())
         private set
 
+    private var searchQueryJob: Job? = null
+
     private val foodPaginator = DefaultPaginator(
         initialKey = state.foodsPage,
         onLoadUpdated = { isLoading ->
@@ -54,8 +56,6 @@ class SearchFoodViewModel @Inject constructor(
         }
     )
 
-    private var searchQueryJob: Job? = null
-
     fun onAction(action: SearchFoodAction) {
         when (action) {
             is SearchFoodAction.SearchQueryChange -> {
@@ -63,15 +63,13 @@ class SearchFoodViewModel @Inject constructor(
                 refreshFoodPaginator(delayMillis = 750)
             }
 
-            is SearchFoodAction.ClearSearchQuery -> {
+            is SearchFoodAction.ClearSearchQueryClick -> {
                 state = state.copy(searchQuery = "")
                 refreshFoodPaginator(delayMillis = 1000)
             }
 
-            is SearchFoodAction.SetSelectedFood -> {
-                state = state.copy(
-                    selectedFood = action.food?.let { ConsumedFood(food = it) }
-                )
+            is SearchFoodAction.FoodClick -> {
+                state = state.copy(selectedFood = ConsumedFood(food = action.food))
             }
 
             is SearchFoodAction.LoadNextPage -> {
@@ -80,6 +78,19 @@ class SearchFoodViewModel @Inject constructor(
 
             is SearchFoodAction.Refresh -> {
                 refreshFoodPaginator(delayMillis = 0)
+            }
+
+            is SearchFoodAction.AddConsumedFood -> {
+                sendUiEvent(SearchFoodUiEvent.NavigateBackWithFood(action.consumedFood))
+                state = state.copy(selectedFood = null)
+            }
+
+            is SearchFoodAction.NavigateBackClick -> {
+               sendUiEvent(SearchFoodUiEvent.NavigateBack)
+            }
+
+            is SearchFoodAction.DismissConsumedFoodDialog -> {
+                state = state.copy(selectedFood = null)
             }
         }
     }

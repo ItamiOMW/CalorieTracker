@@ -27,7 +27,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,43 +34,66 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.presentation.components.DialogComponent
+import com.itami.calorie_tracker.core.presentation.components.NutrientAmountItem
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.navigation.util.NavResultCallback
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.diary_feature.domain.model.ConsumedFood
 import com.itami.calorie_tracker.diary_feature.presentation.components.ConsumedFoodComponent
 import com.itami.calorie_tracker.diary_feature.presentation.components.ConsumedFoodDialog
-import com.itami.calorie_tracker.core.presentation.components.NutrientAmountItem
-import kotlinx.coroutines.flow.Flow
 import kotlin.math.roundToInt
 
 @Composable
 fun NewMealScreen(
     onNavigateSearchFood: (NavResultCallback<ConsumedFood?>) -> Unit,
+    onMealSaved: () -> Unit,
     onNavigateBack: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: NewMealState,
-    uiEvent: Flow<NewMealUiEvent>,
-    onAction: (action: NewMealAction) -> Unit,
+    viewModel: NewMealViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                is NewMealUiEvent.MealSaved -> {
-                    onNavigateBack()
-                }
-
-                is NewMealUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is NewMealUiEvent.MealSaved -> onMealSaved()
+            is NewMealUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
+            is NewMealUiEvent.NavigateBack -> onNavigateBack()
+            is NewMealUiEvent.NavigateToSearchFood -> onNavigateSearchFood { consumedFoodResult ->
+                consumedFoodResult?.let { consumedFood ->
+                    viewModel.onAction(NewMealAction.AddConsumedFoodRequest(consumedFood))
                 }
             }
         }
     }
 
+    NewMealScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun NewMealScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        NewMealScreenContent(
+            state = NewMealState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun NewMealScreenContent(
+    state: NewMealState,
+    onAction: (action: NewMealAction) -> Unit,
+) {
     BackHandler {
-        onAction(NewMealAction.ShowExitDialog(true))
+        onAction(NewMealAction.NavigateBackClick)
     }
 
     if (state.showExitDialog) {
@@ -81,11 +103,10 @@ fun NewMealScreen(
             cancelText = stringResource(R.string.cancel),
             confirmText = stringResource(R.string.exit),
             onConfirm = {
-                onAction(NewMealAction.ShowExitDialog(false))
-                onNavigateBack()
+                onAction(NewMealAction.NavigateBackConfirmClick)
             },
             onDismiss = {
-                onAction(NewMealAction.ShowExitDialog(false))
+                onAction(NewMealAction.NavigateBackDenyClick)
             }
         )
     }
@@ -121,14 +142,10 @@ fun NewMealScreen(
                 },
                 consumedFoods = state.consumedFoods,
                 onCloseIconClick = {
-                    onAction(NewMealAction.ShowExitDialog(true))
+                    onAction(NewMealAction.NavigateBackClick)
                 },
-                onAddIconClick = {
-                    onNavigateSearchFood { consumedFoodResult ->
-                        consumedFoodResult?.let { consumedFood ->
-                            onAction(NewMealAction.AddConsumedFood(consumedFood))
-                        }
-                    }
+                onAddFoodIconClick = {
+                    onAction(NewMealAction.AddFoodIconClick)
                 },
             )
         },
@@ -150,7 +167,7 @@ fun NewMealScreen(
                     vertical = CalorieTrackerTheme.padding.default
                 ),
                 onClick = {
-                    onAction(NewMealAction.SaveMeal)
+                    onAction(NewMealAction.SaveMealClick)
                 },
             ) {
                 Text(
@@ -226,7 +243,7 @@ private fun ConsumedFoodsSection(
 @Composable
 private fun TopBarSection(
     onCloseIconClick: () -> Unit,
-    onAddIconClick: () -> Unit,
+    onAddFoodIconClick: () -> Unit,
     mealName: String,
     onMealNameChange: (String) -> Unit,
     consumedFoods: List<ConsumedFood>,
@@ -305,7 +322,7 @@ private fun TopBarSection(
             )
             IconButton(
                 modifier = Modifier.weight(weight = 0.3f, fill = true),
-                onClick = onAddIconClick
+                onClick = onAddFoodIconClick
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_add),

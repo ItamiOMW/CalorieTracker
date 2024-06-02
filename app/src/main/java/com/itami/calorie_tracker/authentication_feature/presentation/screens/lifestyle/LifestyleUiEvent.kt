@@ -4,4 +4,6 @@ sealed class LifestyleUiEvent {
 
     data object LifestyleSaved: LifestyleUiEvent()
 
+    data object NavigateBack: LifestyleUiEvent()
+
 }

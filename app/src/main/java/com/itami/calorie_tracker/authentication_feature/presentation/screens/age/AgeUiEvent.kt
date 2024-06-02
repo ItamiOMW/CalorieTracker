@@ -4,6 +4,8 @@ sealed class AgeUiEvent {
 
     data object AgeSaved : AgeUiEvent()
 
+    data object NavigateBack : AgeUiEvent()
+
     data class ShowSnackbar(val message: String) : AgeUiEvent()
 
 }

@@ -28,8 +28,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.PullRefreshIndicator
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.pullRefresh
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.rememberPullRefreshState
@@ -38,34 +42,45 @@ import com.itami.calorie_tracker.diary_feature.domain.model.ConsumedFood
 import com.itami.calorie_tracker.diary_feature.domain.model.Food
 import com.itami.calorie_tracker.diary_feature.presentation.components.ConsumedFoodDialog
 import com.itami.calorie_tracker.diary_feature.presentation.components.FoodItem
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun SearchFoodScreen(
-    onNavigateBack: (consumedFood: ConsumedFood?) -> Unit,
+    onNavigateBackWithFood: (consumedFood: ConsumedFood) -> Unit,
+    onNavigateBack: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: SearchFoodState,
-    uiEvent: Flow<SearchFoodUiEvent>,
-    onAction: (action: SearchFoodAction) -> Unit,
+    viewModel: SearchFoodViewModel = hiltViewModel(),
 ) {
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = state.isRefreshing,
-        onRefresh = {
-            onAction(SearchFoodAction.Refresh)
-        }
-    )
-
-    val lazyListState = rememberLazyListState()
-
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                is SearchFoodUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when(event) {
+            is SearchFoodUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
+            is SearchFoodUiEvent.NavigateBack -> onNavigateBack()
+            is SearchFoodUiEvent.NavigateBackWithFood -> onNavigateBackWithFood(event.consumedFood)
         }
     }
+    
+    SearchFoodScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun SearchFoodScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        SearchFoodScreenContent(
+            state = SearchFoodState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun SearchFoodScreenContent(
+    state: SearchFoodState,
+    onAction: (action: SearchFoodAction) -> Unit,
+) {
+    val lazyListState = rememberLazyListState()
 
     LaunchedEffect(key1 = lazyListState.canScrollForward) {
         if (!lazyListState.canScrollForward && !state.isLoadingNextPage && !state.endReached && !state.isRefreshing) {
@@ -73,16 +88,22 @@ fun SearchFoodScreen(
         }
     }
 
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = state.isRefreshing,
+        onRefresh = {
+            onAction(SearchFoodAction.Refresh)
+        }
+    )
+
     if (state.selectedFood != null) {
         val consumedFood = state.selectedFood
         ConsumedFoodDialog(
             consumedFood = consumedFood,
             onConfirm = { weightGrams ->
-                onNavigateBack(consumedFood.copy(grams = weightGrams))
-                onAction(SearchFoodAction.SetSelectedFood(null))
+                onAction(SearchFoodAction.AddConsumedFood(consumedFood.copy(grams = weightGrams)))
             },
             onDismiss = {
-                onAction(SearchFoodAction.SetSelectedFood(null))
+                onAction(SearchFoodAction.DismissConsumedFoodDialog)
             }
         )
     }
@@ -97,10 +118,10 @@ fun SearchFoodScreen(
                     onAction(SearchFoodAction.SearchQueryChange(newValue))
                 },
                 onClearQuery = {
-                    onAction(SearchFoodAction.ClearSearchQuery)
+                    onAction(SearchFoodAction.ClearSearchQueryClick)
                 },
                 onNavigateBack = {
-                    onNavigateBack(null)
+                    onAction(SearchFoodAction.NavigateBackClick)
                 }
             )
         }
@@ -119,7 +140,7 @@ fun SearchFoodScreen(
                     .padding(top = CalorieTrackerTheme.padding.extraSmall),
                 foods = state.foods,
                 onFoodClick = { food ->
-                    onAction(SearchFoodAction.SetSelectedFood(food))
+                    onAction(SearchFoodAction.FoodClick(food))
                 },
                 isLoadingNextPage = state.isLoadingNextPage,
                 lazyListState = lazyListState

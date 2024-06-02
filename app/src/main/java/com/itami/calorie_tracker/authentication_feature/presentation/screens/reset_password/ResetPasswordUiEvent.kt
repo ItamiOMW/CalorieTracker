@@ -6,4 +6,6 @@ sealed class ResetPasswordUiEvent {
 
     data object PasswordResetSuccessful : ResetPasswordUiEvent()
 
+    data object NavigateBack : ResetPasswordUiEvent()
+
 }

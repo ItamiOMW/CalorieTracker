@@ -20,54 +20,72 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.BuildConfig
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.authentication_feature.presentation.utils.OneTapSignInWithGoogle
 import com.itami.calorie_tracker.core.domain.model.DailyNutrientsGoal
+import com.itami.calorie_tracker.core.domain.model.Theme
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun RecommendedNutrientsScreen(
-    onNavigateToDiary: () -> Unit,
+    onGoogleRegisterSuccess: () -> Unit,
     onNavigateToRegisterEmail: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: RecommendedNutrientsState,
-    uiEvent: Flow<RecommendedNutrientUiEvent>,
-    onAction: (RecommendedNutrientAction) -> Unit,
+    viewModel: RecommendedNutrientsViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                is RecommendedNutrientUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-
-                is RecommendedNutrientUiEvent.SignUpSuccessful -> {
-                    onNavigateToDiary()
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is RecommendedNutrientsUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
+            is RecommendedNutrientsUiEvent.GoogleRegisterSuccessful -> onGoogleRegisterSuccess()
+            is RecommendedNutrientsUiEvent.NavigateToRegisterEmail -> onNavigateToRegisterEmail()
         }
     }
 
+    RecommendedNutrientsScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction,
+        onShowSnackbar = onShowSnackbar
+    )
+}
+
+@Preview
+@Composable
+fun RecommendedNutrientsScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        RecommendedNutrientsScreenContent(
+            state = RecommendedNutrientsState(),
+            onAction = {},
+            onShowSnackbar = {}
+        )
+    }
+}
+
+@Composable
+private fun RecommendedNutrientsScreenContent(
+    state: RecommendedNutrientsState,
+    onAction: (RecommendedNutrientsAction) -> Unit,
+    onShowSnackbar: (message: String) -> Unit,
+) {
     OneTapSignInWithGoogle(
         opened = state.showGoogleOneTap,
         clientId = BuildConfig.GOOGLE_CLIENT_ID,
         onIdTokenReceived = { idToken ->
-            onAction(RecommendedNutrientAction.ShowGoogleOneTap(false))
-            onAction(RecommendedNutrientAction.SignUpWithGoogle(idToken))
+            onAction(RecommendedNutrientsAction.GoogleIdTokenReceived(idToken))
         },
-        onDialogDismissed = { errorMessage ->
-            onAction(RecommendedNutrientAction.ShowGoogleOneTap(false))
-            errorMessage?.let(onShowSnackbar)
+        onDialogDismissed = { cause ->
+            onAction(RecommendedNutrientsAction.DismissGoogleOneTap)
+            cause?.let(onShowSnackbar)
         }
     )
 
@@ -96,10 +114,10 @@ fun RecommendedNutrientsScreen(
                         .padding(bottom = CalorieTrackerTheme.padding.large),
                     isLoading = state.isLoading,
                     onContinueWithGoogle = {
-                        onAction(RecommendedNutrientAction.ShowGoogleOneTap(show = true))
+                        onAction(RecommendedNutrientsAction.ContinueWithGoogleClick)
                     },
                     onContinueWithEmail = {
-                        onNavigateToRegisterEmail()
+                        onAction(RecommendedNutrientsAction.ContinueWithEmailClick)
                     }
                 )
             }

@@ -32,7 +32,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,11 +41,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.DailyNutrientsGoal
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.model.User
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.PullRefreshIndicator
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.pullRefresh
 import com.itami.calorie_tracker.core.presentation.components.pull_refresh.rememberPullRefreshState
@@ -57,31 +60,49 @@ import com.itami.calorie_tracker.diary_feature.presentation.components.Nutrients
 import com.itami.calorie_tracker.diary_feature.presentation.components.WaterIntakeComponent
 import com.itami.calorie_tracker.diary_feature.presentation.model.ConsumedWaterUi
 import com.itami.calorie_tracker.diary_feature.presentation.model.MealUi
-import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DiaryScreen(
     onNavigateToMeal: (mealId: Int) -> Unit,
     onNavigateToNewMeal: (datetime: String) -> Unit,
     onNavigateToProfile: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: DiaryState,
-    uiEvent: Flow<DiaryUiEvent>,
-    onAction: (action: DiaryAction) -> Unit,
+    viewModel: DiaryViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                is DiaryUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is DiaryUiEvent.NavigateToMeal -> onNavigateToMeal(event.mealId)
+            is DiaryUiEvent.NavigateToNewMeal -> onNavigateToNewMeal(event.datetime)
+            is DiaryUiEvent.NavigateToProfile -> onNavigateToProfile()
+            is DiaryUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
         }
     }
 
+    DiaryScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun DiaryScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        DiaryScreenContent(
+            state = DiaryState(),
+            onAction = {}
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun DiaryScreenContent(
+    state: DiaryState,
+    onAction: (action: DiaryAction) -> Unit,
+) {
     DatePickerSection(
         showDatePicker = state.showDatePicker,
         date = state.date,
@@ -118,7 +139,9 @@ fun DiaryScreen(
                         onShowDatePicker = { show ->
                             onAction(DiaryAction.ShowDatePicker(show = show))
                         },
-                        onProfileImageClick = onNavigateToProfile
+                        onProfileImageClick = {
+                            onAction(DiaryAction.ProfilePictureClick)
+                        }
                     )
                 }
             )
@@ -156,18 +179,20 @@ fun DiaryScreen(
                     consumedWater = state.consumedWater,
                     dailyNutrientsGoal = state.user.dailyNutrientsGoal,
                     onAddWater = {
-                        onAction(DiaryAction.AddConsumedWater)
+                        onAction(DiaryAction.AddConsumedWaterClick)
                     },
                     onRemoveWater = {
-                        onAction(DiaryAction.RemoveConsumedWater)
+                        onAction(DiaryAction.RemoveConsumedWaterClick)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
                 MealsSection(
                     meals = state.meals,
-                    onMealClick = onNavigateToMeal,
+                    onMealClick = { id ->
+                        onAction(DiaryAction.MealClick(id))
+                    },
                     onAddMealClick = {
-                        onNavigateToNewMeal(state.date.toString())
+                        onAction(DiaryAction.NewMealClick)
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -371,7 +396,8 @@ private fun TopBarContent(
             AsyncImage(
                 model = user.profilePictureUrl,
                 contentDescription = stringResource(R.string.desc_user_profile_picture),
-                error = painterResource(id = R.drawable.icon_account_circle),
+                error = painterResource(id = R.drawable.unknown_person),
+                placeholder = painterResource(id = R.drawable.unknown_person),
                 contentScale = ContentScale.FillBounds,
                 modifier = Modifier
                     .size(40.dp)

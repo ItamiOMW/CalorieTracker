@@ -14,6 +14,8 @@ sealed class RegisterEmailAction {
 
     data class PasswordVisibilityChange(val isVisible: Boolean) : RegisterEmailAction()
 
-    data object Register : RegisterEmailAction()
+    data object RegisterClick : RegisterEmailAction()
+
+    data object NavigateBackClick : RegisterEmailAction()
 
 }

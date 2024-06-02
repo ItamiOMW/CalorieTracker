@@ -69,7 +69,7 @@ class RegisterEmailViewModel @Inject constructor(
                 )
             }
 
-            is RegisterEmailAction.Register -> {
+            is RegisterEmailAction.RegisterClick -> {
                 register(
                     name = state.nameState.text,
                     email = state.emailState.text,
@@ -80,6 +80,10 @@ class RegisterEmailViewModel @Inject constructor(
 
             is RegisterEmailAction.PictureUriChange -> {
                 state = state.copy(profilePictureUri = action.uri)
+            }
+
+            is RegisterEmailAction.NavigateBackClick -> {
+               sendUiEvent(RegisterEmailUiEvent.NavigateBack)
             }
         }
     }

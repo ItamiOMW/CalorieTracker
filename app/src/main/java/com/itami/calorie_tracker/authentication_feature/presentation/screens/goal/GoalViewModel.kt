@@ -30,7 +30,7 @@ class GoalViewModel @Inject constructor(
 
     fun onAction(action: GoalAction) {
         when (action) {
-            is GoalAction.SaveGoal -> {
+            is GoalAction.NavigateNextClick -> {
                 saveGoal(state.selectedGoal)
             }
 

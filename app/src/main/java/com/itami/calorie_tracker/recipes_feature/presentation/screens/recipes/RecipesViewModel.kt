@@ -77,10 +77,6 @@ class RecipesViewModel @Inject constructor(
                 }
             }
 
-            is RecipesAction.ShowFilterOverlay -> {
-                state = state.copy(showFilterOverlay = action.show)
-            }
-
             is RecipesAction.LoadNextRecipes -> {
                 loadNextRecipes()
             }
@@ -88,13 +84,36 @@ class RecipesViewModel @Inject constructor(
             is RecipesAction.UpdateFilters -> {
                 state = state.copy(
                     timeFilters = action.timeFilters,
-                    caloriesFilters = action.caloriesFilters
+                    caloriesFilters = action.caloriesFilters,
+                    showFilterSheet = false
                 )
                 loadRecipesJob?.cancel()
                 loadRecipesJob = viewModelScope.launch {
                     refreshRecipes()
                 }
             }
+
+            is RecipesAction.ProfilePictureClick -> {
+                sendUiEvent(RecipesUiEvent.NavigateToProfile)
+            }
+
+            is RecipesAction.DismissFilterSheet -> {
+                state = state.copy(showFilterSheet = false)
+            }
+
+            is RecipesAction.RecipeClick -> {
+                sendUiEvent(RecipesUiEvent.NavigateToRecipeDetails(action.recipe.id))
+            }
+
+            is RecipesAction.FilterIconClick -> {
+                state = state.copy(showFilterSheet = true)
+            }
+        }
+    }
+
+    private fun sendUiEvent(uiEvent: RecipesUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(uiEvent)
         }
     }
 
@@ -122,12 +141,6 @@ class RecipesViewModel @Inject constructor(
             userManager.user.collect { user ->
                 state = state.copy(user = user)
             }
-        }
-    }
-
-    private fun sendUiEvent(uiEvent: RecipesUiEvent) {
-        viewModelScope.launch {
-            _uiEvent.send(uiEvent)
         }
     }
 

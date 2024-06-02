@@ -61,15 +61,8 @@ class ReportsViewModel @Inject constructor(
                 changeWeightUnit(action.weightUnit)
             }
 
-            is ReportsAction.ShowAddWeightDialog -> {
-                state = state.copy(showAddWeightDialog = action.show)
-            }
-
-            is ReportsAction.ShowEditWeightDialog -> {
-                state = state.copy(weightToEdit = action.weightToEdit)
-            }
-
             is ReportsAction.AddWeight -> {
+                state = state.copy(showAddWeightDialog = false)
                 addWeight(
                     weightGrams = action.weightGrams,
                     datetime = DateTimeUtil.getCurrentDateTimeString()
@@ -77,10 +70,31 @@ class ReportsViewModel @Inject constructor(
             }
 
             is ReportsAction.EditWeight -> {
+                state = state.copy(weightToEdit = null)
                 editWeight(
                     weightId = action.weightId,
                     weightGrams = action.weightGrams
                 )
+            }
+
+            is ReportsAction.ProfilePictureClick -> {
+                sendUiEvent(ReportsUiEvent.NavigateToProfile)
+            }
+
+            is ReportsAction.AddWeightClick -> {
+                state = state.copy(showAddWeightDialog = true)
+            }
+
+            is ReportsAction.DismissAddWeightDialog -> {
+                state = state.copy(showAddWeightDialog = false)
+            }
+
+            is ReportsAction.WeightClick -> {
+                state = state.copy(weightToEdit = action.weight)
+            }
+
+            is ReportsAction.DismissEditWeightDialog -> {
+                state = state.copy(weightToEdit = null)
             }
         }
     }

@@ -29,17 +29,48 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.presentation.components.NutrientAmountItem
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.core.utils.fillWidthOfParent
 import com.itami.calorie_tracker.recipes_feature.domain.model.Recipe
+import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes.RecipeDetailsUiEvent
 
 @Composable
 fun RecipeDetailsScreen(
     onNavigateBack: () -> Unit,
+    viewModel: RecipeDetailViewModel = hiltViewModel(),
+) {
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when(event) {
+            RecipeDetailsUiEvent.NavigateBack -> onNavigateBack()
+        }
+    }
+
+    RecipeDetailsScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun RecipeDetailsScreenContentPreview() {
+    CalorieTrackerTheme {
+        RecipeDetailsScreenContent(
+            state = RecipeDetailState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun RecipeDetailsScreenContent(
     state: RecipeDetailState,
     onAction: (RecipeDetailAction) -> Unit,
 ) {
@@ -49,7 +80,9 @@ fun RecipeDetailsScreen(
         topBar = {
             TopBarContent(
                 recipe = state.recipe,
-                onNavigateBack = onNavigateBack
+                onNavigateBack = {
+                    onAction(RecipeDetailAction.NavigateBackClick)
+                }
             )
         }
     ) {
@@ -89,7 +122,7 @@ fun RecipeDetailsScreen(
                 Error(
                     errorMessage = state.errorMessage,
                     onRetryClick = {
-                        onAction(RecipeDetailAction.Retry)
+                        onAction(RecipeDetailAction.RetryClick)
                     }
                 )
             }

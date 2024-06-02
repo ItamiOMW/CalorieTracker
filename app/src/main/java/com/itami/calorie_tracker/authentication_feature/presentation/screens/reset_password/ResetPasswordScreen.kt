@@ -22,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,43 +36,64 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.OtpTextField
 import com.itami.calorie_tracker.core.presentation.components.OutlinedTextField
 import com.itami.calorie_tracker.core.presentation.state.PasswordTextFieldState
 import com.itami.calorie_tracker.core.presentation.state.StandardTextFieldState
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun ResetPasswordScreen(
-    onNavigateToResetPasswordSuccess: () -> Unit,
+    onPasswordResetSuccess: () -> Unit,
     onNavigateBack: () -> Unit,
     onShowSnackbar: (message: String) -> Unit,
-    state: ResetPasswordState,
-    uiEvent: Flow<ResetPasswordUiEvent>,
-    onAction: (ResetPasswordAction) -> Unit,
+    viewModel: ResetPasswordViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = Unit) {
-        uiEvent.collect { event ->
-            when (event) {
-                is ResetPasswordUiEvent.PasswordResetSuccessful -> {
-                    onNavigateToResetPasswordSuccess()
-                }
-
-                is ResetPasswordUiEvent.ShowSnackbar -> {
-                    onShowSnackbar(event.message)
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            is ResetPasswordUiEvent.PasswordResetSuccessful -> onPasswordResetSuccess()
+            is ResetPasswordUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
+            is ResetPasswordUiEvent.NavigateBack -> onNavigateBack()
         }
     }
 
+    ResetPasswordScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Preview
+@Composable
+fun ResetPasswordScreenContentPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        ResetPasswordScreenContent(
+            state = ResetPasswordState(),
+            onAction = {}
+        )
+    }
+}
+
+@Composable
+private fun ResetPasswordScreenContent(
+    state: ResetPasswordState,
+    onAction: (ResetPasswordAction) -> Unit,
+) {
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
-            TopBarSection(onNavigateBack = onNavigateBack)
+            TopBarSection(
+                onNavigateBack = {
+                    onAction(ResetPasswordAction.NavigateBackClick)
+                }
+            )
         }
     ) { scaffoldPadding ->
         Box(
@@ -120,7 +140,7 @@ fun ResetPasswordScreen(
             ResetButtonSection(
                 isLoading = state.isLoading,
                 onResetClick = {
-                    onAction(ResetPasswordAction.ResetPassword)
+                    onAction(ResetPasswordAction.ResetPasswordClick)
                 }
             )
             if (state.isLoading) {

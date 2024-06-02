@@ -6,4 +6,8 @@ sealed class MealUiEvent {
 
     data object MealSaved: MealUiEvent()
 
+    data object NavigateBack: MealUiEvent()
+
+    data object NavigateToSearchFood: MealUiEvent()
+
 }

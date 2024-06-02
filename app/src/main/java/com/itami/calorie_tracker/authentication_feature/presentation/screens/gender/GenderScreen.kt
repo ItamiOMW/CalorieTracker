@@ -21,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,29 +31,36 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.Gender
+import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun GenderScreen(
-    onNavigateToLifestyle: () -> Unit,
+    onGenderSaved: () -> Unit,
     onNavigateBack: () -> Unit,
-    state: GenderState,
-    uiEvent: Flow<GenderUiEvent>,
-    onAction: (GenderAction) -> Unit,
+    viewModel: GenderViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = true) {
-        uiEvent.collect { event ->
-            when (event) {
-                GenderUiEvent.GenderSaved -> {
-                    onNavigateToLifestyle()
-                }
-            }
+    ObserveAsEvents(viewModel.uiEvent) { event ->
+        when (event) {
+            GenderUiEvent.GenderSaved -> onGenderSaved()
+            GenderUiEvent.NavigateBack -> onNavigateBack()
         }
     }
 
+    GenderScreenContent(
+        state = viewModel.state,
+        onAction = viewModel::onAction
+    )
+}
+
+@Composable
+private fun GenderScreenContent(
+    state: GenderState,
+    onAction: (GenderAction) -> Unit,
+) {
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground
@@ -85,9 +91,11 @@ fun GenderScreen(
             )
             BottomSection(
                 onFABClick = {
-                    onAction(GenderAction.SaveGender)
+                    onAction(GenderAction.NavigateNextClick)
                 },
-                onNavigateBack = onNavigateBack,
+                onNavigateBack = {
+                    onAction(GenderAction.NavigateBackClick)
+                },
                 isLoading = state.isLoading,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
@@ -129,7 +137,7 @@ private fun TopSection(
 @Composable
 private fun GendersSection(
     modifier: Modifier,
-    selectedGender:  Gender,
+    selectedGender: Gender,
     onGenderClick: (gender: Gender) -> Unit,
 ) {
     val genders = remember {

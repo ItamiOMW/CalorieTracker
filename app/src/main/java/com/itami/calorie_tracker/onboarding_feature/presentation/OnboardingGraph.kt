@@ -1,6 +1,5 @@
 package com.itami.calorie_tracker.onboarding_feature.presentation
 
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
@@ -8,7 +7,6 @@ import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 import com.itami.calorie_tracker.onboarding_feature.presentation.onboarding.OnboardingScreen
-import com.itami.calorie_tracker.onboarding_feature.presentation.onboarding.OnboardingViewModel
 
 
 fun NavGraphBuilder.onboardingGraph(
@@ -22,19 +20,15 @@ fun NavGraphBuilder.onboardingGraph(
         composable(
             route = OnboardingGraphScreen.Onboarding.fullRoute
         ) {
-            val viewModel: OnboardingViewModel = hiltViewModel()
             OnboardingScreen(
-                onNavigateToAuthGraph = {
+                onShowOnboardingStateSaved = {
                     navState.navigateToGraph(
                         graph = Graph.Auth.route,
                         popUpInclusive = true
                     )
-                },
-                onAction = viewModel::onAction,
-                uiEvent = viewModel.uiEvent
+                }
             )
         }
-
     }
 }
 
