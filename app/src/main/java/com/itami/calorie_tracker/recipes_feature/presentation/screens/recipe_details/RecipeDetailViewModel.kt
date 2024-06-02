@@ -13,7 +13,6 @@ import com.itami.calorie_tracker.core.utils.AppResponse
 import com.itami.calorie_tracker.core.utils.Constants
 import com.itami.calorie_tracker.recipes_feature.domain.use_case.GetRecipeByIdUseCase
 import com.itami.calorie_tracker.recipes_feature.presentation.RecipesGraphScreen
-import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes.RecipeDetailsUiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

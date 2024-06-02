@@ -39,7 +39,6 @@ import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.core.utils.fillWidthOfParent
 import com.itami.calorie_tracker.recipes_feature.domain.model.Recipe
-import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes.RecipeDetailsUiEvent
 
 @Composable
 fun RecipeDetailsScreen(

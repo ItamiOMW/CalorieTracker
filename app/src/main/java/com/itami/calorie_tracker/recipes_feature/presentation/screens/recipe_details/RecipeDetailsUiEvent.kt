@@ -1,4 +1,4 @@
-package com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes
+package com.itami.calorie_tracker.recipes_feature.presentation.screens.recipe_details
 
 sealed class RecipeDetailsUiEvent {
 
