@@ -1,8 +1,5 @@
 package com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,7 +39,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,7 +63,6 @@ import com.itami.calorie_tracker.recipes_feature.domain.model.Recipe
 import com.itami.calorie_tracker.recipes_feature.domain.model.TimeFilter
 import com.itami.calorie_tracker.recipes_feature.presentation.components.RecipeItem
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,7 +103,27 @@ fun RecipesScreen(
 
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    val coroutineScope = rememberCoroutineScope()
+    if (state.showFilterOverlay) {
+        ModalBottomSheet(
+            containerColor = CalorieTrackerTheme.colors.surfacePrimary,
+            sheetState = bottomSheetState,
+            onDismissRequest = {
+                onAction(RecipesAction.ShowFilterOverlay(false))
+            }
+        ) {
+            BottomSheetContent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = CalorieTrackerTheme.padding.default),
+                caloriesFilters = state.caloriesFilters,
+                timeFilters = state.timeFilters,
+                onConfirm = { caloriesFilters, timeFilters ->
+                    onAction(RecipesAction.ShowFilterOverlay(show = false))
+                    onAction(RecipesAction.UpdateFilters(timeFilters, caloriesFilters))
+                }
+            )
+        }
+    }
 
     Scaffold(
         modifier = Modifier.nestedScroll(topBarScrollBehavior.nestedScrollConnection),
@@ -131,36 +146,6 @@ fun RecipesScreen(
             )
         },
     ) {
-        AnimatedVisibility(
-            visible = state.showFilterOverlay,
-            enter = expandVertically(),
-            exit = shrinkVertically()
-        ) {
-            ModalBottomSheet(
-                sheetState = bottomSheetState,
-                containerColor = CalorieTrackerTheme.colors.surfacePrimary,
-                contentColor = CalorieTrackerTheme.colors.onSurfacePrimary,
-                onDismissRequest = {
-                    onAction(RecipesAction.ShowFilterOverlay(show = false))
-                }
-            ) {
-                BottomSheetContent(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = CalorieTrackerTheme.padding.default),
-                    caloriesFilters = state.caloriesFilters,
-                    timeFilters = state.timeFilters,
-                    onConfirm = { caloriesFilters, timeFilters ->
-                        onAction(RecipesAction.ShowFilterOverlay(show = false))
-                        onAction(RecipesAction.UpdateFilters(timeFilters, caloriesFilters))
-                        coroutineScope.launch {
-                            bottomSheetState.hide()
-                        }
-
-                    }
-                )
-            }
-        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -183,9 +168,6 @@ fun RecipesScreen(
                     },
                     onFilterClick = {
                         onAction(RecipesAction.ShowFilterOverlay(show = true))
-                        coroutineScope.launch {
-                            bottomSheetState.show()
-                        }
                     }
                 )
                 Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
