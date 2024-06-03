@@ -132,7 +132,9 @@ class DiaryRepositoryImpl @Inject constructor(
         return when (val response = diaryApiService.getMealsWithWaterIntake(token = token, date = utcDate)) {
             is ApiResponse.Success -> {
                 val meals = response.body.meals
+                val consumedWater = response.body.consumedWater
                 insertMealsByDate(meals, utcDate)
+                consumedWater?.toConsumedWaterEntity()?.let { consumedWaterDao.insertConsumedWater(it) }
                 AppResponse.success(Unit)
             }
 
