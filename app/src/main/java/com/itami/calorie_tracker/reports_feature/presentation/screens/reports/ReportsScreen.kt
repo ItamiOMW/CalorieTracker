@@ -369,7 +369,7 @@ private fun WeightChartSection(
                 brush = null
             ),
             guideline = null,
-            valueFormatter = remember {
+            valueFormatter = remember(weights) {
                 CartesianValueFormatter { value, chartValues, verticalAxisPosition ->
                     weights[value.toInt()].datetime.format(
                         DateTimeFormatter.ofPattern(
