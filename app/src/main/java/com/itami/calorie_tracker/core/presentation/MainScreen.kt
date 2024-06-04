@@ -55,8 +55,7 @@ fun MainScreen(
                 SnackbarHost(snackbarHostState) { snackbarData ->
                     Snackbar(
                         snackbarData = snackbarData,
-                        modifier = Modifier
-                            .padding(bottom = CalorieTrackerTheme.padding.extraLarge),
+                        modifier = Modifier.padding(bottom = CalorieTrackerTheme.padding.extraLarge),
                         shape = CalorieTrackerTheme.shapes.small,
                         containerColor = CalorieTrackerTheme.colors.surfacePrimary,
                         contentColor = CalorieTrackerTheme.colors.onSurfacePrimary,
