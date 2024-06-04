@@ -79,7 +79,7 @@ private fun RecipeDetailsScreenContent(
         topBar = {
             TopBarContent(
                 recipe = state.recipe,
-                onNavigateBack = {
+                onNavigateBackClick = {
                     onAction(RecipeDetailAction.NavigateBackClick)
                 }
             )
@@ -227,7 +227,7 @@ private fun RecipeTextSection(
 @Composable
 private fun TopBarContent(
     recipe: Recipe?,
-    onNavigateBack: () -> Unit,
+    onNavigateBackClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -243,7 +243,7 @@ private fun TopBarContent(
             )
         }
         FilledIconButton(
-            onClick = onNavigateBack,
+            onClick = onNavigateBackClick,
             colors = IconButtonDefaults.filledIconButtonColors(
                 containerColor = CalorieTrackerTheme.colors.surfacePrimary,
                 contentColor = CalorieTrackerTheme.colors.onSurfacePrimary

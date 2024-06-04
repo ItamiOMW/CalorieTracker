@@ -3,7 +3,6 @@ package com.itami.calorie_tracker.authentication_feature.presentation.screens.re
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -90,7 +89,7 @@ private fun ResetPasswordScreenContent(
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
             TopBarSection(
-                onNavigateBack = {
+                onNavigateBackClick = {
                     onAction(ResetPasswordAction.NavigateBackClick)
                 }
             )
@@ -125,14 +124,14 @@ private fun ResetPasswordScreenContent(
                         onAction(ResetPasswordAction.PasswordInputChange(it))
                     },
                     onPasswordVisibilityChange = {
-                        onAction(ResetPasswordAction.PasswordVisibilityChange(it))
+                        onAction(ResetPasswordAction.PasswordVisibilityIconClick)
                     },
                     repeatPasswordState = state.repeatPasswordState,
                     onRepeatPasswordChange = {
                         onAction(ResetPasswordAction.RepeatPasswordInputChange(it))
                     },
                     onRepeatPasswordVisibilityChange = {
-                        onAction(ResetPasswordAction.RepeatPasswordVisibilityChange(it))
+                        onAction(ResetPasswordAction.RepeatPasswordVisibilityIconClick)
                     },
                     isLoading = state.isLoading
                 )
@@ -151,13 +150,13 @@ private fun ResetPasswordScreenContent(
 }
 
 @Composable
-private fun ColumnScope.OtpCodeSection(
-    otpState: StandardTextFieldState,
+private fun OtpCodeSection(
     email: String,
+    otpState: StandardTextFieldState,
+    onOtpChange: (String) -> Unit,
     isLoading: Boolean,
     emailColor: Color = CalorieTrackerTheme.colors.primary,
     textColor: Color = CalorieTrackerTheme.colors.onBackgroundVariant,
-    onOtpChange: (String) -> Unit,
 ) {
     val text = stringResource(R.string.enter_password_reset_code, email)
 
@@ -197,13 +196,13 @@ private fun ColumnScope.OtpCodeSection(
 }
 
 @Composable
-private fun ColumnScope.NewPasswordSection(
+private fun NewPasswordSection(
     passwordState: PasswordTextFieldState,
     onPasswordChange: (String) -> Unit,
-    onPasswordVisibilityChange: (isVisible: Boolean) -> Unit,
+    onPasswordVisibilityChange: () -> Unit,
     repeatPasswordState: PasswordTextFieldState,
     onRepeatPasswordChange: (String) -> Unit,
-    onRepeatPasswordVisibilityChange: (isVisible: Boolean) -> Unit,
+    onRepeatPasswordVisibilityChange: () -> Unit,
     isLoading: Boolean,
 ) {
     Column(
@@ -220,11 +219,7 @@ private fun ColumnScope.NewPasswordSection(
             visualTransformation = if (passwordState.isPasswordVisible) VisualTransformation.None
             else PasswordVisualTransformation(),
             trailingIcon = {
-                IconButton(
-                    onClick = {
-                        onPasswordVisibilityChange(!passwordState.isPasswordVisible)
-                    }
-                ) {
+                IconButton(onClick = onPasswordVisibilityChange) {
                     Icon(
                         painter = painterResource(
                             id = if (passwordState.isPasswordVisible) R.drawable.icon_visibility
@@ -246,11 +241,7 @@ private fun ColumnScope.NewPasswordSection(
             visualTransformation = if (repeatPasswordState.isPasswordVisible) VisualTransformation.None
             else PasswordVisualTransformation(),
             trailingIcon = {
-                IconButton(
-                    onClick = {
-                        onRepeatPasswordVisibilityChange(!repeatPasswordState.isPasswordVisible)
-                    }
-                ) {
+                IconButton(onClick = onRepeatPasswordVisibilityChange) {
                     Icon(
                         painter = painterResource(
                             id = if (repeatPasswordState.isPasswordVisible) R.drawable.icon_visibility
@@ -295,7 +286,7 @@ private fun BoxScope.ResetButtonSection(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBarSection(
-    onNavigateBack: () -> Unit,
+    onNavigateBackClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(top = CalorieTrackerTheme.padding.small),
@@ -315,7 +306,7 @@ private fun TopBarSection(
         navigationIcon = {
             IconButton(
                 modifier = Modifier,
-                onClick = onNavigateBack
+                onClick = onNavigateBackClick
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_arrow_back),

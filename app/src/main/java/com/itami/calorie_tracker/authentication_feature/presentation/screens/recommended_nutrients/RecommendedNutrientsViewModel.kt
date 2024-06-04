@@ -49,15 +49,17 @@ class RecommendedNutrientsViewModel @Inject constructor(
                 )
             }
 
-            is RecommendedNutrientsAction.ContinueWithEmailClick -> {
-                sendUiEvent(RecommendedNutrientsUiEvent.NavigateToRegisterEmail)
+            is RecommendedNutrientsAction.GoogleIdTokenNotReceived -> {
+                state = state.copy(showGoogleOneTap = false)
+                action.cause?.let { sendUiEvent(RecommendedNutrientsUiEvent.ShowSnackbar(it)) }
             }
 
             is RecommendedNutrientsAction.ContinueWithGoogleClick -> {
                 state = state.copy(showGoogleOneTap = true)
             }
-            is RecommendedNutrientsAction.DismissGoogleOneTap -> {
-                state = state.copy(showGoogleOneTap = false)
+
+            is RecommendedNutrientsAction.ContinueWithEmailClick -> {
+                sendUiEvent(RecommendedNutrientsUiEvent.NavigateToRegisterEmail)
             }
         }
     }

@@ -62,10 +62,10 @@ class ResetPasswordViewModel @Inject constructor(
                 )
             }
 
-            is ResetPasswordAction.PasswordVisibilityChange -> {
+            is ResetPasswordAction.PasswordVisibilityIconClick -> {
                 state = state.copy(
                     passwordState = state.passwordState.copy(
-                        isPasswordVisible = action.isVisible
+                        isPasswordVisible = !state.passwordState.isPasswordVisible
                     )
                 )
             }
@@ -79,10 +79,10 @@ class ResetPasswordViewModel @Inject constructor(
                 )
             }
 
-            is ResetPasswordAction.RepeatPasswordVisibilityChange -> {
+            is ResetPasswordAction.RepeatPasswordVisibilityIconClick -> {
                 state = state.copy(
                     repeatPasswordState = state.repeatPasswordState.copy(
-                        isPasswordVisible = action.isVisible
+                        isPasswordVisible = !state.repeatPasswordState.isPasswordVisible
                     )
                 )
             }
@@ -103,6 +103,12 @@ class ResetPasswordViewModel @Inject constructor(
             is ResetPasswordAction.NavigateBackClick -> {
                 sendUiEvent(ResetPasswordUiEvent.NavigateBack)
             }
+        }
+    }
+
+    private fun sendUiEvent(uiEvent: ResetPasswordUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(uiEvent)
         }
     }
 
@@ -162,12 +168,6 @@ class ResetPasswordViewModel @Inject constructor(
                 }
             }
             state = state.copy(isLoading = false)
-        }
-    }
-
-    private fun sendUiEvent(uiEvent: ResetPasswordUiEvent) {
-        viewModelScope.launch {
-            _uiEvent.send(uiEvent)
         }
     }
 

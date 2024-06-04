@@ -6,11 +6,11 @@ sealed class ResetPasswordAction {
 
     data class PasswordInputChange(val newValue: String): ResetPasswordAction()
 
-    data class PasswordVisibilityChange(val isVisible: Boolean): ResetPasswordAction()
+    data object PasswordVisibilityIconClick : ResetPasswordAction()
 
     data class RepeatPasswordInputChange(val newValue: String): ResetPasswordAction()
 
-    data class RepeatPasswordVisibilityChange(val isVisible: Boolean): ResetPasswordAction()
+    data object RepeatPasswordVisibilityIconClick : ResetPasswordAction()
 
     data object ResendResetCodeClick : ResetPasswordAction()
 

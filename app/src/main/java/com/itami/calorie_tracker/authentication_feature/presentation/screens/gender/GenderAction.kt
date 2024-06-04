@@ -4,7 +4,7 @@ import com.itami.calorie_tracker.core.domain.model.Gender
 
 sealed class GenderAction {
 
-    data class SelectGender(val gender: Gender) : GenderAction()
+    data class GenderClick(val gender: Gender) : GenderAction()
 
     data object NavigateNextClick : GenderAction()
 

@@ -55,7 +55,6 @@ fun RecommendedNutrientsScreen(
     RecommendedNutrientsScreenContent(
         state = viewModel.state,
         onAction = viewModel::onAction,
-        onShowSnackbar = onShowSnackbar
     )
 }
 
@@ -66,7 +65,6 @@ fun RecommendedNutrientsScreenContentPreview() {
         RecommendedNutrientsScreenContent(
             state = RecommendedNutrientsState(),
             onAction = {},
-            onShowSnackbar = {}
         )
     }
 }
@@ -75,7 +73,6 @@ fun RecommendedNutrientsScreenContentPreview() {
 private fun RecommendedNutrientsScreenContent(
     state: RecommendedNutrientsState,
     onAction: (RecommendedNutrientsAction) -> Unit,
-    onShowSnackbar: (message: String) -> Unit,
 ) {
     OneTapSignInWithGoogle(
         opened = state.showGoogleOneTap,
@@ -84,8 +81,7 @@ private fun RecommendedNutrientsScreenContent(
             onAction(RecommendedNutrientsAction.GoogleIdTokenReceived(idToken))
         },
         onDialogDismissed = { cause ->
-            onAction(RecommendedNutrientsAction.DismissGoogleOneTap)
-            cause?.let(onShowSnackbar)
+            onAction(RecommendedNutrientsAction.GoogleIdTokenNotReceived(cause))
         }
     )
 
@@ -104,7 +100,7 @@ private fun RecommendedNutrientsScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.TopCenter),
-                    dailyNutrientsGoal = { state.dailyNutrientsGoal }
+                    dailyNutrientsGoal = state.dailyNutrientsGoal
                 )
                 BottomSection(
                     modifier = Modifier
@@ -113,10 +109,10 @@ private fun RecommendedNutrientsScreenContent(
                         .padding(horizontal = CalorieTrackerTheme.padding.medium)
                         .padding(bottom = CalorieTrackerTheme.padding.large),
                     isLoading = state.isLoading,
-                    onContinueWithGoogle = {
+                    onContinueWithGoogleClick = {
                         onAction(RecommendedNutrientsAction.ContinueWithGoogleClick)
                     },
-                    onContinueWithEmail = {
+                    onContinueWithEmailClick = {
                         onAction(RecommendedNutrientsAction.ContinueWithEmailClick)
                     }
                 )
@@ -132,8 +128,8 @@ private fun RecommendedNutrientsScreenContent(
 private fun BottomSection(
     modifier: Modifier,
     isLoading: Boolean,
-    onContinueWithGoogle: () -> Unit,
-    onContinueWithEmail: () -> Unit,
+    onContinueWithGoogleClick: () -> Unit,
+    onContinueWithEmailClick: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -146,7 +142,7 @@ private fun BottomSection(
             enabled = !isLoading,
             contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
             modifier = Modifier.fillMaxWidth(),
-            onClick = onContinueWithGoogle
+            onClick = onContinueWithGoogleClick
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -172,7 +168,7 @@ private fun BottomSection(
             enabled = !isLoading,
             contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
             modifier = Modifier.fillMaxWidth(),
-            onClick = onContinueWithEmail
+            onClick = onContinueWithEmailClick
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -197,7 +193,7 @@ private fun BottomSection(
 @Composable
 private fun TopSection(
     modifier: Modifier,
-    dailyNutrientsGoal: () -> DailyNutrientsGoal,
+    dailyNutrientsGoal: DailyNutrientsGoal,
 ) {
     Column(
         modifier = modifier,
@@ -240,29 +236,25 @@ private fun TopSection(
             ) {
                 NutrientItem(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(
-                        R.string.proteins_to_grams,
-                        dailyNutrientsGoal().proteinsGoal
-                    )
+                    text = stringResource(R.string.proteins_to_grams, dailyNutrientsGoal.proteinsGoal)
                 )
                 NutrientItem(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.fats_to_grams, dailyNutrientsGoal().fatsGoal)
+                    text = stringResource(R.string.fats_to_grams, dailyNutrientsGoal.fatsGoal)
                 )
                 NutrientItem(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.carbs_to_grams, dailyNutrientsGoal().carbsGoal)
+                    text = stringResource(R.string.carbs_to_grams, dailyNutrientsGoal.carbsGoal)
                 )
             }
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.small))
             NutrientItem(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 paddingValues = PaddingValues(
                     vertical = CalorieTrackerTheme.padding.small,
                     horizontal = CalorieTrackerTheme.padding.extraSmall
                 ),
-                text = stringResource(R.string.calories_amount, dailyNutrientsGoal().caloriesGoal)
+                text = stringResource(R.string.calories_amount, dailyNutrientsGoal.caloriesGoal)
             )
         }
     }

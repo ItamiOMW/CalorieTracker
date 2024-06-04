@@ -12,7 +12,7 @@ sealed class RegisterEmailAction {
 
     data class PasswordInputChange(val newValue: String) : RegisterEmailAction()
 
-    data class PasswordVisibilityChange(val isVisible: Boolean) : RegisterEmailAction()
+    data object PasswordVisibilityIconClick : RegisterEmailAction()
 
     data object RegisterClick : RegisterEmailAction()
 

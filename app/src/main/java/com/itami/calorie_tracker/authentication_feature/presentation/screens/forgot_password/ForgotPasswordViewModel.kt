@@ -50,6 +50,12 @@ class ForgotPasswordViewModel @Inject constructor(
         }
     }
 
+    private fun sendUiEvent(uiEvent: ForgotPasswordUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(uiEvent)
+        }
+    }
+
     private fun sendPasswordResetEmail(email: String) {
         state = state.copy(isLoading = true)
         viewModelScope.launch {
@@ -63,12 +69,6 @@ class ForgotPasswordViewModel @Inject constructor(
                 }
             }
             state = state.copy(isLoading = false)
-        }
-    }
-
-    private fun sendUiEvent(uiEvent: ForgotPasswordUiEvent) {
-        viewModelScope.launch {
-            _uiEvent.send(uiEvent)
         }
     }
 

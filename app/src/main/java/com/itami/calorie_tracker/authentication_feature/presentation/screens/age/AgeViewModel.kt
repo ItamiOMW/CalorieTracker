@@ -37,12 +37,12 @@ class AgeViewModel @Inject constructor(
 
     fun onAction(action: AgeAction) {
         when (action) {
-            is AgeAction.NavigateNextClick -> {
-                saveAge(age = state.age.toInt())
-            }
-
             is AgeAction.AgeValueChange -> {
                 state = state.copy(age = action.age)
+            }
+
+            is AgeAction.NavigateNextClick -> {
+                saveAge(age = state.age.toInt())
             }
 
             is AgeAction.NavigateBackClick -> {

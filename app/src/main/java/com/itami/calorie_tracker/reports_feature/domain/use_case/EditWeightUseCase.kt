@@ -12,9 +12,11 @@ class EditWeightUseCase(private val reportsRepository: ReportsRepository) {
         weightId: Int,
     ): AppResponse<Weight> {
         val weightException = ValidationUtil.validateWeight(weightGrams = weightGrams)
+
         if (weightException != null) {
             return AppResponse.failed(appException = weightException)
         }
+
         return reportsRepository.editWeight(
             weightId = weightId,
             weightGrams = weightGrams

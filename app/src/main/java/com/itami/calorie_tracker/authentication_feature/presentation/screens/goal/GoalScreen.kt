@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -91,15 +90,14 @@ private fun GoalScreenContent(
                     )
             )
             WeightGoalsSection(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 selectedWeightGoal = state.selectedGoal,
                 onWeightGoalClick = { goal ->
-                    onAction(GoalAction.SelectGoal(weightGoal = goal))
+                    onAction(GoalAction.GoalClick(weightGoal = goal))
                 }
             )
             BottomSection(
-                onFABClick = {
+                onNavigateNextClick = {
                     onAction(GoalAction.NavigateNextClick)
                 },
                 isLoading = state.isLoading,
@@ -152,6 +150,7 @@ private fun WeightGoalsSection(
             WeightGoal.GAIN_WEIGHT,
         )
     }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -172,39 +171,6 @@ private fun WeightGoalsSection(
     }
 }
 
-@Composable
-private fun BottomSection(
-    onFABClick: () -> Unit,
-    isLoading: Boolean,
-    modifier: Modifier,
-) {
-    Box(
-        modifier = modifier,
-    ) {
-        FloatingActionButton(
-            containerColor = CalorieTrackerTheme.colors.primary,
-            contentColor = CalorieTrackerTheme.colors.onPrimary,
-            onClick = {
-                if (!isLoading) {
-                    onFABClick()
-                }
-            },
-            modifier = Modifier
-                .size(56.dp)
-                .shadow(elevation = 5.dp, shape = CircleShape)
-                .clip(CircleShape)
-                .align(Alignment.CenterEnd),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_navigate_next),
-                contentDescription = stringResource(R.string.desc_icon_navigate_next),
-                modifier = Modifier.size(24.dp)
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WeightGoalItem(
     selected: Boolean,
@@ -245,5 +211,37 @@ private fun WeightGoalItem(
                 .fillMaxWidth()
                 .padding(vertical = CalorieTrackerTheme.padding.default),
         )
+    }
+}
+
+@Composable
+private fun BottomSection(
+    onNavigateNextClick: () -> Unit,
+    isLoading: Boolean,
+    modifier: Modifier,
+) {
+    Box(
+        modifier = modifier,
+    ) {
+        FloatingActionButton(
+            containerColor = CalorieTrackerTheme.colors.primary,
+            contentColor = CalorieTrackerTheme.colors.onPrimary,
+            onClick = {
+                if (!isLoading) {
+                    onNavigateNextClick()
+                }
+            },
+            modifier = Modifier
+                .size(56.dp)
+                .shadow(elevation = 5.dp, shape = CircleShape)
+                .clip(CircleShape)
+                .align(Alignment.CenterEnd),
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_navigate_next),
+                contentDescription = stringResource(R.string.desc_icon_navigate_next),
+                modifier = Modifier.size(24.dp)
+            )
+        }
     }
 }

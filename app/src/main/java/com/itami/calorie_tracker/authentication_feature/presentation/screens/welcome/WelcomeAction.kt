@@ -4,12 +4,12 @@ sealed class WelcomeAction {
 
     data class GoogleIdTokenReceived(val idToken: String) : WelcomeAction()
 
-    data object DismissGoogleOneTap : WelcomeAction()
+    data class GoogleIdTokenNoteReceived(val cause: String?) : WelcomeAction()
 
-    data object OnSignInWithEmailClick : WelcomeAction()
+    data object SignInWithEmailClick : WelcomeAction()
 
-    data object OnSignInWithGoogleClick : WelcomeAction()
+    data object SignInWithGoogleClick : WelcomeAction()
 
-    data object OnStartClick : WelcomeAction()
+    data object StartClick : WelcomeAction()
 
 }

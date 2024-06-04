@@ -12,9 +12,11 @@ class AddWeightUseCase(private val reportsRepository: ReportsRepository) {
         datetime: String,
     ): AppResponse<Weight> {
         val weightException = ValidationUtil.validateWeight(weightGrams = weightGrams)
+
         if (weightException != null) {
             return AppResponse.failed(appException = weightException)
         }
+
         return reportsRepository.addWeight(
             datetime = datetime,
             weightGrams = weightGrams

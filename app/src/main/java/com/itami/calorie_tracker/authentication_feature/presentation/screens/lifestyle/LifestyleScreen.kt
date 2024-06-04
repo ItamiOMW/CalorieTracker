@@ -94,18 +94,17 @@ private fun LifestyleScreenContent(
                     )
             )
             LifestylesSection(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 selectedLifestyle = state.selectedLifestyle,
                 onLifestyleClick = { lifestyle ->
-                    onAction(LifestyleAction.SelectLifestyle(lifestyle = lifestyle))
+                    onAction(LifestyleAction.LifestyleClick(lifestyle = lifestyle))
                 }
             )
             BottomSection(
-                onFABClick = {
+                onNavigateNextClick = {
                     onAction(LifestyleAction.NavigateNextClick)
                 },
-                onNavigateBack = {
+                onNavigateBackClick = {
                     onAction(LifestyleAction.NavigateBackClick)
                 },
                 isLoading = state.isLoading,
@@ -160,6 +159,7 @@ private fun LifestylesSection(
             Lifestyle.VERY_ACTIVE,
         )
     }
+
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -175,51 +175,6 @@ private fun LifestylesSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = CalorieTrackerTheme.padding.default)
-            )
-        }
-    }
-}
-
-@Composable
-private fun BottomSection(
-    onFABClick: () -> Unit,
-    onNavigateBack: () -> Unit,
-    isLoading: Boolean,
-    modifier: Modifier,
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        TextButton(
-            modifier = Modifier.align(Alignment.Bottom),
-            onClick = {
-                onNavigateBack()
-            }
-        ) {
-            Text(
-                text = stringResource(R.string.back),
-                color = CalorieTrackerTheme.colors.onBackgroundVariant,
-                style = CalorieTrackerTheme.typography.bodyLarge,
-            )
-        }
-        FloatingActionButton(
-            containerColor = CalorieTrackerTheme.colors.primary,
-            contentColor = CalorieTrackerTheme.colors.onPrimary,
-            onClick = {
-                if (!isLoading) {
-                    onFABClick()
-                }
-            },
-            modifier = Modifier
-                .size(56.dp)
-                .shadow(elevation = 5.dp, shape = CircleShape)
-                .clip(CircleShape),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_navigate_next),
-                contentDescription = stringResource(R.string.desc_icon_navigate_next),
-                modifier = Modifier.size(24.dp)
             )
         }
     }
@@ -269,5 +224,48 @@ private fun LifestyleItem(
                 .fillMaxWidth()
                 .padding(vertical = CalorieTrackerTheme.padding.default),
         )
+    }
+}
+
+@Composable
+private fun BottomSection(
+    onNavigateNextClick: () -> Unit,
+    onNavigateBackClick: () -> Unit,
+    isLoading: Boolean,
+    modifier: Modifier,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        TextButton(
+            modifier = Modifier.align(Alignment.Bottom),
+            onClick = onNavigateBackClick
+        ) {
+            Text(
+                text = stringResource(R.string.back),
+                color = CalorieTrackerTheme.colors.onBackgroundVariant,
+                style = CalorieTrackerTheme.typography.bodyLarge,
+            )
+        }
+        FloatingActionButton(
+            containerColor = CalorieTrackerTheme.colors.primary,
+            contentColor = CalorieTrackerTheme.colors.onPrimary,
+            onClick = {
+                if (!isLoading) {
+                    onNavigateNextClick()
+                }
+            },
+            modifier = Modifier
+                .size(56.dp)
+                .shadow(elevation = 5.dp, shape = CircleShape)
+                .clip(CircleShape),
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_navigate_next),
+                contentDescription = stringResource(R.string.desc_icon_navigate_next),
+                modifier = Modifier.size(24.dp)
+            )
+        }
     }
 }

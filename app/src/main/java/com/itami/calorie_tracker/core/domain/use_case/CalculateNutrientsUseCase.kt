@@ -16,8 +16,8 @@ class CalculateNutrientsUseCase {
         gender: Gender,
         weightGoal: WeightGoal,
         lifestyle: Lifestyle,
-        carbsRatio: Float = 0.5f,
-        proteinsRatio: Float = 0.25f,
+        carbsRatio: Float = 0.55f,
+        proteinsRatio: Float = 0.2f,
         fatsRatio: Float = 0.25f,
     ): DailyNutrientsGoal {
         val weightKgs = WeightUnit.KILOGRAM.gramsToKilograms(grams = weightGrams)

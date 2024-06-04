@@ -102,10 +102,10 @@ private fun HeightScreenContent(
                 modifier = Modifier.padding(start = CalorieTrackerTheme.padding.large)
             )
             BottomSection(
-                onFABClick = {
+                onNavigateNextClick = {
                     onAction(HeightAction.NavigateNextClick)
                 },
-                onNavigateBack = {
+                onNavigateBackClick = {
                     onAction(HeightAction.NavigateBackClick)
                 },
                 isLoading = state.isLoading,
@@ -146,11 +146,10 @@ private fun TopSection(
     }
 }
 
-
 @Composable
 private fun BottomSection(
-    onFABClick: () -> Unit,
-    onNavigateBack: () -> Unit,
+    onNavigateNextClick: () -> Unit,
+    onNavigateBackClick: () -> Unit,
     isLoading: Boolean,
     modifier: Modifier,
 ) {
@@ -160,9 +159,7 @@ private fun BottomSection(
     ) {
         TextButton(
             modifier = Modifier.align(Alignment.Bottom),
-            onClick = {
-                onNavigateBack()
-            }
+            onClick = onNavigateBackClick
         ) {
             Text(
                 text = stringResource(R.string.back),
@@ -175,7 +172,7 @@ private fun BottomSection(
             contentColor = CalorieTrackerTheme.colors.onPrimary,
             onClick = {
                 if (!isLoading) {
-                    onFABClick()
+                    onNavigateNextClick()
                 }
             },
             modifier = Modifier

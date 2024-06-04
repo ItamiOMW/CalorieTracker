@@ -96,13 +96,13 @@ private fun EmailActivationScreenContent(
                 .fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            ActivationTextSection(email = state.email)
+            ActivateAccountTextSection(email = state.email)
             BottomSection(
                 isLoading = state.isLoading,
-                onGoToLoginClicked = {
+                onGoToLoginClick = {
                     onAction(EmailActivationAction.OnGoToLoginClick)
                 },
-                onResendEmailClicked = {
+                onResendEmailClick = {
                     onAction(EmailActivationAction.OnResendConfirmationEmailClick)
                 }
             )
@@ -114,7 +114,7 @@ private fun EmailActivationScreenContent(
 }
 
 @Composable
-fun BoxScope.ActivationTextSection(
+fun BoxScope.ActivateAccountTextSection(
     email: String,
     textColor: Color = CalorieTrackerTheme.colors.onBackgroundVariant,
     emailColor: Color = CalorieTrackerTheme.colors.primary,
@@ -139,7 +139,8 @@ fun BoxScope.ActivationTextSection(
     Text(
         modifier = Modifier
             .align(Alignment.Center)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(bottom = CalorieTrackerTheme.padding.medium),
         text = annotatedText,
         color = textColor,
         style = CalorieTrackerTheme.typography.bodyLarge,
@@ -150,8 +151,8 @@ fun BoxScope.ActivationTextSection(
 @Composable
 private fun BoxScope.BottomSection(
     isLoading: Boolean,
-    onGoToLoginClicked: () -> Unit,
-    onResendEmailClicked: () -> Unit,
+    onGoToLoginClick: () -> Unit,
+    onResendEmailClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -171,7 +172,7 @@ private fun BoxScope.BottomSection(
             shape = CalorieTrackerTheme.shapes.small,
             enabled = !isLoading,
             modifier = Modifier.fillMaxWidth(),
-            onClick = onGoToLoginClicked,
+            onClick = onGoToLoginClick,
         ) {
             Text(
                 text = stringResource(R.string.go_to_login),
@@ -180,7 +181,7 @@ private fun BoxScope.BottomSection(
         }
         Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
         TextButton(
-            onClick = onResendEmailClicked,
+            onClick = onResendEmailClick,
             enabled = !isLoading,
             contentPadding = PaddingValues(CalorieTrackerTheme.padding.tiny)
         ) {

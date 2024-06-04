@@ -46,7 +46,7 @@ class EmailActivationViewModel @Inject constructor(
             }
 
             is EmailActivationAction.OnNavigateBackClick -> {
-                sendUiEvent(EmailActivationUiEvent.NavigateToLogin)
+                sendUiEvent(EmailActivationUiEvent.NavigateBack)
             }
 
             is EmailActivationAction.OnGoToLoginClick -> {

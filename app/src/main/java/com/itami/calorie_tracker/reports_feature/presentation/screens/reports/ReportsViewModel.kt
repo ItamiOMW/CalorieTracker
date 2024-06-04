@@ -99,6 +99,12 @@ class ReportsViewModel @Inject constructor(
         }
     }
 
+    private fun sendUiEvent(uiEvent: ReportsUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(uiEvent)
+        }
+    }
+
     private fun editWeight(
         weightGrams: Int,
         weightId: Int,
@@ -204,12 +210,6 @@ class ReportsViewModel @Inject constructor(
             appSettingsManager.weightUnit.collect { weightUnit ->
                 state = state.copy(weightUnit = weightUnit)
             }
-        }
-    }
-
-    private fun sendUiEvent(uiEvent: ReportsUiEvent) {
-        viewModelScope.launch {
-            _uiEvent.send(uiEvent)
         }
     }
 

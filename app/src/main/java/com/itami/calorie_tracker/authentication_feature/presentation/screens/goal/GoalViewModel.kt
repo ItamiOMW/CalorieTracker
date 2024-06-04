@@ -34,7 +34,7 @@ class GoalViewModel @Inject constructor(
                 saveGoal(state.selectedGoal)
             }
 
-            is GoalAction.SelectGoal -> {
+            is GoalAction.GoalClick -> {
                 state = state.copy(selectedGoal = action.weightGoal)
             }
         }

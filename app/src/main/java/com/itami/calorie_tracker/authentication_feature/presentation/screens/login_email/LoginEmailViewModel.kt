@@ -49,16 +49,19 @@ class LoginEmailViewModel @Inject constructor(
                 )
             }
 
-            is LoginEmailAction.PasswordVisibilityChange -> {
+            is LoginEmailAction.PasswordVisibilityIconClick -> {
                 state = state.copy(
                     passwordState = state.passwordState.copy(
-                        isPasswordVisible = action.isVisible
+                        isPasswordVisible = !state.passwordState.isPasswordVisible
                     )
                 )
             }
 
             is LoginEmailAction.LoginClick -> {
-                login(email = state.emailState.text, password = state.passwordState.text)
+                login(
+                    email = state.emailState.text,
+                    password = state.passwordState.text
+                )
             }
 
             is LoginEmailAction.ForgotPasswordClick -> {
@@ -68,6 +71,12 @@ class LoginEmailViewModel @Inject constructor(
             is LoginEmailAction.NavigateBackClick -> {
                 sendUiEvent(LoginEmailUiEvent.NavigateBack)
             }
+        }
+    }
+
+    private fun sendUiEvent(uiEvent: LoginEmailUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(uiEvent)
         }
     }
 
@@ -103,12 +112,6 @@ class LoginEmailViewModel @Inject constructor(
                 null -> Unit
             }
             state = state.copy(isLoading = false)
-        }
-    }
-
-    private fun sendUiEvent(uiEvent: LoginEmailUiEvent) {
-        viewModelScope.launch {
-            _uiEvent.send(uiEvent)
         }
     }
 

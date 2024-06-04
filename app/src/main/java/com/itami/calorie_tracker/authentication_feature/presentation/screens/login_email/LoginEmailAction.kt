@@ -6,7 +6,7 @@ sealed class LoginEmailAction {
 
     data class PasswordInputChange(val newValue: String) : LoginEmailAction()
 
-    data class PasswordVisibilityChange(val isVisible: Boolean) : LoginEmailAction()
+    data object PasswordVisibilityIconClick : LoginEmailAction()
 
     data object LoginClick : LoginEmailAction()
 

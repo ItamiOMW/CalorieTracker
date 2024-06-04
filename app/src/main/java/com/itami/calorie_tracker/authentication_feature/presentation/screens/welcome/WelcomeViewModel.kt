@@ -34,20 +34,21 @@ class WelcomeViewModel @Inject constructor(
                 signInWithGoogle(idToken = action.idToken)
             }
 
-            is WelcomeAction.OnSignInWithEmailClick -> {
+            is WelcomeAction.GoogleIdTokenNoteReceived -> {
+                state = state.copy(showGoogleOneTap = false)
+                action.cause?.let { sendUiEvent(WelcomeUiEvent.ShowSnackbar(it)) }
+            }
+
+            is WelcomeAction.SignInWithEmailClick -> {
                 sendUiEvent(WelcomeUiEvent.NavigateToLoginEmail)
             }
 
-            is WelcomeAction.OnStartClick -> {
+            is WelcomeAction.StartClick -> {
                 sendUiEvent(WelcomeUiEvent.Start)
             }
 
-            is WelcomeAction.OnSignInWithGoogleClick -> {
+            is WelcomeAction.SignInWithGoogleClick -> {
                 state = state.copy(showGoogleOneTap = true)
-            }
-
-            is WelcomeAction.DismissGoogleOneTap -> {
-                state = state.copy(showGoogleOneTap = false)
             }
         }
     }

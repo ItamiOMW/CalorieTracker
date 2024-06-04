@@ -59,7 +59,7 @@ private fun ResetPasswordSuccessScreenContent(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
-            TopBarSection(onNavigateBack = onNavigateBack)
+            TopBarSection(onNavigateBackClick = onNavigateBack)
         }
     ) { scaffoldPadding ->
         Box(
@@ -117,7 +117,7 @@ private fun BoxScope.GoToLoginButtonSection(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBarSection(
-    onNavigateBack: () -> Unit,
+    onNavigateBackClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(top = CalorieTrackerTheme.padding.small),
@@ -137,7 +137,7 @@ private fun TopBarSection(
         navigationIcon = {
             IconButton(
                 modifier = Modifier,
-                onClick = onNavigateBack
+                onClick = onNavigateBackClick
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_arrow_back),

@@ -92,7 +92,7 @@ private fun RegisterEmailScreenContent(
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
             TopBarSection(
-                onNavigateBack = {
+                onNavigateBackClick = {
                     onAction(RegisterEmailAction.NavigateBackClick)
                 }
             )
@@ -138,8 +138,8 @@ private fun RegisterEmailScreenContent(
                     onPasswordChange = {
                         onAction(RegisterEmailAction.PasswordInputChange(it))
                     },
-                    onPasswordVisibilityChange = {
-                        onAction(RegisterEmailAction.PasswordVisibilityChange(it))
+                    onPasswordVisibilityIconClick = {
+                        onAction(RegisterEmailAction.PasswordVisibilityIconClick)
                     },
                     isLoading = state.isLoading
                 )
@@ -158,7 +158,7 @@ private fun RegisterEmailScreenContent(
 }
 
 @Composable
-fun ProfilePictureSection(
+private fun ProfilePictureSection(
     pictureUri: Uri?,
     onAddPhotoClick: () -> Unit,
 ) {
@@ -178,7 +178,7 @@ private fun CredentialsSection(
     onEmailChange: (String) -> Unit,
     passwordState: PasswordTextFieldState,
     onPasswordChange: (String) -> Unit,
-    onPasswordVisibilityChange: (isVisible: Boolean) -> Unit,
+    onPasswordVisibilityIconClick: () -> Unit,
     isLoading: Boolean,
 ) {
     Column(
@@ -211,11 +211,7 @@ private fun CredentialsSection(
             visualTransformation = if (passwordState.isPasswordVisible) VisualTransformation.None
             else PasswordVisualTransformation(),
             trailingIcon = {
-                IconButton(
-                    onClick = {
-                        onPasswordVisibilityChange(!passwordState.isPasswordVisible)
-                    }
-                ) {
+                IconButton(onClick = onPasswordVisibilityIconClick) {
                     Icon(
                         painter = painterResource(
                             id = if (passwordState.isPasswordVisible) R.drawable.icon_visibility
@@ -235,20 +231,18 @@ private fun BoxScope.RegisterButtonSection(
     onRegisterClick: () -> Unit,
 ) {
     Button(
+        onClick = onRegisterClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = CalorieTrackerTheme.colors.primary,
             contentColor = CalorieTrackerTheme.colors.onPrimary,
         ),
-        contentPadding = PaddingValues(
-            vertical = CalorieTrackerTheme.padding.default
-        ),
+        contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
         shape = CalorieTrackerTheme.shapes.small,
         enabled = !isLoading,
         modifier = Modifier
             .align(Alignment.BottomCenter)
             .fillMaxWidth()
             .padding(bottom = CalorieTrackerTheme.padding.extraLarge),
-        onClick = onRegisterClick,
     ) {
         Text(
             text = stringResource(R.string.register),
@@ -260,7 +254,7 @@ private fun BoxScope.RegisterButtonSection(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBarSection(
-    onNavigateBack: () -> Unit,
+    onNavigateBackClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(top = CalorieTrackerTheme.padding.small),
@@ -280,7 +274,7 @@ private fun TopBarSection(
         navigationIcon = {
             IconButton(
                 modifier = Modifier,
-                onClick = onNavigateBack
+                onClick = onNavigateBackClick
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_arrow_back),

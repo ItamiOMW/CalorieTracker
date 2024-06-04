@@ -4,7 +4,7 @@ import com.itami.calorie_tracker.core.domain.model.Lifestyle
 
 sealed class LifestyleAction {
 
-    data class SelectLifestyle(val lifestyle: Lifestyle) : LifestyleAction()
+    data class LifestyleClick(val lifestyle: Lifestyle) : LifestyleAction()
 
     data object NavigateNextClick : LifestyleAction()
 

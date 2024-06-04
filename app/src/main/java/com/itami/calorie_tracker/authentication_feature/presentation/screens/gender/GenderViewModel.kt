@@ -34,13 +34,19 @@ class GenderViewModel @Inject constructor(
                 saveGender(state.selectedGender)
             }
 
-            is GenderAction.SelectGender -> {
+            is GenderAction.GenderClick -> {
                 state = state.copy(selectedGender = action.gender)
             }
 
             is GenderAction.NavigateBackClick -> {
                 sendUiEvent(GenderUiEvent.NavigateBack)
             }
+        }
+    }
+
+    private fun sendUiEvent(event: GenderUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(event)
         }
     }
 
@@ -57,12 +63,6 @@ class GenderViewModel @Inject constructor(
             userManager.setGender(gender = gender)
             state = state.copy(isLoading = false)
             sendUiEvent(GenderUiEvent.GenderSaved)
-        }
-    }
-
-    private fun sendUiEvent(event: GenderUiEvent) {
-        viewModelScope.launch {
-            _uiEvent.send(event)
         }
     }
 

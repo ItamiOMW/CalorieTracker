@@ -4,7 +4,7 @@ sealed class RecommendedNutrientsAction {
 
     data class GoogleIdTokenReceived(val idToken: String): RecommendedNutrientsAction()
 
-    data object DismissGoogleOneTap : RecommendedNutrientsAction()
+    data class GoogleIdTokenNotReceived(val cause: String?): RecommendedNutrientsAction()
 
     data object ContinueWithGoogleClick : RecommendedNutrientsAction()
     

@@ -178,10 +178,10 @@ private fun DiaryScreenContent(
                 WaterIntakeSection(
                     consumedWater = state.consumedWater,
                     dailyNutrientsGoal = state.user.dailyNutrientsGoal,
-                    onAddWater = {
+                    onAddWaterClick = {
                         onAction(DiaryAction.AddConsumedWaterClick)
                     },
-                    onRemoveWater = {
+                    onRemoveWaterClick = {
                         onAction(DiaryAction.RemoveConsumedWaterClick)
                     },
                     modifier = Modifier.fillMaxWidth()
@@ -198,6 +198,9 @@ private fun DiaryScreenContent(
                 )
             }
             if (state.isLoading) {
+                CircularProgressIndicator(color = CalorieTrackerTheme.colors.primary)
+            }
+            if (state.isLoadingMeals) {
                 CircularProgressIndicator(color = CalorieTrackerTheme.colors.primary)
             }
             PullRefreshIndicator(
@@ -253,6 +256,7 @@ private fun MealsSection(
             val lazyColumnHeight = remember(meals.size) {
                 mealComponentHeight * meals.size + bottomSpacerHeight
             }
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -300,8 +304,8 @@ private fun MealsSection(
 private fun WaterIntakeSection(
     consumedWater: ConsumedWaterUi?,
     dailyNutrientsGoal: DailyNutrientsGoal,
-    onAddWater: () -> Unit,
-    onRemoveWater: () -> Unit,
+    onAddWaterClick: () -> Unit,
+    onRemoveWaterClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -321,8 +325,8 @@ private fun WaterIntakeSection(
             lastTimeDrank = consumedWater?.timestamp?.format(
                 DateTimeFormatter.ofPattern(DateTimeUtil.DEFAULT_TIME_PATTERN)
             ) ?: stringResource(R.string.text_have_not_drank),
-            onAddWaterClick = onAddWater,
-            onRemoveWaterClick = onRemoveWater,
+            onAddWaterClick = onAddWaterClick,
+            onRemoveWaterClick = onRemoveWaterClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(132.dp)

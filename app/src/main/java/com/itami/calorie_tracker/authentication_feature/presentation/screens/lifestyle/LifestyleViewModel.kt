@@ -30,12 +30,12 @@ class LifestyleViewModel @Inject constructor(
 
     fun onAction(action: LifestyleAction) {
         when (action) {
-            is LifestyleAction.NavigateNextClick -> {
-                saveLifestyle(state.selectedLifestyle)
+            is LifestyleAction.LifestyleClick -> {
+                state = state.copy(selectedLifestyle = action.lifestyle)
             }
 
-            is LifestyleAction.SelectLifestyle -> {
-                state = state.copy(selectedLifestyle = action.lifestyle)
+            is LifestyleAction.NavigateNextClick -> {
+                saveLifestyle(state.selectedLifestyle)
             }
 
             is LifestyleAction.NavigateBackClick -> {

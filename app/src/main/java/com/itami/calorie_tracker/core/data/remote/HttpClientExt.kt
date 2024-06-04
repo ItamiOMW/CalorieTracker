@@ -38,8 +38,6 @@ suspend inline fun <reified T, reified E> HttpClient.safeRequest(
 suspend inline fun <reified E> ResponseException.errorBody(): E? =
     try {
         response.body()
-    } catch (e: SerializationException) {
-        null
     } catch (e: Exception) {
         null
     }

@@ -99,7 +99,7 @@ private fun AgeScreenContent(
             )
             AgeSection(
                 age = state.age,
-                onValueChange = { age ->
+                onAgeValueChange = { age ->
                     onAction(AgeAction.AgeValueChange(age))
                 },
                 modifier = Modifier
@@ -107,10 +107,10 @@ private fun AgeScreenContent(
                     .padding(start = CalorieTrackerTheme.padding.medium)
             )
             BottomSection(
-                onFABClick = {
+                onNavigateNextClick = {
                     onAction(AgeAction.NavigateNextClick)
                 },
-                onNavigateBack = {
+                onNavigateBackClick = {
                     onAction(AgeAction.NavigateBackClick)
                 },
                 isLoading = state.isLoading,
@@ -154,7 +154,7 @@ private fun TopSection(
 @Composable
 private fun AgeSection(
     age: String,
-    onValueChange: (age: String) -> Unit,
+    onAgeValueChange: (age: String) -> Unit,
     modifier: Modifier,
 ) {
     Row(
@@ -171,7 +171,7 @@ private fun AgeSection(
                 val newText = newValue.takeIf { input ->
                     input.isEmpty() || input.toIntOrNull() != null
                 }
-                newText?.let { onValueChange(it) }
+                newText?.let { onAgeValueChange(it) }
             },
             textStyle = CalorieTrackerTheme.typography.bodyLarge,
             colors = TextFieldDefaults.colors(
@@ -201,8 +201,8 @@ private fun AgeSection(
 
 @Composable
 private fun BottomSection(
-    onFABClick: () -> Unit,
-    onNavigateBack: () -> Unit,
+    onNavigateNextClick: () -> Unit,
+    onNavigateBackClick: () -> Unit,
     isLoading: Boolean,
     modifier: Modifier,
 ) {
@@ -213,7 +213,7 @@ private fun BottomSection(
         TextButton(
             modifier = Modifier.align(Alignment.Bottom),
             onClick = {
-                onNavigateBack()
+                onNavigateBackClick()
             }
         ) {
             Text(
@@ -227,7 +227,7 @@ private fun BottomSection(
             contentColor = CalorieTrackerTheme.colors.onPrimary,
             onClick = {
                 if (!isLoading) {
-                    onFABClick()
+                    onNavigateNextClick()
                 }
             },
             modifier = Modifier

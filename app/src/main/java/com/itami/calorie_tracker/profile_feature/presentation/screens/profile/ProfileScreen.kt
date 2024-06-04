@@ -94,7 +94,7 @@ private fun ProfileScreenContent(
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
             TopBarSection(
-                onNavigateBack = {
+                onNavigateBackClick = {
                     onAction(ProfileAction.NavigateBackClick)
                 }
             )
@@ -119,7 +119,7 @@ private fun ProfileScreenContent(
                     .padding(horizontal = CalorieTrackerTheme.padding.default)
                     .fillMaxWidth(),
                 user = state.user,
-                onMyInfoClicked = {
+                onMyInfoClick = {
                     onAction(ProfileAction.MyInfoClick)
                 },
                 onCalorieIntakeClick = {
@@ -262,7 +262,7 @@ private fun OptionsSection(
 private fun MainNavigationButtons(
     modifier: Modifier,
     user: User,
-    onMyInfoClicked: () -> Unit,
+    onMyInfoClick: () -> Unit,
     onCalorieIntakeClick: () -> Unit,
     onWaterIntakeClick: () -> Unit,
 ) {
@@ -273,7 +273,7 @@ private fun MainNavigationButtons(
     ) {
         Button(
             modifier = Modifier.height(50.dp),
-            onClick = onMyInfoClicked,
+            onClick = onMyInfoClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = if (CalorieTrackerTheme.isDarkTheme) CalorieTrackerTheme.colors.surfacePrimary
                 else CalorieTrackerTheme.colors.primary,
@@ -405,7 +405,7 @@ private fun ProfileInfoSection(
 
 @Composable
 private fun TopBarSection(
-    onNavigateBack: () -> Unit,
+    onNavigateBackClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -417,7 +417,7 @@ private fun TopBarSection(
     ) {
         IconButton(
             modifier = Modifier.weight(weight = 0.3f, fill = true),
-            onClick = onNavigateBack
+            onClick = onNavigateBackClick
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_arrow_back),

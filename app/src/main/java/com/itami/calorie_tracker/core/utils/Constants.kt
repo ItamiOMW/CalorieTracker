@@ -3,7 +3,6 @@ package com.itami.calorie_tracker.core.utils
 object Constants {
 
     const val UNKNOWN_ID = -1
-    const val EMPTY_STRING = ""
 
     const val DEFAULT_FOOD_SERVING_GRAMS = 100
     const val DEFAULT_WATER_SERVING_ML = 200

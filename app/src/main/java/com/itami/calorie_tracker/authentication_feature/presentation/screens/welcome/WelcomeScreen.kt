@@ -60,8 +60,8 @@ fun WelcomeScreen(
             is WelcomeUiEvent.ShowSnackbar -> onShowSnackbar(event.message)
         }
     }
+
     WelcomeScreenContent(
-        onShowSnackbar = onShowSnackbar,
         state = viewModel.state,
         onAction = viewModel::onAction
     )
@@ -72,7 +72,6 @@ fun WelcomeScreen(
 fun WelcomeScreenContentPreview() {
     CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
         WelcomeScreenContent(
-            onShowSnackbar = {},
             state = WelcomeState(),
             onAction = {}
         )
@@ -82,7 +81,6 @@ fun WelcomeScreenContentPreview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WelcomeScreenContent(
-    onShowSnackbar: (message: String) -> Unit,
     state: WelcomeState,
     onAction: (action: WelcomeAction) -> Unit,
 ) {
@@ -93,8 +91,7 @@ private fun WelcomeScreenContent(
             onAction(WelcomeAction.GoogleIdTokenReceived(idToken))
         },
         onDialogDismissed = { message ->
-            onAction(WelcomeAction.DismissGoogleOneTap)
-            message?.let(onShowSnackbar)
+            onAction(WelcomeAction.GoogleIdTokenNoteReceived(message))
         }
     )
 
@@ -116,11 +113,11 @@ private fun WelcomeScreenContent(
                 isLoading = state.isLoading,
                 onSignInWithEmailButtonClick = {
                     showBottomSheet = false
-                    onAction(WelcomeAction.OnSignInWithEmailClick)
+                    onAction(WelcomeAction.SignInWithEmailClick)
                 },
                 onSignInWithGoogleButtonClick = {
                     showBottomSheet = false
-                    onAction(WelcomeAction.OnSignInWithGoogleClick)
+                    onAction(WelcomeAction.SignInWithGoogleClick)
                 }
             )
         }
@@ -140,7 +137,7 @@ private fun WelcomeScreenContent(
             BottomSection(
                 isLoading = { state.isLoading },
                 onStartClick = {
-                    onAction(WelcomeAction.OnStartClick)
+                    onAction(WelcomeAction.StartClick)
                 },
                 onSignInClick = { showBottomSheet = true },
                 modifier = Modifier

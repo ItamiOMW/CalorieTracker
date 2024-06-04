@@ -76,6 +76,7 @@ object ValidationUtil {
         if (heightCm > Constants.MAX_HEIGHT_CM || heightCm < Constants.MIN_HEIGHT_CM) {
             return UserInfoException.InvalidHeightException
         }
+
         return null
     }
 
@@ -83,6 +84,7 @@ object ValidationUtil {
         if (weightGrams > Constants.MAX_WEIGHT_GRAMS || weightGrams < Constants.MIN_WEIGHT_GRAMS) {
             return UserInfoException.InvalidWeightException
         }
+
         return null
     }
 
@@ -90,6 +92,7 @@ object ValidationUtil {
         if (age > Constants.MAX_AGE || age < Constants.MIN_AGE) {
             return UserInfoException.InvalidAgeException
         }
+
         return null
     }
 

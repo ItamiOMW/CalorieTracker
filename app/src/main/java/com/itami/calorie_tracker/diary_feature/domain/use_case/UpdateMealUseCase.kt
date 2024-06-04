@@ -9,9 +9,11 @@ class UpdateMealUseCase(private val diaryRepository: DiaryRepository) {
 
     suspend operator fun invoke(mealId: Int, updateMeal: UpdateMeal): AppResponse<Unit> {
         val trimmedMealName = updateMeal.name.trim()
+
         if (trimmedMealName.isBlank()) {
             return AppResponse.failed(MealException.EmptyMealNameException)
         }
+
         return diaryRepository.updateMeal(
             mealId = mealId,
             updateMeal = updateMeal.copy(name = trimmedMealName)

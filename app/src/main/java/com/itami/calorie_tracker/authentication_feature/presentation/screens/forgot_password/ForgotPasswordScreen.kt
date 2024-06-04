@@ -157,9 +157,7 @@ private fun BoxScope.SendCodeButtonSection(
             containerColor = CalorieTrackerTheme.colors.primary,
             contentColor = CalorieTrackerTheme.colors.onPrimary,
         ),
-        contentPadding = PaddingValues(
-            vertical = CalorieTrackerTheme.padding.default
-        ),
+        contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
         shape = CalorieTrackerTheme.shapes.small,
         enabled = !isLoading,
         onClick = onSendClick,

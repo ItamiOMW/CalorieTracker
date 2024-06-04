@@ -165,9 +165,7 @@ private fun MealScreenContent(
                     contentColor = CalorieTrackerTheme.colors.onPrimary
                 ),
                 shape = CalorieTrackerTheme.shapes.small,
-                contentPadding = PaddingValues(
-                    vertical = CalorieTrackerTheme.padding.default
-                ),
+                contentPadding = PaddingValues(vertical = CalorieTrackerTheme.padding.default),
                 onClick = {
                     onAction(MealAction.SaveMealClick)
                 },

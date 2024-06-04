@@ -85,7 +85,7 @@ private fun LoginEmailScreenContent(
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
             TopBarSection(
-                onNavigateBack = {
+                onNavigateBackClick = {
                     onAction(LoginEmailAction.NavigateBackClick)
                 }
             )
@@ -111,8 +111,8 @@ private fun LoginEmailScreenContent(
                 onPasswordChange = {
                     onAction(LoginEmailAction.PasswordInputChange(it))
                 },
-                onPasswordVisibilityChange = {
-                    onAction(LoginEmailAction.PasswordVisibilityChange(it))
+                onPasswordVisibilityIconClick = {
+                    onAction(LoginEmailAction.PasswordVisibilityIconClick)
                 },
                 isLoading = state.isLoading
             )
@@ -188,7 +188,7 @@ private fun CredentialsSection(
     onEmailChange: (String) -> Unit,
     passwordState: PasswordTextFieldState,
     onPasswordChange: (String) -> Unit,
-    onPasswordVisibilityChange: (isVisible: Boolean) -> Unit,
+    onPasswordVisibilityIconClick: () -> Unit,
     isLoading: Boolean,
 ) {
     Column(
@@ -215,9 +215,7 @@ private fun CredentialsSection(
             else PasswordVisualTransformation(),
             trailingIcon = {
                 IconButton(
-                    onClick = {
-                        onPasswordVisibilityChange(!passwordState.isPasswordVisible)
-                    }
+                    onClick = onPasswordVisibilityIconClick
                 ) {
                     Icon(
                         painter = painterResource(
@@ -235,7 +233,7 @@ private fun CredentialsSection(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBarSection(
-    onNavigateBack: () -> Unit,
+    onNavigateBackClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier.padding(top = CalorieTrackerTheme.padding.small),
@@ -255,7 +253,7 @@ private fun TopBarSection(
         navigationIcon = {
             IconButton(
                 modifier = Modifier,
-                onClick = onNavigateBack
+                onClick = onNavigateBackClick
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_arrow_back),

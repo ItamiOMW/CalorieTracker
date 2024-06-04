@@ -61,10 +61,10 @@ class RegisterEmailViewModel @Inject constructor(
                 )
             }
 
-            is RegisterEmailAction.PasswordVisibilityChange -> {
+            is RegisterEmailAction.PasswordVisibilityIconClick -> {
                 state = state.copy(
                     passwordState = state.passwordState.copy(
-                        isPasswordVisible = action.isVisible
+                        isPasswordVisible = !state.passwordState.isPasswordVisible
                     )
                 )
             }
@@ -85,6 +85,12 @@ class RegisterEmailViewModel @Inject constructor(
             is RegisterEmailAction.NavigateBackClick -> {
                sendUiEvent(RegisterEmailUiEvent.NavigateBack)
             }
+        }
+    }
+
+    private fun sendUiEvent(uiEvent: RegisterEmailUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.send(uiEvent)
         }
     }
 
@@ -136,12 +142,6 @@ class RegisterEmailViewModel @Inject constructor(
                 null -> Unit
             }
             state = state.copy(isLoading = false)
-        }
-    }
-
-    private fun sendUiEvent(uiEvent: RegisterEmailUiEvent) {
-        viewModelScope.launch {
-            _uiEvent.send(uiEvent)
         }
     }
 
