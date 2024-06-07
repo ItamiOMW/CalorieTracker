@@ -125,13 +125,13 @@
     <string name="cal_amount">%1$s Cal</string>
     <string name="minutes_number_short">%1$s min</string>
     <string name="desc_icon_navigate_back">Icon navigate back</string>
-    <string name="profile">Profile</string>
+    <string name="title_profile">Profile</string>
     <string name="my_info">My Info</string>
     <string name="calorie_intake">Calorie Intake</string>
     <string name="dark_theme">Dark theme</string>
     <string name="desc_icon_contrast">Contrast icon</string>
-    <string name="contact_us">Contact us</string>
-    <string name="about_app">About app</string>
+    <string name="title_contact_us">Contact us</string>
+    <string name="title_about_app">About app</string>
     <string name="desc_icon_info">Info icon</string>
     <string name="settings">Settings</string>
     <string name="desc_icon_settings">Settings icon</string>
@@ -186,4 +186,9 @@
     <string name="you_successfully_changed_password">You have successfully changed your password</string>
     <string name="reset">Reset</string>
     <string name="enter_password_reset_code">Please enter the password reset code that we have sent to your email, %1$s</string>
+    <string name="calorie_tracker_about_app">Calorie Tracker - an Android app developed and designed by a single developer to assist you on your journey to achieving dream physique.</string>
+    <string name="provide_features_such_as">We provide with all the necessary features such as:</string>
+    <string name="desc_diary_feature">Diary to log your meals and consumed water</string>
+    <string name="desc_reports_feature">Reports to keep a track on your weight</string>
+    <string name="desc_recipes_feature">Recipes to quickly come up with something to cook</string>
 </resources>

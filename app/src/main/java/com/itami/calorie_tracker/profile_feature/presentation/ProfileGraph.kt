@@ -10,6 +10,7 @@ import androidx.navigation.navigation
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
+import com.itami.calorie_tracker.profile_feature.presentation.screens.about_app.AboutAppScreen
 import com.itami.calorie_tracker.profile_feature.presentation.screens.profile.ProfileScreen
 
 fun NavGraphBuilder.profileGraph(
@@ -58,7 +59,7 @@ fun NavGraphBuilder.profileGraph(
                     onShowSnackbar("Not implemented yet")
                 },
                 onNavigateToAboutApp = {
-                    onShowSnackbar("Not implemented yet")
+                    navState.navigateToScreen(route = ProfileGraphScreens.AboutApp.fullRoute)
                 },
                 onNavigateToContactUs = {
                     onShowSnackbar("Not implemented yet")
@@ -67,6 +68,21 @@ fun NavGraphBuilder.profileGraph(
                     navState.navigateBack()
                 },
             )
+        }
+        composable(route = ProfileGraphScreens.MyInfo.fullRoute) {
+
+        }
+        composable(route = ProfileGraphScreens.CalorieIntake.fullRoute) {
+
+        }
+        composable(route = ProfileGraphScreens.WaterIntake.fullRoute) {
+
+        }
+        composable(route = ProfileGraphScreens.AboutApp.fullRoute) {
+            AboutAppScreen(onNavigateBack = navState::navigateBack)
+        }
+        composable(route = ProfileGraphScreens.ContactUs.fullRoute) {
+
         }
     }
 }
@@ -77,5 +93,15 @@ sealed class ProfileGraphScreens(
 ) : Screen(route, *params) {
 
     data object Profile : ProfileGraphScreens(route = "profile")
+
+    data object MyInfo : ProfileGraphScreens(route = "my_info")
+
+    data object CalorieIntake : ProfileGraphScreens(route = "calorie_intake")
+
+    data object WaterIntake : ProfileGraphScreens(route = "water_intake")
+
+    data object AboutApp : ProfileGraphScreens(route = "about_app")
+
+    data object ContactUs : ProfileGraphScreens(route = "contact_us")
 
 }

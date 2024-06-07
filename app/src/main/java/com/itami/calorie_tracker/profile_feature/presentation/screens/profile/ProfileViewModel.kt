@@ -37,7 +37,7 @@ class ProfileViewModel @Inject constructor(
                 changeTheme(action.theme)
             }
 
-            is ProfileAction.AboutClick -> {
+            is ProfileAction.AboutAppClick -> {
                 sendUiEvent(ProfileUiEvent.NavigateToAbout)
             }
 
