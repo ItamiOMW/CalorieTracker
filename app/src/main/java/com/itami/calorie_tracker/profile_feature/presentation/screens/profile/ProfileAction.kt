@@ -14,7 +14,7 @@ sealed class ProfileAction {
 
     data object ContactUsClick : ProfileAction()
 
-    data object AboutClick : ProfileAction()
+    data object AboutAppClick : ProfileAction()
 
     data object SettingsClick : ProfileAction()
 

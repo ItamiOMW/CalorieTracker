@@ -10,11 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -143,7 +145,7 @@ private fun ProfileScreenContent(
                     onAction(ProfileAction.ContactUsClick)
                 },
                 onAboutAppClick = {
-                    onAction(ProfileAction.AboutClick)
+                    onAction(ProfileAction.AboutAppClick)
                 },
                 onSettingsClick = {
                     onAction(ProfileAction.SettingsClick)
@@ -210,7 +212,7 @@ private fun OptionsSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(54.dp),
-            optionText = stringResource(R.string.contact_us),
+            optionText = stringResource(R.string.title_contact_us),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_mail),
@@ -226,7 +228,7 @@ private fun OptionsSection(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(54.dp),
-            optionText = stringResource(R.string.about_app),
+            optionText = stringResource(R.string.title_about_app),
             leadingIcon = {
                 Icon(
                     painter = painterResource(id = R.drawable.icon_info),
@@ -403,40 +405,38 @@ private fun ProfileInfoSection(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBarSection(
     onNavigateBackClick: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(CalorieTrackerTheme.padding.default)
-            .statusBarsPadding(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton(
-            modifier = Modifier.weight(weight = 0.3f, fill = true),
-            onClick = onNavigateBackClick
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_arrow_back),
-                contentDescription = stringResource(R.string.desc_icon_navigate_back),
-                tint = CalorieTrackerTheme.colors.onBackground,
-                modifier = Modifier.size(24.dp)
+    CenterAlignedTopAppBar(
+        modifier = Modifier.padding(top = CalorieTrackerTheme.padding.small),
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = CalorieTrackerTheme.colors.background,
+            titleContentColor = CalorieTrackerTheme.colors.onBackground,
+            navigationIconContentColor = CalorieTrackerTheme.colors.onBackground
+        ),
+        title = {
+            Text(
+                text = stringResource(R.string.title_profile),
+                style = CalorieTrackerTheme.typography.titleLarge,
+                textAlign = TextAlign.Center,
+                color = CalorieTrackerTheme.colors.onBackground
             )
+        },
+        navigationIcon = {
+            IconButton(
+                modifier = Modifier,
+                onClick = onNavigateBackClick
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_arrow_back),
+                    contentDescription = stringResource(R.string.desc_icon_navigate_back),
+                    tint = CalorieTrackerTheme.colors.onBackground,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
         }
-        Text(
-            modifier = Modifier.weight(weight = 1f, fill = true),
-            text = stringResource(R.string.profile),
-            style = CalorieTrackerTheme.typography.titleMedium,
-            color = CalorieTrackerTheme.colors.onBackground,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(
-            Modifier
-                .size(24.dp)
-                .weight(weight = 0.3f, fill = true)
-        )
-    }
+    )
 }
