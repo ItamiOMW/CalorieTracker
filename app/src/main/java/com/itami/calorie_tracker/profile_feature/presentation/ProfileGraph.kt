@@ -51,7 +51,7 @@ fun NavGraphBuilder.profileGraph(
             ProfileScreen(
                 onLogoutSuccess = {
                     navHostController.navigate(Graph.Auth.route) {
-                        popUpTo(navHostController.graph.startDestinationId) {
+                        popUpTo(Graph.Diary.route) {
                             inclusive = true
                         }
                     }
