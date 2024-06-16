@@ -1,5 +1,6 @@
 package com.itami.calorie_tracker.core.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -130,12 +131,14 @@ private fun MeterHeightPicker(
                         )
                     }
                     DropdownMenu(
+                        modifier = Modifier.background(CalorieTrackerTheme.colors.surfacePrimary),
                         expanded = dropdownMenuExpanded,
                         onDismissRequest = {
                             dropdownMenuExpanded = false
                         },
                     ) {
                         DropdownMenuItem(
+                            modifier = Modifier.background(CalorieTrackerTheme.colors.surfacePrimary),
                             text = {
                                 Text(
                                     text = stringResource(R.string.height_unit_meter),
@@ -144,12 +147,14 @@ private fun MeterHeightPicker(
                             },
                             onClick = {
                                 onHeightUnitChange(HeightUnit.METER)
+                                dropdownMenuExpanded = false
                             },
                             colors = MenuDefaults.itemColors(
                                 textColor = CalorieTrackerTheme.colors.onSurfacePrimary,
                             ),
                         )
                         DropdownMenuItem(
+                            modifier = Modifier.background(CalorieTrackerTheme.colors.surfacePrimary),
                             text = {
                                 Text(
                                     text = stringResource(R.string.height_unit_feet),
@@ -158,6 +163,7 @@ private fun MeterHeightPicker(
                             },
                             onClick = {
                                 onHeightUnitChange(HeightUnit.FEET)
+                                dropdownMenuExpanded = false
                             },
                             colors = MenuDefaults.itemColors(
                                 textColor = CalorieTrackerTheme.colors.onSurfacePrimary,

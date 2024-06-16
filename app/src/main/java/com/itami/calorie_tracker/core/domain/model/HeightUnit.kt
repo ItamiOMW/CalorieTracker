@@ -44,6 +44,20 @@ enum class HeightUnit {
         val remainingCentimeters = centimeters % 100
         return HeightValueMeters(meters = meters, centimeters = remainingCentimeters)
     }
+
+    fun format(heightCm: Int): String {
+        when(this) {
+            FEET -> {
+                val totalInches = (heightCm / 2.54).roundToInt()
+                val feet = (totalInches / 12)
+                val remainingInches = (totalInches % 12)
+                return "$feet ft. $remainingInches in."
+            }
+            METER -> {
+                return "$heightCm cm"
+            }
+        }
+    }
 }
 
 data class HeightValueMeters(val meters: Int, val centimeters: Int)

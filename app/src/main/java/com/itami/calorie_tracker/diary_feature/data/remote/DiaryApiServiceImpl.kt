@@ -2,7 +2,7 @@ package com.itami.calorie_tracker.diary_feature.data.remote
 
 import com.itami.calorie_tracker.core.data.remote.response.ApiResponse
 import com.itami.calorie_tracker.core.data.remote.response.ErrorResponse
-import com.itami.calorie_tracker.core.data.remote.safeRequest
+import com.itami.calorie_tracker.core.data.remote.utils.safeRequest
 import com.itami.calorie_tracker.diary_feature.data.remote.request.AddConsumedWaterRequest
 import com.itami.calorie_tracker.diary_feature.data.remote.request.CreateMealRequest
 import com.itami.calorie_tracker.diary_feature.data.remote.request.RemoveConsumedWaterRequest

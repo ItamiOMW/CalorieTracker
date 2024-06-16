@@ -4,6 +4,8 @@
     em = exclamation mark
       -->
     <string name="app_name">Calorie Tracker</string>
+    <string name="current_app_version">Version: 0.0.7</string>
+
     <string name="diary">Diary</string>
     <string name="recipes">Recipes</string>
     <string name="reports">Reports</string>
@@ -72,6 +74,7 @@
     <string name="weight_unit_short_kilograms">kg</string>
     <string name="weight_unit_pounds">Pounds</string>
     <string name="weight_unit_short_pounds">lb</string>
+    <string name="weight_unit">Weight Unit</string>
 
     <string name="icon_desc_arrow_drop_down">Arrow drop down</string>
     <string name="error_invalid_height">The app does not support this height.</string>
@@ -79,7 +82,8 @@
     <string name="error_invalid_age">The app does not support this age.</string>
     <string name="error_unknown">Unknown error occurred.</string>
     <string name="age_unit">age</string>
-    <string name="amount_grams">%1$sg</string>
+    <string name="years">Years</string>
+    <string name="amount_grams">%1$s g</string>
     <string name="proteins_to_grams">Proteins: %1$sg</string>
     <string name="fats_to_grams">Fats: %1$sg</string>
     <string name="carbs_to_grams">Carbs: %1$sg</string>
@@ -98,7 +102,6 @@
     <string name="nutrients_indicator">Nutrients Indicator</string>
     <string name="water_intake">Water Intake</string>
     <string name="meals">Meals</string>
-    <string name="water">Water</string>
     <string name="water_liters">%1$sL</string>
     <string name="water_milliliters">%1$s ml</string>
     <string name="desc_clock_icon">Clock icon</string>
@@ -127,6 +130,7 @@
     <string name="desc_icon_navigate_back">Icon navigate back</string>
     <string name="title_profile">Profile</string>
     <string name="my_info">My Info</string>
+    <string name="me">Me</string>
     <string name="calorie_intake">Calorie Intake</string>
     <string name="dark_theme">Dark theme</string>
     <string name="desc_icon_contrast">Contrast icon</string>
@@ -134,6 +138,7 @@
     <string name="title_about_app">About app</string>
     <string name="desc_icon_info">Info icon</string>
     <string name="settings">Settings</string>
+    <string name="logout">Logout</string>
     <string name="desc_icon_settings">Settings icon</string>
     <string name="placeholder_search_for_recipes">Search for recipes..</string>
     <string name="desc_search_icon">Search icon</string>
@@ -191,4 +196,26 @@
     <string name="desc_diary_feature">Diary to log your meals and consumed water</string>
     <string name="desc_reports_feature">Reports to keep a track on your weight</string>
     <string name="desc_recipes_feature">Recipes to quickly come up with something to cook</string>
+    <string name="you_sure_you_want_to_log_out">Are you sure you want to log out?</string>
+    <string name="log_out">Log out</string>
+    <string name="goal">Goal</string>
+    <string name="age">Age</string>
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+    <string name="gender">Gender</string>
+    <string name="lifestyle">Lifestyle</string>
+    <string name="calories">Calories</string>
+    <string name="proteins">Proteins</string>
+    <string name="fats">Fats</string>
+    <string name="carbs">Carbs</string>
+    <string name="water">Water</string>
+    <string name="number_of_years">%1$s years</string>
+    <string name="update_nutrients">Update nutrients</string>
+    <string name="amount_cal">%1$s Cal</string>
+    <string name="daily_calorie_intake">Daily calorie intake</string>
+    <string name="daily_protein_intake">Daily protein intake</string>
+    <string name="daily_fat_intake">Daily fat intake</string>
+    <string name="daily_carb_intake">Daily carb intake</string>
+    <string name="daily_water_intake">Daily water intake</string>
+    <string name="recommended_amount">Recommended: %1$s</string>
 </resources>

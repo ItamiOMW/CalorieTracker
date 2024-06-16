@@ -74,7 +74,7 @@ fun DialogComponent(
                     textAlign = TextAlign.Center,
                     maxLines = 2
                 )
-                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.default))
+                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
                 Text(
                     text = description,
                     style = descriptionStyle,

@@ -1,4 +1,4 @@
-package com.itami.calorie_tracker.core.data.remote
+package com.itami.calorie_tracker.core.data.remote.utils
 
 import com.itami.calorie_tracker.core.data.remote.response.ApiResponse
 import io.ktor.client.HttpClient

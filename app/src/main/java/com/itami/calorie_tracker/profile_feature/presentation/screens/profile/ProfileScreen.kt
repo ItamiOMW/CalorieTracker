@@ -1,6 +1,7 @@
 package com.itami.calorie_tracker.profile_feature.presentation.screens.profile
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -42,15 +43,18 @@ import coil.compose.AsyncImage
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.model.User
+import com.itami.calorie_tracker.core.domain.model.WeightUnit
+import com.itami.calorie_tracker.core.presentation.components.DialogComponent
 import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.OptionItem
+import com.itami.calorie_tracker.core.presentation.components.WeightUnitDialog
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 
 @Composable
 fun ProfileScreen(
-    onNavigateToMyInfo: () -> Unit,
+    onLogoutSuccess: () -> Unit,
+    onNavigateToUserInfo: () -> Unit,
     onNavigateToCalorieIntake: () -> Unit,
-    onNavigateToWaterIntake: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToContactUs: () -> Unit,
     onNavigateToAboutApp: () -> Unit,
@@ -63,9 +67,9 @@ fun ProfileScreen(
             ProfileUiEvent.NavigateToAbout -> onNavigateToAboutApp()
             ProfileUiEvent.NavigateToCalorieIntake -> onNavigateToCalorieIntake()
             ProfileUiEvent.NavigateToContactsUs -> onNavigateToContactUs()
-            ProfileUiEvent.NavigateToMyInfo -> onNavigateToMyInfo()
+            ProfileUiEvent.NavigateToMyInfo -> onNavigateToUserInfo()
             ProfileUiEvent.NavigateToSettings -> onNavigateToSettings()
-            ProfileUiEvent.NavigateToWaterIntake -> onNavigateToWaterIntake()
+            ProfileUiEvent.LogoutSuccess -> onLogoutSuccess()
         }
     }
 
@@ -80,7 +84,7 @@ fun ProfileScreen(
 fun ProfileScreenContentPreview() {
     CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
         ProfileScreenContent(
-            state = ProfileState(),
+            state = ProfileState(showLogoutDialog = true),
             onAction = {}
         )
     }
@@ -91,6 +95,30 @@ private fun ProfileScreenContent(
     state: ProfileState,
     onAction: (ProfileAction) -> Unit,
 ) {
+    if (state.showLogoutDialog) {
+        DialogComponent(
+            title = stringResource(id = R.string.logout),
+            description = stringResource(R.string.you_sure_you_want_to_log_out),
+            cancelText = stringResource(id = R.string.cancel),
+            confirmText = stringResource(R.string.log_out),
+            onConfirm = { onAction(ProfileAction.ConfirmLogout) },
+            onDismiss = { onAction(ProfileAction.DenyLogout) },
+            confirmTextColor = CalorieTrackerTheme.colors.danger
+        )
+    }
+
+    if (state.showWeightUnitDialog) {
+        WeightUnitDialog(
+            selectedWeightUnit = state.weightUnit,
+            onConfirm = { weightUnit ->
+                onAction(ProfileAction.SaveWeightUnit(weightUnit))
+            },
+            onDismiss = {
+                onAction(ProfileAction.DismissWeightUnitDialog)
+            }
+        )
+    }
+
     Scaffold(
         containerColor = CalorieTrackerTheme.colors.background,
         contentColor = CalorieTrackerTheme.colors.onBackground,
@@ -101,60 +129,79 @@ private fun ProfileScreenContent(
                 }
             )
         }
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+    ) { scaffoldPadding ->
+        Box(
+            modifier = Modifier.padding(scaffoldPadding),
+            contentAlignment = Alignment.Center
         ) {
-            Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.default))
-            ProfileInfoSection(
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.default))
+                ProfileInfoSection(
+                    user = state.user,
+                    modifier = Modifier
+                        .padding(horizontal = CalorieTrackerTheme.padding.large)
+                        .wrapContentWidth()
+                )
+                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
+                MainNavigationButtons(
+                    modifier = Modifier
+                        .padding(horizontal = CalorieTrackerTheme.padding.default)
+                        .fillMaxWidth(),
+                    user = state.user,
+                    selectedWeightUnit = state.weightUnit,
+                    onMeClick = {
+                        onAction(ProfileAction.MeClick)
+                    },
+                    onCalorieIntakeClick = {
+                        onAction(ProfileAction.CalorieIntakeClick)
+                    },
+                    onWeightUnitClick = {
+                        onAction(ProfileAction.WeightUnitClick)
+                    }
+                )
+                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
+                HorizontalDivider(
+                    modifier = Modifier
+                        .padding(horizontal = CalorieTrackerTheme.padding.small)
+                        .fillMaxWidth(),
+                    color = CalorieTrackerTheme.colors.outlineVariant
+                )
+                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.small))
+                OptionsSection(
+                    modifier = Modifier.fillMaxWidth(),
+                    onContactUsClick = {
+                        onAction(ProfileAction.ContactUsClick)
+                    },
+                    onAboutAppClick = {
+                        onAction(ProfileAction.AboutAppClick)
+                    },
+                    onSettingsClick = {
+                        onAction(ProfileAction.SettingsClick)
+                    },
+                    onLogoutClick = {
+                        if (!state.isLoggingOut) {
+                            onAction(ProfileAction.LogoutClick)
+                        }
+                    },
+                    onChangeTheme = { theme ->
+                        onAction(ProfileAction.ChangeTheme(theme))
+                    },
+                )
+            }
+            Text(
+                text = stringResource(R.string.current_app_version),
+                textAlign = TextAlign.Center,
+                color = CalorieTrackerTheme.colors.onBackgroundVariant,
                 modifier = Modifier
-                    .padding(horizontal = CalorieTrackerTheme.padding.large)
-                    .wrapContentWidth(),
-                user = state.user
-            )
-            Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
-            MainNavigationButtons(
-                modifier = Modifier
-                    .padding(horizontal = CalorieTrackerTheme.padding.default)
-                    .fillMaxWidth(),
-                user = state.user,
-                onMyInfoClick = {
-                    onAction(ProfileAction.MyInfoClick)
-                },
-                onCalorieIntakeClick = {
-                    onAction(ProfileAction.CalorieIntakeClick)
-                },
-                onWaterIntakeClick = {
-                    onAction(ProfileAction.WaterIntakeClick)
-                }
-            )
-            Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
-            HorizontalDivider(
-                modifier = Modifier
-                    .padding(horizontal = CalorieTrackerTheme.padding.small)
-                    .fillMaxWidth(),
-                color = CalorieTrackerTheme.colors.outlineVariant
-            )
-            Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.small))
-            OptionsSection(
-                modifier = Modifier.fillMaxWidth(),
-                onContactUsClick = {
-                    onAction(ProfileAction.ContactUsClick)
-                },
-                onAboutAppClick = {
-                    onAction(ProfileAction.AboutAppClick)
-                },
-                onSettingsClick = {
-                    onAction(ProfileAction.SettingsClick)
-                },
-                onChangeTheme = { theme ->
-                    onAction(ProfileAction.ChangeTheme(theme))
-                }
+                    .fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = CalorieTrackerTheme.padding.medium),
             )
         }
+
     }
 }
 
@@ -165,6 +212,7 @@ private fun OptionsSection(
     onContactUsClick: () -> Unit,
     onAboutAppClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    onLogoutClick: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -174,7 +222,7 @@ private fun OptionsSection(
         OptionItem(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(54.dp),
+                .height(52.dp),
             optionText = stringResource(R.string.dark_theme),
             leadingIcon = {
                 Icon(
@@ -256,6 +304,22 @@ private fun OptionsSection(
             },
             onClick = onSettingsClick
         )
+        OptionItem(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
+            optionText = stringResource(R.string.logout),
+            textColor = CalorieTrackerTheme.colors.danger,
+            leadingIcon = {
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_logout),
+                    contentDescription = stringResource(R.string.desc_icon_settings),
+                    tint = CalorieTrackerTheme.colors.danger,
+                    modifier = Modifier.size(24.dp),
+                )
+            },
+            onClick = onLogoutClick
+        )
     }
 }
 
@@ -264,9 +328,10 @@ private fun OptionsSection(
 private fun MainNavigationButtons(
     modifier: Modifier,
     user: User,
-    onMyInfoClick: () -> Unit,
+    selectedWeightUnit: WeightUnit,
+    onMeClick: () -> Unit,
     onCalorieIntakeClick: () -> Unit,
-    onWaterIntakeClick: () -> Unit,
+    onWeightUnitClick: () -> Unit,
 ) {
     Column(
         modifier = modifier,
@@ -275,7 +340,7 @@ private fun MainNavigationButtons(
     ) {
         Button(
             modifier = Modifier.height(50.dp),
-            onClick = onMyInfoClick,
+            onClick = onMeClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = if (CalorieTrackerTheme.isDarkTheme) CalorieTrackerTheme.colors.surfacePrimary
                 else CalorieTrackerTheme.colors.primary,
@@ -291,7 +356,7 @@ private fun MainNavigationButtons(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.my_info),
+                    text = stringResource(R.string.me),
                     style = CalorieTrackerTheme.typography.labelLarge,
                 )
                 Icon(
@@ -333,7 +398,7 @@ private fun MainNavigationButtons(
         }
         Button(
             modifier = Modifier.height(50.dp),
-            onClick = onWaterIntakeClick,
+            onClick = onWeightUnitClick,
             colors = ButtonDefaults.buttonColors(
                 containerColor = if (CalorieTrackerTheme.isDarkTheme) CalorieTrackerTheme.colors.surfacePrimary
                 else CalorieTrackerTheme.colors.surfaceSecondary,
@@ -347,14 +412,16 @@ private fun MainNavigationButtons(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.water_intake),
+                    text = stringResource(R.string.weight_unit),
                     style = CalorieTrackerTheme.typography.bodyMedium,
                     color = CalorieTrackerTheme.colors.onSurfacePrimary
                 )
                 Text(
                     text = stringResource(
-                        R.string.water_milliliters,
-                        user.dailyNutrientsGoal.waterMlGoal
+                        id = when (selectedWeightUnit) {
+                            WeightUnit.POUND -> R.string.weight_unit_pounds
+                            WeightUnit.KILOGRAM -> R.string.weight_unit_kilograms
+                        },
                     ),
                     style = CalorieTrackerTheme.typography.labelLarge,
                     color = CalorieTrackerTheme.colors.primary

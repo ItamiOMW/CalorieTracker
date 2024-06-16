@@ -20,6 +20,8 @@ interface AuthRepository {
 
     suspend fun loginGoogle(idToken: String): AppResponse<Unit>
 
+    suspend fun logout(): AppResponse<Unit>
+
     suspend fun isAuthenticated(): AppResponse<Unit>
 
 }

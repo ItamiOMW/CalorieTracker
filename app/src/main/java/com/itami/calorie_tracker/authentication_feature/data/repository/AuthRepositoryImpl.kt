@@ -35,7 +35,8 @@ class AuthRepositoryImpl @Inject constructor(
     private val jwtToken get() = authManager.token
 
     override suspend fun registerEmail(createUser: CreateUserEmail): AppResponse<Unit> {
-        val inputStream = createUser.profilePictureUri?.toUri()?.let { context.contentResolver.openInputStream(it) }
+        val inputStream = createUser.profilePictureUri?.toUri()
+            ?.let { context.contentResolver.openInputStream(it) }
         val imageByteArray = inputStream?.readBytes()
 
         return when (val response = authApiService.registerEmail(createUser.toEmailRegisterRequest(), imageByteArray)) {
@@ -315,8 +316,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun registerGoogle(createUser: CreateUserGoogle): AppResponse<Unit> {
-        return when (val response =
-            authApiService.registerGoogle(createUser.toRegisterGoogleRequest())) {
+        return when (val response = authApiService.registerGoogle(createUser.toRegisterGoogleRequest())) {
             is ApiResponse.Success -> {
                 val user = response.body.user.toUser()
                 val token = response.body.token
@@ -429,6 +429,12 @@ class AuthRepositoryImpl @Inject constructor(
                 )
             }
         }
+    }
+
+    override suspend fun logout(): AppResponse<Unit> {
+        authManager.setToken(null)
+        userManager.setUser(null)
+        return AppResponse.success(Unit)
     }
 
     override suspend fun isAuthenticated(): AppResponse<Unit> {

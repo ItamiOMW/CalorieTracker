@@ -16,4 +16,6 @@ sealed class Graph(val route: String) {
 
     data object Profile: Graph("profile_graph")
 
+    data object Settings: Graph("settings_graph")
+
 }

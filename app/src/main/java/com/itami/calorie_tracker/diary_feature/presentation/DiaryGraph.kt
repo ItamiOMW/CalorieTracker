@@ -8,12 +8,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
-import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 import com.itami.calorie_tracker.core.presentation.navigation.util.appendParams
 import com.itami.calorie_tracker.core.presentation.navigation.util.navigateForResult
@@ -26,7 +26,7 @@ import com.itami.calorie_tracker.diary_feature.presentation.screens.new_meal.New
 import com.itami.calorie_tracker.diary_feature.presentation.screens.search_food.SearchFoodScreen
 
 fun NavGraphBuilder.diaryGraph(
-    navState: NavigationState,
+    navHostController: NavHostController,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
@@ -36,19 +36,18 @@ fun NavGraphBuilder.diaryGraph(
         composable(DiaryGraphScreens.Diary.fullRoute) {
             DiaryScreen(
                 onNavigateToMeal = { mealId ->
-                    navState.navigateToScreen(DiaryGraphScreens.Meal.routeWithArgs(mealId))
+                    navHostController.navigate(DiaryGraphScreens.Meal.routeWithArgs(mealId)) {
+                        launchSingleTop = true
+                    }
                 },
                 onNavigateToNewMeal = { datetime ->
                     val encodedDate = Uri.encode(datetime)
-                    navState.navigateToScreen(DiaryGraphScreens.NewMeal.routeWithArgs(encodedDate))
+                    navHostController.navigate(DiaryGraphScreens.NewMeal.routeWithArgs(encodedDate)) {
+                        launchSingleTop = true
+                    }
                 },
                 onNavigateToProfile = {
-                    navState.navigateToGraph(
-                        graph = Graph.Profile.route,
-                        popUpInclusive = false,
-                        saveState = false,
-                        restoreState = false
-                    )
+                    navHostController.navigate(Graph.Profile.route)
                 },
                 onShowSnackbar = onShowSnackbar,
             )
@@ -85,16 +84,16 @@ fun NavGraphBuilder.diaryGraph(
         ) {
             NewMealScreen(
                 onNavigateSearchFood = { navCallback ->
-                    navState.navHostController.navigateForResult(
+                    navHostController.navigateForResult(
                         route = DiaryGraphScreens.SearchFood.fullRoute,
                         navResultCallback = navCallback,
                     )
                 },
                 onMealSaved = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar,
             )
@@ -131,16 +130,16 @@ fun NavGraphBuilder.diaryGraph(
         ) {
             MealScreen(
                 onNavigateSearchFood = { navCallback ->
-                    navState.navHostController.navigateForResult(
+                    navHostController.navigateForResult(
                         route = DiaryGraphScreens.SearchFood.fullRoute,
                         navResultCallback = navCallback,
                     )
                 },
                 onMealSaved = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar,
             )
@@ -170,10 +169,10 @@ fun NavGraphBuilder.diaryGraph(
         ) {
             SearchFoodScreen(
                 onNavigateBackWithFood = { consumedFood ->
-                    navState.navHostController.popBackStackWithResult(consumedFood)
+                    navHostController.popBackStackWithResult(consumedFood)
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )

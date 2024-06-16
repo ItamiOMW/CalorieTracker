@@ -21,7 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.itami.calorie_tracker.core.presentation.components.animated_bottom_bar.AnimatedNavigationBar
 import com.itami.calorie_tracker.core.presentation.components.animated_bottom_bar.BottomNavItem
 import com.itami.calorie_tracker.core.presentation.components.animated_bottom_bar.animation.ball_trajectory.StraightBall
@@ -29,7 +31,6 @@ import com.itami.calorie_tracker.core.presentation.components.animated_bottom_ba
 import com.itami.calorie_tracker.core.presentation.components.animated_bottom_bar.animation.outdent_shape.shapeCornerRadius
 import com.itami.calorie_tracker.core.presentation.components.animated_bottom_bar.utils.noRippleClickable
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
-import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.RootNavGraph
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.core.presentation.utils.BottomNavItem
@@ -37,7 +38,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    navState: NavigationState,
+    navHostController: NavHostController = rememberNavController(),
     startRoute: String = Graph.Auth.route,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -48,8 +49,7 @@ fun MainScreen(
         contentColor = CalorieTrackerTheme.colors.onBackground,
         snackbarHost = {
             Box(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.BottomCenter
             ) {
                 SnackbarHost(snackbarHostState) { snackbarData ->
@@ -65,7 +65,7 @@ fun MainScreen(
             }
         },
         bottomBar = {
-            BottomBar(navState = navState)
+            BottomBar(navHostController = navHostController)
         }
     ) {
         it
@@ -74,7 +74,7 @@ fun MainScreen(
                 .navigationBarsPadding()
                 .fillMaxSize()
                 .padding(PaddingValues()),
-            navState = navState,
+            navHostController = navHostController,
             startGraphRoute = startRoute,
             onShowSnackbar = { message ->
                 coroutineScope.launch {
@@ -91,14 +91,14 @@ fun MainScreen(
 
 @Composable
 private fun BottomBar(
-    navState: NavigationState,
+    navHostController: NavHostController,
 ) {
     val navItems = listOf(
         BottomNavItem.Recipes,
         BottomNavItem.Diary,
         BottomNavItem.Reports,
     )
-    val backStackEntry by navState.navHostController.currentBackStackEntryAsState()
+    val backStackEntry by navHostController.currentBackStackEntryAsState()
     val route = backStackEntry?.destination?.route
     val selectedNavigationItemIndex = navItems.indexOfFirst { it.screenRoute == route }
 
@@ -138,14 +138,13 @@ private fun BottomBar(
                     modifier = Modifier
                         .noRippleClickable {
                             if (!selected) {
-                                navState.navigateToGraph(
-                                    graph = navItem.screenRoute,
-                                    popUpToId = navState.navHostController.graph.findStartDestination().id,
-                                    inclusive = false,
-                                    saveState = true,
-                                    restoreState = true,
+                                navHostController.navigate(navItem.screenRoute) {
+                                    popUpTo(navHostController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    restoreState = true
                                     launchSingleTop = true
-                                )
+                                }
                             }
                         }
                 )

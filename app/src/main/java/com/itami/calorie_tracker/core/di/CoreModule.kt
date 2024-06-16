@@ -6,10 +6,14 @@ import coil.ImageLoader
 import com.itami.calorie_tracker.BuildConfig
 import com.itami.calorie_tracker.core.data.auth.AuthManager
 import com.itami.calorie_tracker.core.data.auth.EncryptedAuthManager
+import com.itami.calorie_tracker.core.data.remote.UserApiService
+import com.itami.calorie_tracker.core.data.remote.UserApiServiceImpl
 import com.itami.calorie_tracker.core.data.repository.DataStoreAppSettingsManager
+import com.itami.calorie_tracker.core.data.repository.UserRepositoryImpl
 import com.itami.calorie_tracker.core.data.repository.user_manager.DataStoreUserManager
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
 import com.itami.calorie_tracker.core.domain.repository.UserManager
+import com.itami.calorie_tracker.core.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,6 +40,12 @@ object CoreModule {
 
     @Provides
     @Singleton
+    fun provideUserRepository(
+        userRepositoryImpl: UserRepositoryImpl,
+    ): UserRepository = userRepositoryImpl
+
+    @Provides
+    @Singleton
     fun provideAuthManager(
         authManager: EncryptedAuthManager,
     ): AuthManager = authManager
@@ -59,6 +69,12 @@ object CoreModule {
     ): ImageLoader = ImageLoader.Builder(context)
         .crossfade(true)
         .build()
+
+    @Provides
+    @Singleton
+    fun provideUserApiService(
+        userApiServiceImpl: UserApiServiceImpl
+    ): UserApiService = userApiServiceImpl
 
     @Provides
     @Singleton
