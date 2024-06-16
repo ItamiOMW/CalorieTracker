@@ -2,7 +2,7 @@ package com.itami.calorie_tracker.recipes_feature.data.remote
 
 import com.itami.calorie_tracker.core.data.remote.response.ApiResponse
 import com.itami.calorie_tracker.core.data.remote.response.ErrorResponse
-import com.itami.calorie_tracker.core.data.remote.safeRequest
+import com.itami.calorie_tracker.core.data.remote.utils.safeRequest
 import com.itami.calorie_tracker.recipes_feature.data.remote.response.RecipeResponse
 import com.itami.calorie_tracker.recipes_feature.domain.model.CaloriesFilter
 import com.itami.calorie_tracker.recipes_feature.domain.model.TimeFilter

@@ -8,8 +8,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
-import com.itami.calorie_tracker.core.presentation.navigation.rememberNavigationState
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -35,10 +35,10 @@ class MainActivity : ComponentActivity() {
                 else -> Graph.Auth.route
             }
             CalorieTrackerTheme(theme = theme) {
-                val navState = rememberNavigationState()
+                val navController = rememberNavController()
                 MainScreen(
                     startRoute = startRoute,
-                    navState = navState,
+                    navHostController = navController,
                 )
             }
         }

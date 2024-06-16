@@ -17,7 +17,7 @@ internal fun String.appendParams(vararg params: Pair<String, Any?>): String {
     return builder.toString()
 }
 
-//Implementation by https://stackoverflow.com/a/75472964/20298826
+// NavResultCallback implementation by https://stackoverflow.com/a/75472964/20298826
 typealias NavResultCallback<T> = (T) -> Unit
 
 private const val NAV_RESULT_CALLBACK_KEY = "NavResultCallbackKey"

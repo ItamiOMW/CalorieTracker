@@ -1,6 +1,7 @@
 package com.itami.calorie_tracker.authentication_feature.presentation
 
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -20,12 +21,11 @@ import com.itami.calorie_tracker.authentication_feature.presentation.screens.res
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.weight.WeightScreen
 import com.itami.calorie_tracker.authentication_feature.presentation.screens.welcome.WelcomeScreen
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
-import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 import com.itami.calorie_tracker.core.presentation.navigation.util.appendParams
 
 fun NavGraphBuilder.authGraph(
-    navState: NavigationState,
+    navHostController: NavHostController,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
@@ -35,16 +35,17 @@ fun NavGraphBuilder.authGraph(
         composable(route = AuthGraphScreen.Welcome.fullRoute) {
             WelcomeScreen(
                 onStart = {
-                    navState.navigateToScreen(route = AuthGraphScreen.Goal.fullRoute)
-                },
-                onGoogleLoginSuccessful = {
-                    navState.navigateToGraph(
-                        graph = Graph.Diary.route,
-                        popUpInclusive = true,
-                    )
+                    navHostController.navigate(AuthGraphScreen.Goal.fullRoute)
                 },
                 onNavigateToLoginEmail = {
-                    navState.navigateToScreen(route = AuthGraphScreen.LoginEmail.fullRoute)
+                    navHostController.navigate(AuthGraphScreen.LoginEmail.fullRoute)
+                },
+                onGoogleLoginSuccessful = {
+                    navHostController.navigate(Graph.Diary.route) {
+                        popUpTo(Graph.Auth.route) {
+                            inclusive = true
+                        }
+                    }
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -52,37 +53,37 @@ fun NavGraphBuilder.authGraph(
         composable(route = AuthGraphScreen.Goal.fullRoute) {
             GoalScreen(
                 onGoalSaved = {
-                    navState.navigateToScreen(route = AuthGraphScreen.Gender.fullRoute)
+                    navHostController.navigate(AuthGraphScreen.Gender.fullRoute)
                 }
             )
         }
         composable(route = AuthGraphScreen.Gender.fullRoute) {
             GenderScreen(
                 onGenderSaved = {
-                    navState.navigateToScreen(route = AuthGraphScreen.Lifestyle.fullRoute)
+                    navHostController.navigate(AuthGraphScreen.Lifestyle.fullRoute)
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 }
             )
         }
         composable(route = AuthGraphScreen.Lifestyle.fullRoute) {
             LifestyleScreen(
                 onLifestyleSaved = {
-                    navState.navigateToScreen(AuthGraphScreen.Height.fullRoute)
+                    navHostController.navigate(AuthGraphScreen.Height.fullRoute)
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 }
             )
         }
         composable(route = AuthGraphScreen.Height.fullRoute) {
             HeightScreen(
                 onHeightSaved = {
-                    navState.navigateToScreen(AuthGraphScreen.Weight.fullRoute)
+                    navHostController.navigate(AuthGraphScreen.Weight.fullRoute)
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -90,10 +91,10 @@ fun NavGraphBuilder.authGraph(
         composable(route = AuthGraphScreen.Weight.fullRoute) {
             WeightScreen(
                 onWeightSaved = {
-                    navState.navigateToScreen(route = AuthGraphScreen.Age.fullRoute)
+                    navHostController.navigate(AuthGraphScreen.Age.fullRoute)
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -101,10 +102,10 @@ fun NavGraphBuilder.authGraph(
         composable(route = AuthGraphScreen.Age.fullRoute) {
             AgeScreen(
                 onAgeSaved = {
-                    navState.navigateToScreen(route = AuthGraphScreen.RecommendedNutrients.fullRoute)
+                    navHostController.navigate(AuthGraphScreen.RecommendedNutrients.fullRoute)
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -112,13 +113,19 @@ fun NavGraphBuilder.authGraph(
         composable(route = AuthGraphScreen.RecommendedNutrients.fullRoute) {
             RecommendedNutrientsScreen(
                 onGoogleRegisterSuccess = {
-                    navState.navigateToGraph(
-                        graph = Graph.Diary.route,
-                        popUpInclusive = true
-                    )
+                    navHostController.navigate(Graph.Diary.route) {
+                        popUpTo(Graph.Auth.route) {
+                            inclusive = true
+                        }
+                    }
                 },
                 onNavigateToRegisterEmail = {
-                    navState.navigateToScreen(route = AuthGraphScreen.RegisterEmail.fullRoute)
+                    navHostController.navigate(AuthGraphScreen.RegisterEmail.fullRoute) {
+                        popUpTo(AuthGraphScreen.RecommendedNutrients.fullRoute) {
+                            saveState = true
+                        }
+                        restoreState = true
+                    }
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -126,16 +133,22 @@ fun NavGraphBuilder.authGraph(
         composable(route = AuthGraphScreen.LoginEmail.fullRoute) {
             LoginEmailScreen(
                 onLoginSuccess = {
-                    navState.navigateToGraph(
-                        graph = Graph.Diary.route,
-                        popUpInclusive = true,
-                    )
+                    navHostController.navigate(Graph.Diary.route) {
+                        popUpTo(Graph.Auth.route) {
+                            inclusive = true
+                        }
+                    }
                 },
                 onNavigateToForgotPassword = {
-                    navState.navigateToScreen(route = AuthGraphScreen.ForgotPassword.fullRoute)
+                    navHostController.navigate(route = AuthGraphScreen.ForgotPassword.fullRoute) {
+                        popUpTo(AuthGraphScreen.LoginEmail.fullRoute) {
+                            saveState = true
+                        }
+                        restoreState = true
+                    }
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -143,14 +156,15 @@ fun NavGraphBuilder.authGraph(
         composable(route = AuthGraphScreen.ForgotPassword.fullRoute) {
             ForgotPasswordScreen(
                 onResetCodeSent = { email ->
-                    navState.navigateToScreen(
-                        route = AuthGraphScreen.ResetPassword.routeWithArgs(
-                            email
-                        )
-                    )
+                    navHostController.navigate(AuthGraphScreen.ResetPassword.routeWithArgs(email)) {
+                        popUpTo(AuthGraphScreen.ForgotPassword.fullRoute) {
+                            saveState = true
+                        }
+                        restoreState = true
+                    }
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -165,13 +179,15 @@ fun NavGraphBuilder.authGraph(
         ) {
             ResetPasswordScreen(
                 onPasswordResetSuccess = {
-                    navState.navigateToScreen(
-                        route = AuthGraphScreen.ResetPasswordSuccess.fullRoute,
-                        popUpToRoute = AuthGraphScreen.LoginEmail.fullRoute
-                    )
+                    navHostController.navigate(AuthGraphScreen.ResetPasswordSuccess.fullRoute) {
+                        popUpTo(AuthGraphScreen.LoginEmail.fullRoute) {
+                            saveState = true
+                        }
+                        restoreState = true
+                    }
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -179,23 +195,25 @@ fun NavGraphBuilder.authGraph(
         composable(route = AuthGraphScreen.ResetPasswordSuccess.fullRoute) {
             ResetPasswordSuccessScreen(
                 onNavigateBack = {
-                    navState.navigateBack(AuthGraphScreen.LoginEmail.fullRoute)
+                    navHostController.navigateUp()
                 },
                 onNavigateToLogin = {
-                    navState.navigateBack(AuthGraphScreen.LoginEmail.fullRoute)
+                    navHostController.navigateUp()
                 }
             )
         }
         composable(route = AuthGraphScreen.RegisterEmail.fullRoute) {
             RegisterEmailScreen(
                 onEmailRegisterSuccess = { email ->
-                    navState.navigateToScreen(
-                        route = AuthGraphScreen.EmailActivation.routeWithArgs(email),
-                        popUpToRoute = AuthGraphScreen.Welcome.fullRoute
-                    )
+                    navHostController.navigate(AuthGraphScreen.EmailActivation.routeWithArgs(email)) {
+                        popUpTo(AuthGraphScreen.Welcome.fullRoute) {
+                            saveState = true
+                        }
+                        restoreState = true
+                    }
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )
@@ -210,13 +228,15 @@ fun NavGraphBuilder.authGraph(
         ) {
             EmailActivationScreen(
                 onNavigateToLogin = {
-                    navState.navigateToScreen(
-                        route = AuthGraphScreen.LoginEmail.fullRoute,
-                        popUpToRoute = AuthGraphScreen.Welcome.fullRoute
-                    )
+                    navHostController.navigate(AuthGraphScreen.LoginEmail.fullRoute) {
+                        popUpTo(AuthGraphScreen.Welcome.fullRoute) {
+                            saveState = true
+                        }
+                        restoreState = true
+                    }
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
                 onShowSnackbar = onShowSnackbar
             )

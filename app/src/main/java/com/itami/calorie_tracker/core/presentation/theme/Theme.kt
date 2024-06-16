@@ -36,6 +36,7 @@ private val lightTheme = CalorieTrackerColors(
     green = Color(0xFF35CC8C),
     lighterBlue = Color(0xFF81DDFF),
     lightBlue = Color(0xFF78ABFF),
+    danger = Color(0xFFCB2030)
 )
 
 private val darkTheme = CalorieTrackerColors(
@@ -62,6 +63,7 @@ private val darkTheme = CalorieTrackerColors(
     green = Color(0xFF2DAE77),
     lighterBlue = Color(0xFF78CEEE),
     lightBlue = Color(0xFF6D9CE8),
+    danger = Color(0xFFFF4051)
 )
 
 private val typography = CalorieTrackerTypography()

@@ -5,16 +5,19 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
-import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 import com.itami.calorie_tracker.profile_feature.presentation.screens.about_app.AboutAppScreen
+import com.itami.calorie_tracker.profile_feature.presentation.screens.calorie_intake.CalorieIntakeScreen
+import com.itami.calorie_tracker.profile_feature.presentation.screens.contact_us.ContactUsScreen
 import com.itami.calorie_tracker.profile_feature.presentation.screens.profile.ProfileScreen
+import com.itami.calorie_tracker.profile_feature.presentation.screens.user_info.UserInfoScreen
 
 fun NavGraphBuilder.profileGraph(
-    navState: NavigationState,
+    navHostController: NavHostController,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
@@ -46,43 +49,64 @@ fun NavGraphBuilder.profileGraph(
             }
         ) {
             ProfileScreen(
-                onNavigateToMyInfo = {
-                    onShowSnackbar("Not implemented yet")
+                onLogoutSuccess = {
+                    navHostController.navigate(Graph.Auth.route) {
+                        popUpTo(navHostController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onNavigateToUserInfo = {
+                    navHostController.navigate(ProfileGraphScreens.UserInfo.fullRoute) {
+                        launchSingleTop = true
+                    }
                 },
                 onNavigateToCalorieIntake = {
-                    onShowSnackbar("Not implemented yet")
-                },
-                onNavigateToWaterIntake = {
-                    onShowSnackbar("Not implemented yet")
-                },
-                onNavigateToSettings = {
-                    onShowSnackbar("Not implemented yet")
+                    navHostController.navigate(ProfileGraphScreens.CalorieIntake.fullRoute) {
+                        launchSingleTop = true
+                    }
                 },
                 onNavigateToAboutApp = {
-                    navState.navigateToScreen(route = ProfileGraphScreens.AboutApp.fullRoute)
+                    navHostController.navigate(ProfileGraphScreens.AboutApp.fullRoute) {
+                        launchSingleTop = true
+                    }
                 },
                 onNavigateToContactUs = {
-                    onShowSnackbar("Not implemented yet")
+                    navHostController.navigate(ProfileGraphScreens.ContactUs.fullRoute) {
+                        launchSingleTop = true
+                    }
+                },
+                onNavigateToSettings = {
+                    onShowSnackbar("Not implemented yet..")
                 },
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 },
             )
         }
-        composable(route = ProfileGraphScreens.MyInfo.fullRoute) {
-
+        composable(route = ProfileGraphScreens.UserInfo.fullRoute) {
+            UserInfoScreen(
+                onNavigateBack = {
+                    navHostController.navigateUp()
+                },
+                onUserInfoSaved = {
+                    navHostController.navigateUp()
+                },
+                onShowSnackbar = onShowSnackbar
+            )
         }
         composable(route = ProfileGraphScreens.CalorieIntake.fullRoute) {
-
-        }
-        composable(route = ProfileGraphScreens.WaterIntake.fullRoute) {
-
+            CalorieIntakeScreen(
+                onNavigateBack = navHostController::navigateUp,
+                onCalorieIntakeSaved = navHostController::navigateUp,
+                onShowSnackbar = onShowSnackbar
+            )
         }
         composable(route = ProfileGraphScreens.AboutApp.fullRoute) {
-            AboutAppScreen(onNavigateBack = navState::navigateBack)
+            AboutAppScreen(onNavigateBack = navHostController::navigateUp)
         }
         composable(route = ProfileGraphScreens.ContactUs.fullRoute) {
-
+            ContactUsScreen(onNavigateBack = navHostController::navigateUp)
         }
     }
 }
@@ -94,11 +118,9 @@ sealed class ProfileGraphScreens(
 
     data object Profile : ProfileGraphScreens(route = "profile")
 
-    data object MyInfo : ProfileGraphScreens(route = "my_info")
+    data object UserInfo : ProfileGraphScreens(route = "user_info")
 
     data object CalorieIntake : ProfileGraphScreens(route = "calorie_intake")
-
-    data object WaterIntake : ProfileGraphScreens(route = "water_intake")
 
     data object AboutApp : ProfileGraphScreens(route = "about_app")
 

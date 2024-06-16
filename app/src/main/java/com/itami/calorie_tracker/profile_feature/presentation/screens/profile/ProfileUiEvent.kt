@@ -8,12 +8,12 @@ sealed class ProfileUiEvent {
 
     data object NavigateToCalorieIntake: ProfileUiEvent()
 
-    data object NavigateToWaterIntake: ProfileUiEvent()
-
     data object NavigateToSettings: ProfileUiEvent()
 
     data object NavigateToContactsUs: ProfileUiEvent()
 
     data object NavigateToAbout: ProfileUiEvent()
+
+    data object LogoutSuccess: ProfileUiEvent()
 
 }

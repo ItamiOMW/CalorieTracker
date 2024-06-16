@@ -28,4 +28,5 @@ data class CalorieTrackerColors(
     val green: Color,
     val lighterBlue: Color,
     val lightBlue: Color,
+    val danger: Color,
 )

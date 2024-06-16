@@ -7,7 +7,7 @@ import kotlinx.coroutines.CoroutineScope
  * The same as [LaunchedEffect], but skips first invocation.
  */
 @Composable
-fun UpdateEffect(key: Any, block: suspend CoroutineScope.() -> Unit) {
+fun UpdateEffect(key: Any?, block: suspend CoroutineScope.() -> Unit) {
     var isTriggered by remember { mutableStateOf(false) }
 
     LaunchedEffect(key) {

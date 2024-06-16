@@ -102,7 +102,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    // Chart Library
+    // Chart
     implementation("com.patrykandpatrick.vico:compose:2.0.0-alpha.19")
     implementation("com.patrykandpatrick.vico:compose-m3:2.0.0-alpha.19")
     implementation("com.patrykandpatrick.vico:core:2.0.0-alpha.19")
@@ -113,7 +113,7 @@ dependencies {
     // Kotlinx Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 
-    // Compose Navigation, keep it 2.7.5 since updating to newer version breaks navigation for some reason
+    // Compose Navigation, keep it 2.7.5 since updating to a newer version breaks navigation for some reason
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
     // Splash Screen Api

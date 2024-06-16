@@ -11,7 +11,7 @@ import com.itami.calorie_tracker.authentication_feature.data.remote.response.Use
 import com.itami.calorie_tracker.core.data.remote.response.ApiResponse
 import com.itami.calorie_tracker.core.data.remote.response.ErrorResponse
 import com.itami.calorie_tracker.core.data.remote.response.UserResponse
-import com.itami.calorie_tracker.core.data.remote.safeRequest
+import com.itami.calorie_tracker.core.data.remote.utils.safeRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.timeout
 import io.ktor.client.request.bearerAuth

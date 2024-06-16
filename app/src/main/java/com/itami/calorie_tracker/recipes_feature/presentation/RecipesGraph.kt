@@ -1,19 +1,19 @@
 package com.itami.calorie_tracker.recipes_feature.presentation
 
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
-import com.itami.calorie_tracker.core.presentation.navigation.NavigationState
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 import com.itami.calorie_tracker.core.presentation.navigation.util.appendParams
 import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipe_details.RecipeDetailsScreen
 import com.itami.calorie_tracker.recipes_feature.presentation.screens.recipes.RecipesScreen
 
 fun NavGraphBuilder.recipesGraph(
-    navState: NavigationState,
+    navHostController: NavHostController,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     navigation(
@@ -23,15 +23,18 @@ fun NavGraphBuilder.recipesGraph(
         composable(route = RecipesGraphScreen.Recipes.fullRoute) {
             RecipesScreen(
                 onNavigateToRecipeDetail = { recipeId ->
-                    navState.navigateToScreen(RecipesGraphScreen.RecipeDetail.routeWithArgs(recipeId))
+                    navHostController.navigate(
+                        RecipesGraphScreen.RecipeDetail.routeWithArgs(
+                            recipeId
+                        )
+                    ) {
+                        launchSingleTop = true
+                    }
                 },
                 onNavigateToProfile = {
-                    navState.navigateToGraph(
-                        graph = Graph.Profile.route,
-                        popUpInclusive = false,
-                        saveState = false,
-                        restoreState = false
-                    )
+                    navHostController.navigate(Graph.Profile.route) {
+                        launchSingleTop = true
+                    }
                 },
                 onShowSnackbar = onShowSnackbar,
             )
@@ -46,7 +49,7 @@ fun NavGraphBuilder.recipesGraph(
         ) {
             RecipeDetailsScreen(
                 onNavigateBack = {
-                    navState.navigateBack()
+                    navHostController.navigateUp()
                 }
             )
         }

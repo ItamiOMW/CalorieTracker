@@ -2,7 +2,9 @@ package com.itami.calorie_tracker.core.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.itami.calorie_tracker.authentication_feature.presentation.authGraph
 import com.itami.calorie_tracker.diary_feature.presentation.diaryGraph
 import com.itami.calorie_tracker.onboarding_feature.presentation.onboardingGraph
@@ -14,38 +16,38 @@ import com.itami.calorie_tracker.reports_feature.presentation.reportsGraph
 @Composable
 fun RootNavGraph(
     modifier: Modifier = Modifier,
-    navState: NavigationState,
+    navHostController: NavHostController = rememberNavController(),
     startGraphRoute: String = Graph.Auth.route,
     onShowSnackbar: (message: String) -> Unit,
 ) {
     NavHost(
         modifier = modifier,
-        navController = navState.navHostController,
+        navController = navHostController,
         route = Graph.Root.route,
         startDestination = startGraphRoute
     ) {
         onboardingGraph(
-            navState = navState,
+            navHostController = navHostController,
             onShowSnackbar = onShowSnackbar
         )
         authGraph(
-            navState = navState,
+            navHostController = navHostController,
             onShowSnackbar = onShowSnackbar
         )
         diaryGraph(
-            navState = navState,
+            navHostController = navHostController,
             onShowSnackbar = onShowSnackbar
         )
         recipesGraph(
-            navState = navState,
+            navHostController = navHostController,
             onShowSnackbar = onShowSnackbar
         )
         reportsGraph(
-            navState = navState,
+            navHostController = navHostController,
             onShowSnackbar = onShowSnackbar
         )
         profileGraph(
-            navState = navState,
+            navHostController = navHostController,
             onShowSnackbar = onShowSnackbar
         )
     }

@@ -6,8 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.itami.calorie_tracker.core.domain.model.Theme
+import com.itami.calorie_tracker.core.domain.model.WeightUnit
 import com.itami.calorie_tracker.core.domain.repository.AppSettingsManager
 import com.itami.calorie_tracker.core.domain.repository.UserManager
+import com.itami.calorie_tracker.core.domain.use_case.LogoutUseCase
+import com.itami.calorie_tracker.core.utils.AppResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.collectLatest
@@ -19,6 +22,7 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val appSettingsManager: AppSettingsManager,
     private val userManager: UserManager,
+    private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
 
     private val _uiEvent = Channel<ProfileUiEvent>()
@@ -29,6 +33,7 @@ class ProfileViewModel @Inject constructor(
 
     init {
         getUser()
+        getWeightUnit()
     }
 
     fun onAction(action: ProfileAction) {
@@ -49,20 +54,42 @@ class ProfileViewModel @Inject constructor(
                 sendUiEvent(ProfileUiEvent.NavigateToContactsUs)
             }
 
-            is ProfileAction.MyInfoClick -> {
-                sendUiEvent(ProfileUiEvent.NavigateToAbout)
+            is ProfileAction.MeClick -> {
+                sendUiEvent(ProfileUiEvent.NavigateToMyInfo)
             }
 
             is ProfileAction.SettingsClick -> {
                 sendUiEvent(ProfileUiEvent.NavigateToSettings)
             }
 
-            is ProfileAction.WaterIntakeClick -> {
-                sendUiEvent(ProfileUiEvent.NavigateToWaterIntake)
+            is ProfileAction.WeightUnitClick -> {
+                state = state.copy(showWeightUnitDialog = true)
+            }
+
+            is ProfileAction.SaveWeightUnit -> {
+                state = state.copy(showWeightUnitDialog = false)
+                saveWeightUnit(action.weightUnit)
+            }
+
+            is ProfileAction.DismissWeightUnitDialog -> {
+                state = state.copy(showWeightUnitDialog = false)
             }
 
             is ProfileAction.NavigateBackClick -> {
                 sendUiEvent(ProfileUiEvent.NavigateBack)
+            }
+
+            is ProfileAction.LogoutClick -> {
+                state = state.copy(showLogoutDialog = true)
+            }
+
+            is ProfileAction.ConfirmLogout -> {
+                state = state.copy(showLogoutDialog = false)
+                logout()
+            }
+
+            is ProfileAction.DenyLogout -> {
+                state = state.copy(showLogoutDialog = false)
             }
         }
     }
@@ -73,9 +100,39 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    private fun logout() {
+        state = state.copy(isLoggingOut = true)
+        viewModelScope.launch {
+            when (val response = logoutUseCase()) {
+                is AppResponse.Success -> {
+                    sendUiEvent(ProfileUiEvent.LogoutSuccess)
+                }
+
+                is AppResponse.Failed -> {
+                    Unit
+                }
+            }
+            state = state.copy(isLoggingOut = false)
+        }
+    }
+
     private fun changeTheme(theme: Theme) {
         viewModelScope.launch {
             appSettingsManager.changeTheme(theme)
+        }
+    }
+
+    private fun saveWeightUnit(weightUnit: WeightUnit) {
+        viewModelScope.launch {
+            appSettingsManager.changeWeightUnit(weightUnit)
+        }
+    }
+
+    private fun getWeightUnit() {
+        viewModelScope.launch {
+            appSettingsManager.weightUnit.collect { unit ->
+                state = state.copy(weightUnit = unit)
+            }
         }
     }
 

@@ -222,7 +222,6 @@ private fun BottomSection(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GenderItem(
     selected: Boolean,

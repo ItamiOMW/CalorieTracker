@@ -25,11 +25,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.itami.calorie_tracker.R
+import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.model.WeightUnit
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import java.util.Locale
@@ -158,7 +160,19 @@ fun WeightDialog(
                     }
                 }
             }
-
         }
+    }
+}
+
+@Preview
+@Composable
+fun WeightDialogPreview() {
+    CalorieTrackerTheme(theme = Theme.SYSTEM_THEME) {
+        WeightDialog(
+            onShowErrorMessage = {},
+            onChangeWeightUnit = {},
+            onConfirm = { },
+            onDismiss = { }
+        )
     }
 }
