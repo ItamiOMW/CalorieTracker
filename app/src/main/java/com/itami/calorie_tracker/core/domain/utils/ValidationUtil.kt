@@ -2,11 +2,29 @@ package com.itami.calorie_tracker.core.domain.utils
 
 import android.util.Patterns
 import com.itami.calorie_tracker.core.domain.exceptions.AppException
+import com.itami.calorie_tracker.core.domain.exceptions.FeedbackMessageException
 import com.itami.calorie_tracker.core.domain.exceptions.UserCredentialsException
 import com.itami.calorie_tracker.core.domain.exceptions.UserInfoException
 import com.itami.calorie_tracker.core.utils.Constants
 
 object ValidationUtil {
+
+    fun validateFeedbackMessage(message: String): AppException? {
+        val trimmedMessage = message.trim()
+        if (trimmedMessage.isEmpty()) {
+            return FeedbackMessageException.EmptyMessageException
+        }
+
+        if (trimmedMessage.length < 20) {
+            return FeedbackMessageException.ShortMessageException
+        }
+
+        if (trimmedMessage.length > 1000) {
+            return FeedbackMessageException.LargeMessageException
+        }
+
+        return null
+    }
 
     fun validateResetCode(code: Int): AppException? {
         if (code < 100000 || code > 999999) {

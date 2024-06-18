@@ -1,13 +1,17 @@
 package com.itami.calorie_tracker.profile_feature.presentation
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.itami.calorie_tracker.core.utils.safeStartActivity
 import com.itami.calorie_tracker.core.presentation.navigation.Graph
 import com.itami.calorie_tracker.core.presentation.navigation.Screen
 import com.itami.calorie_tracker.profile_feature.presentation.screens.about_app.AboutAppScreen
@@ -106,7 +110,49 @@ fun NavGraphBuilder.profileGraph(
             AboutAppScreen(onNavigateBack = navHostController::navigateUp)
         }
         composable(route = ProfileGraphScreens.ContactUs.fullRoute) {
-            ContactUsScreen(onNavigateBack = navHostController::navigateUp)
+            val context = LocalContext.current
+            ContactUsScreen(
+                onNavigateToEmail = { email ->
+                    val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                        data = Uri.parse("mailto:$email") // Replace with your email
+                        putExtra(Intent.EXTRA_SUBJECT, "Calorie Tracker feedback")
+                        putExtra(Intent.EXTRA_TEXT, "Feedback text")
+                    }
+                    safeStartActivity(
+                        context = context,
+                        intent = emailIntent,
+                        onException = { cause ->
+                            onShowSnackbar(cause)
+                        }
+                    )
+                },
+                onNavigateToTelegram = { username ->
+                    val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse("tg://resolve?domain=$username") // Replace with the Telegram username
+                    }
+                    safeStartActivity(
+                        context = context,
+                        intent = telegramIntent,
+                        onException = { cause ->
+                            onShowSnackbar(cause)
+                        }
+                    )
+                },
+                onNavigateToGithub = { username ->
+                    val githubIntent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse("https://github.com/$username") // Replace with the GitHub profile or repo URL
+                    }
+                    safeStartActivity(
+                        context = context,
+                        intent = githubIntent,
+                        onException = { cause ->
+                            onShowSnackbar(cause)
+                        }
+                    )
+                },
+                onNavigateBack = navHostController::navigateUp,
+                onShowSnackbar = onShowSnackbar
+            )
         }
     }
 }
