@@ -4,4 +4,14 @@ sealed class ContactUsAction {
 
     data object NavigateBackClick : ContactUsAction()
 
+    data object SendMessageClick : ContactUsAction()
+
+    data class MessageValueChange(val newValue: String) : ContactUsAction()
+
+    data object EmailLinkClick : ContactUsAction()
+
+    data object TelegramLinkClick : ContactUsAction()
+
+    data object GithubLinkClick : ContactUsAction()
+
 }

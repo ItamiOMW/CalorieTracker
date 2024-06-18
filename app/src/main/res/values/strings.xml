@@ -218,4 +218,19 @@
     <string name="daily_carb_intake">Daily carb intake</string>
     <string name="daily_water_intake">Daily water intake</string>
     <string name="recommended_amount">Recommended: %1$s</string>
+    <string name="error_short_message">Message should contain at least 20 symbols</string>
+    <string name="error_large_message">Message should contain at most 1000 symbols</string>
+    <string name="feedback_has_been_sent">Feedback has been sent successfully. We appreciate your support.</string>
+    <string name="desc_email_social_link">Email social link</string>
+    <string name="desc_telegram_social_link">Telegram social link</string>
+    <string name="desc_github_social_link">Github social link</string>
+    <string name="our_social_links">Our social links</string>
+    <string name="error_app_not_found">App not found.</string>
+
+    <string name="developer_email_address">itamiomw@gmail.com</string>
+    <string name="developer_telegram_username">itamiomw</string>
+    <string name="developer_github_username">itamiomw</string>
+    <string name="contact_info">Contact Info</string>
+    <string name="message">Message</string>
+    <string name="send">Send</string>
 </resources>
