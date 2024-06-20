@@ -38,15 +38,36 @@ fun NavGraphBuilder.diaryGraph(
                     Graph.Recipes.route -> {
                         slideIntoContainer(
                             towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                        ) + fadeIn(animationSpec = tween(200))
+                            animationSpec = tween(250)
+                        )
                     }
                     Graph.Reports.route -> {
                         slideIntoContainer(
                             towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                        ) + fadeIn(animationSpec = tween(200))
+                            animationSpec = tween(250)
+                        )
                     }
                     else -> {
                         fadeIn(animationSpec = tween(200))
+                    }
+                }
+            },
+            exitTransition = {
+                when (this.targetState.destination.parent?.route) {
+                    Graph.Recipes.route -> {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                            animationSpec = tween(250)
+                        )
+                    }
+                    Graph.Reports.route -> {
+                        slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                            animationSpec = tween(250)
+                        )
+                    }
+                    else -> {
+                        fadeOut(animationSpec = tween(200))
                     }
                 }
             }
