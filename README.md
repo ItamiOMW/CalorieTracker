@@ -1,6 +1,7 @@
 # Calorie Tracker android app.
 
 Calorie tracker helps you to keep track of your diet according to your personal goal.\
+[Figma design](https://www.figma.com/community/file/1385594739598175691/calorie-tracker)\
 [Ktor backend](https://github.com/ItamiOMW/CalorieTrackerBackend)
 
 ![Calorie Tracker Thumbnail](https://github.com/ItamiOWM/android-calorie-tracker/blob/master/art/thumbnail.png)
