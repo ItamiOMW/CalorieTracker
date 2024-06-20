@@ -1,5 +1,9 @@
 package com.itami.calorie_tracker.recipes_feature.presentation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -20,7 +24,31 @@ fun NavGraphBuilder.recipesGraph(
         route = Graph.Recipes.route,
         startDestination = RecipesGraphScreen.Recipes.fullRoute
     ) {
-        composable(route = RecipesGraphScreen.Recipes.fullRoute) {
+        composable(
+            route = RecipesGraphScreen.Recipes.fullRoute,
+            enterTransition = {
+                when (this.initialState.destination.parent?.route) {
+                    Graph.Diary.route -> {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                        ) + fadeIn(animationSpec = tween(200))
+                    }
+                    else -> {
+                        fadeIn(animationSpec = tween(200))
+                    }
+                }
+            },
+            exitTransition = {
+                if (this.targetState.destination.parent?.route == Graph.Diary.route) {
+                    slideOutOfContainer(
+                        towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(200)
+                    )
+                } else {
+                    fadeOut(tween(200))
+                }
+            }
+        ) {
             RecipesScreen(
                 onNavigateToRecipeDetail = { recipeId ->
                     navHostController.navigate(

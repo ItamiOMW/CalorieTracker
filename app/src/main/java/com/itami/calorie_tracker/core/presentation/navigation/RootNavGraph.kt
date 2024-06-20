@@ -24,7 +24,7 @@ fun RootNavGraph(
         modifier = modifier,
         navController = navHostController,
         route = Graph.Root.route,
-        startDestination = startGraphRoute
+        startDestination = startGraphRoute,
     ) {
         onboardingGraph(
             navHostController = navHostController,

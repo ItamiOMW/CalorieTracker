@@ -5,8 +5,6 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -33,7 +31,26 @@ fun NavGraphBuilder.diaryGraph(
         route = Graph.Diary.route,
         startDestination = DiaryGraphScreens.Diary.fullRoute
     ) {
-        composable(DiaryGraphScreens.Diary.fullRoute) {
+        composable(
+            route = DiaryGraphScreens.Diary.fullRoute,
+            enterTransition = {
+                when (this.initialState.destination.parent?.route) {
+                    Graph.Recipes.route -> {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Left,
+                        ) + fadeIn(animationSpec = tween(200))
+                    }
+                    Graph.Reports.route -> {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Right,
+                        ) + fadeIn(animationSpec = tween(200))
+                    }
+                    else -> {
+                        fadeIn(animationSpec = tween(200))
+                    }
+                }
+            }
+        ) {
             DiaryScreen(
                 onNavigateToMeal = { mealId ->
                     navHostController.navigate(DiaryGraphScreens.Meal.routeWithArgs(mealId)) {
@@ -63,7 +80,7 @@ fun NavGraphBuilder.diaryGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                ) + fadeIn(animationSpec = tween(750))
+                ) + fadeIn(animationSpec = tween(200))
             },
             exitTransition = {
                 slideOutOfContainer(
@@ -71,16 +88,13 @@ fun NavGraphBuilder.diaryGraph(
                     targetOffset = {
                         it / 2
                     }
-                ) + fadeOut(animationSpec = tween(750))
+                ) + fadeOut(animationSpec = tween(200))
             },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                    targetOffset = {
-                        it / 2
-                    }
-                ) + fadeOut(animationSpec = tween(750))
-            }
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right
+                ) + fadeIn(animationSpec = tween(200))
+            },
         ) {
             NewMealScreen(
                 onNavigateSearchFood = { navCallback ->
@@ -109,7 +123,7 @@ fun NavGraphBuilder.diaryGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                ) + fadeIn(animationSpec = tween(750))
+                ) + fadeIn(animationSpec = tween(200))
             },
             exitTransition = {
                 slideOutOfContainer(
@@ -117,16 +131,13 @@ fun NavGraphBuilder.diaryGraph(
                     targetOffset = {
                         it / 2
                     }
-                ) + fadeOut(animationSpec = tween(750))
+                ) + fadeOut(animationSpec = tween(200))
             },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                    targetOffset = {
-                        it / 2
-                    }
-                ) + fadeOut(animationSpec = tween(750))
-            }
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right
+                ) + fadeIn(animationSpec = tween(200))
+            },
         ) {
             MealScreen(
                 onNavigateSearchFood = { navCallback ->
@@ -147,25 +158,11 @@ fun NavGraphBuilder.diaryGraph(
         composable(
             route = DiaryGraphScreens.SearchFood.fullRoute,
             enterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { it }, animationSpec = tween(350)
-                ) + fadeIn(animationSpec = tween(750))
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
             },
             exitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { it }, animationSpec = tween(350)
-                ) + fadeOut(animationSpec = tween(750))
-            },
-            popExitTransition = {
-                slideOutHorizontally(
-                    targetOffsetX = { it }, animationSpec = tween(350)
-                ) + fadeOut(animationSpec = tween(750))
-            },
-            popEnterTransition = {
-                slideInHorizontally(
-                    initialOffsetX = { -it }, animationSpec = tween(350)
-                ).plus(fadeIn(tween(750)))
-            },
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            }
         ) {
             SearchFoodScreen(
                 onNavigateBackWithFood = { consumedFood ->
