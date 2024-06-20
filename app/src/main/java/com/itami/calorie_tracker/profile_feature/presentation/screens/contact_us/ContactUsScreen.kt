@@ -166,12 +166,14 @@ private fun ContactInfoSection(
             Text(
                 text = stringResource(R.string.contact_info),
                 color = CalorieTrackerTheme.colors.onSurfacePrimary,
-                style = CalorieTrackerTheme.typography.labelLarge,
+                style = CalorieTrackerTheme.typography.titleSmall,
                 textAlign = TextAlign.Center,
             )
-            Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.default))
+            Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.medium))
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(start = CalorieTrackerTheme.padding.large)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.small)
             ) {
@@ -179,13 +181,15 @@ private fun ContactInfoSection(
                     text = stringResource(id = R.string.developer_email_address),
                     iconPainter = painterResource(id = R.drawable.icon_mail),
                     iconColor = CalorieTrackerTheme.colors.primary,
-                    textColor = CalorieTrackerTheme.colors.onSurfacePrimary
+                    textColor = CalorieTrackerTheme.colors.onSurfacePrimary,
+                    textStyle = CalorieTrackerTheme.typography.labelLarge
                 )
                 IconToText(
                     text = "@${stringResource(id = R.string.developer_telegram_username)}",
                     iconPainter = painterResource(id = R.drawable.icon_telegram),
                     iconColor = CalorieTrackerTheme.colors.primary,
-                    textColor = CalorieTrackerTheme.colors.onSurfacePrimary
+                    textColor = CalorieTrackerTheme.colors.onSurfacePrimary,
+                    textStyle = CalorieTrackerTheme.typography.labelLarge
                 )
             }
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.extraLarge))

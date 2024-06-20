@@ -4,4 +4,6 @@ sealed class AboutAppUiEvent {
 
     data object NavigateBack: AboutAppUiEvent()
 
+    data object NavigateToGithubSourceCode: AboutAppUiEvent()
+
 }

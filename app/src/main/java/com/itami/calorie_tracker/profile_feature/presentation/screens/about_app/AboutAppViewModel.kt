@@ -19,6 +19,10 @@ class AboutAppViewModel @Inject constructor(): ViewModel() {
             is AboutAppAction.NavigateBackClick -> {
                 sendUiEvent(AboutAppUiEvent.NavigateBack)
             }
+
+            is AboutAppAction.GithubSourceClick -> {
+                sendUiEvent(AboutAppUiEvent.NavigateToGithubSourceCode)
+            }
         }
     }
 
