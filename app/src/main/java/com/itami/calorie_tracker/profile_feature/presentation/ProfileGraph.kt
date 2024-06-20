@@ -33,7 +33,7 @@ fun NavGraphBuilder.profileGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                ) + fadeIn(animationSpec = tween(750))
+                ) + fadeIn(animationSpec = tween(200))
             },
             exitTransition = {
                 slideOutOfContainer(
@@ -41,16 +41,13 @@ fun NavGraphBuilder.profileGraph(
                     targetOffset = {
                         it / 5
                     }
-                ) + fadeOut(animationSpec = tween(750))
+                ) + fadeOut(animationSpec = tween(200))
             },
-            popExitTransition = {
-                slideOutOfContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Down,
-                    targetOffset = {
-                        it / 5
-                    }
-                ) + fadeOut(animationSpec = tween(750))
-            }
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right
+                ) + fadeIn(animationSpec = tween(200))
+            },
         ) {
             ProfileScreen(
                 onLogoutSuccess = {
@@ -88,7 +85,15 @@ fun NavGraphBuilder.profileGraph(
                 },
             )
         }
-        composable(route = ProfileGraphScreens.UserInfo.fullRoute) {
+        composable(
+            route = ProfileGraphScreens.UserInfo.fullRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            }
+        ) {
             UserInfoScreen(
                 onNavigateBack = {
                     navHostController.navigateUp()
@@ -99,22 +104,61 @@ fun NavGraphBuilder.profileGraph(
                 onShowSnackbar = onShowSnackbar
             )
         }
-        composable(route = ProfileGraphScreens.CalorieIntake.fullRoute) {
+        composable(
+            route = ProfileGraphScreens.CalorieIntake.fullRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            }
+        ) {
             CalorieIntakeScreen(
                 onNavigateBack = navHostController::navigateUp,
                 onCalorieIntakeSaved = navHostController::navigateUp,
                 onShowSnackbar = onShowSnackbar
             )
         }
-        composable(route = ProfileGraphScreens.AboutApp.fullRoute) {
-            AboutAppScreen(onNavigateBack = navHostController::navigateUp)
+        composable(
+            route = ProfileGraphScreens.AboutApp.fullRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            }
+        ) {
+            val context = LocalContext.current
+            AboutAppScreen(
+                onNavigateBack = navHostController::navigateUp,
+                onNavigateToGithubSourceCode = {
+                    val githubIntent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse("https://github.com/ItamiOMW/CalorieTracker")
+                    }
+                    safeStartActivity(
+                        context = context,
+                        intent = githubIntent,
+                        onException = { cause ->
+                            onShowSnackbar(cause)
+                        }
+                    )
+                }
+            )
         }
-        composable(route = ProfileGraphScreens.ContactUs.fullRoute) {
+        composable(
+            route = ProfileGraphScreens.ContactUs.fullRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            }
+        ) {
             val context = LocalContext.current
             ContactUsScreen(
                 onNavigateToEmail = { email ->
                     val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
-                        data = Uri.parse("mailto:$email") // Replace with your email
+                        data = Uri.parse("mailto:$email")
                         putExtra(Intent.EXTRA_SUBJECT, "Calorie Tracker feedback")
                         putExtra(Intent.EXTRA_TEXT, "Feedback text")
                     }
@@ -128,7 +172,7 @@ fun NavGraphBuilder.profileGraph(
                 },
                 onNavigateToTelegram = { username ->
                     val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
-                        data = Uri.parse("tg://resolve?domain=$username") // Replace with the Telegram username
+                        data = Uri.parse("tg://resolve?domain=$username")
                     }
                     safeStartActivity(
                         context = context,
@@ -140,7 +184,7 @@ fun NavGraphBuilder.profileGraph(
                 },
                 onNavigateToGithub = { username ->
                     val githubIntent = Intent(Intent.ACTION_VIEW).apply {
-                        data = Uri.parse("https://github.com/$username") // Replace with the GitHub profile or repo URL
+                        data = Uri.parse("https://github.com/$username")
                     }
                     safeStartActivity(
                         context = context,

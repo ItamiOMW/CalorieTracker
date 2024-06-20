@@ -4,4 +4,6 @@ sealed class AboutAppAction {
 
     data object NavigateBackClick: AboutAppAction()
 
+    data object GithubSourceClick: AboutAppAction()
+
 }

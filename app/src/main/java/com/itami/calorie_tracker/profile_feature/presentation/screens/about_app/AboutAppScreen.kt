@@ -19,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +27,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,11 +44,13 @@ import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 @Composable
 fun AboutAppScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToGithubSourceCode: () -> Unit,
     viewModel: AboutAppViewModel = hiltViewModel(),
 ) {
     ObserveAsEvents(viewModel.uiEvent) { event ->
         when (event) {
             is AboutAppUiEvent.NavigateBack -> onNavigateBack()
+            is AboutAppUiEvent.NavigateToGithubSourceCode -> onNavigateToGithubSourceCode()
         }
     }
 
@@ -69,9 +76,15 @@ private fun AboutAppScreenContent(
         contentColor = CalorieTrackerTheme.colors.onBackground,
         topBar = {
             TopBarSection(
-                onNavigateBackClick = {
-                    onAction(AboutAppAction.NavigateBackClick)
-                }
+                onNavigateBackClick = { onAction(AboutAppAction.NavigateBackClick) }
+            )
+        },
+        bottomBar = {
+            SourceCodeSection(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = CalorieTrackerTheme.padding.large),
+                onGithubSourceClick = { onAction(AboutAppAction.GithubSourceClick) }
             )
         }
     ) { paddingValues ->
@@ -86,30 +99,30 @@ private fun AboutAppScreenContent(
                 ),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(
-                text = stringResource(R.string.calorie_tracker_about_app),
-                style = CalorieTrackerTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-            )
+            AboutTextSection()
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.extraLarge))
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(horizontal = CalorieTrackerTheme.padding.small)
+                    .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.medium)
             ) {
                 Text(
                     text = stringResource(R.string.provide_features_such_as),
                     style = CalorieTrackerTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center
                 )
+                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.large))
                 ListStyleText(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.desc_diary_feature)
                 )
+                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.large))
                 ListStyleText(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.desc_reports_feature)
                 )
+                Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.large))
                 ListStyleText(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(R.string.desc_recipes_feature)
@@ -117,7 +130,9 @@ private fun AboutAppScreenContent(
             }
             Spacer(modifier = Modifier.height(CalorieTrackerTheme.spacing.extraLarge))
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(horizontal = CalorieTrackerTheme.padding.small)
+                    .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.default),
             ) {
@@ -145,6 +160,28 @@ private fun AboutAppScreenContent(
             }
         }
     }
+}
+
+@Composable
+private fun AboutTextSection(
+    appName: String = stringResource(id = R.string.app_name),
+    aboutAppText: String = stringResource(id = R.string.calorie_tracker_about_app),
+    appNameColor: Color = CalorieTrackerTheme.colors.primary,
+) {
+    val annotatedString = remember {
+        buildAnnotatedString {
+            withStyle(style = SpanStyle(color = appNameColor, fontWeight = FontWeight.Medium)) {
+                append(appName)
+            }
+            append(" - ")
+            append(aboutAppText)
+        }
+    }
+    Text(
+        text = annotatedString,
+        style = CalorieTrackerTheme.typography.bodyLarge,
+        textAlign = TextAlign.Center,
+    )
 }
 
 @Composable
@@ -181,6 +218,35 @@ private fun OutlinedFeatureItem(
                 text = featureTitle,
                 style = CalorieTrackerTheme.typography.labelMedium,
                 textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SourceCodeSection(
+    modifier: Modifier = Modifier,
+    onGithubSourceClick: () -> Unit,
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(CalorieTrackerTheme.spacing.small)
+    ) {
+        Text(
+            text = stringResource(R.string.visit_source_code),
+            style = CalorieTrackerTheme.typography.bodyMedium,
+            color = CalorieTrackerTheme.colors.onBackgroundVariant,
+            textAlign = TextAlign.Center,
+        )
+        IconButton(
+            onClick = onGithubSourceClick
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.icon_github),
+                contentDescription = stringResource(R.string.desc_github_icon),
+                tint = CalorieTrackerTheme.colors.primary,
+                modifier = Modifier.size(32.dp)
             )
         }
     }
