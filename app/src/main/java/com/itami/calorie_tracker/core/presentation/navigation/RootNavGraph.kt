@@ -12,7 +12,6 @@ import com.itami.calorie_tracker.profile_feature.presentation.profileGraph
 import com.itami.calorie_tracker.recipes_feature.presentation.recipesGraph
 import com.itami.calorie_tracker.reports_feature.presentation.reportsGraph
 
-
 @Composable
 fun RootNavGraph(
     modifier: Modifier = Modifier,

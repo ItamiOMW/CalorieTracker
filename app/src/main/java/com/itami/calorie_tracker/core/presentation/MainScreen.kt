@@ -117,11 +117,11 @@ private fun BottomBar(
             barColor = CalorieTrackerTheme.colors.bottomBarContainer,
             ballColor = CalorieTrackerTheme.colors.primary,
             ballSize = 64.dp,
-            ballAnimation = StraightBall(tween(200)),
+            ballAnimation = StraightBall(tween(300)),
             outdentAnimation = StraightOutdent(
                 outdentWidth = 35.dp,
                 outdentHeight = 20.dp,
-                animationSpec = tween(200)
+                animationSpec = tween(300)
             ),
             cornerRadius = shapeCornerRadius(
                 topLeft = 30.dp,

@@ -31,7 +31,8 @@ fun NavGraphBuilder.recipesGraph(
                     Graph.Diary.route -> {
                         slideIntoContainer(
                             towards = AnimatedContentTransitionScope.SlideDirection.Right,
-                        ) + fadeIn(animationSpec = tween(200))
+                            animationSpec = tween(250)
+                        )
                     }
                     else -> {
                         fadeIn(animationSpec = tween(200))
@@ -42,7 +43,7 @@ fun NavGraphBuilder.recipesGraph(
                 if (this.targetState.destination.parent?.route == Graph.Diary.route) {
                     slideOutOfContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Left,
-                        animationSpec = tween(200)
+                        animationSpec = tween(250)
                     )
                 } else {
                     fadeOut(tween(200))

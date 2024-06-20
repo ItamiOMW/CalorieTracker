@@ -1,5 +1,6 @@
 package com.itami.calorie_tracker.authentication_feature.presentation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -130,7 +131,21 @@ fun NavGraphBuilder.authGraph(
                 onShowSnackbar = onShowSnackbar
             )
         }
-        composable(route = AuthGraphScreen.LoginEmail.fullRoute) {
+        composable(
+            route = AuthGraphScreen.LoginEmail.fullRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+        ) {
             LoginEmailScreen(
                 onLoginSuccess = {
                     navHostController.navigate(Graph.Diary.route) {
@@ -153,7 +168,21 @@ fun NavGraphBuilder.authGraph(
                 onShowSnackbar = onShowSnackbar
             )
         }
-        composable(route = AuthGraphScreen.ForgotPassword.fullRoute) {
+        composable(
+            route = AuthGraphScreen.ForgotPassword.fullRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+        ) {
             ForgotPasswordScreen(
                 onResetCodeSent = { email ->
                     navHostController.navigate(AuthGraphScreen.ResetPassword.routeWithArgs(email)) {
@@ -175,7 +204,19 @@ fun NavGraphBuilder.authGraph(
                 navArgument(AuthGraphScreen.EMAIL_ARG) {
                     type = NavType.StringType
                 }
-            )
+            ),
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+            popEnterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+            popExitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
         ) {
             ResetPasswordScreen(
                 onPasswordResetSuccess = {
@@ -192,7 +233,15 @@ fun NavGraphBuilder.authGraph(
                 onShowSnackbar = onShowSnackbar
             )
         }
-        composable(route = AuthGraphScreen.ResetPasswordSuccess.fullRoute) {
+        composable(
+            route = AuthGraphScreen.ResetPasswordSuccess.fullRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+        ) {
             ResetPasswordSuccessScreen(
                 onNavigateBack = {
                     navHostController.navigateUp()
@@ -202,7 +251,15 @@ fun NavGraphBuilder.authGraph(
                 }
             )
         }
-        composable(route = AuthGraphScreen.RegisterEmail.fullRoute) {
+        composable(
+            route = AuthGraphScreen.RegisterEmail.fullRoute,
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
+        ) {
             RegisterEmailScreen(
                 onEmailRegisterSuccess = { email ->
                     navHostController.navigate(AuthGraphScreen.EmailActivation.routeWithArgs(email)) {
@@ -224,7 +281,13 @@ fun NavGraphBuilder.authGraph(
                 navArgument(AuthGraphScreen.EMAIL_ARG) {
                     type = NavType.StringType
                 }
-            )
+            ),
+            enterTransition = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+            },
+            exitTransition = {
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+            },
         ) {
             EmailActivationScreen(
                 onNavigateToLogin = {
