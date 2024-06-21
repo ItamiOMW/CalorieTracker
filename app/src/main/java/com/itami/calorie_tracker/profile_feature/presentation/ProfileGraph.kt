@@ -33,20 +33,25 @@ fun NavGraphBuilder.profileGraph(
             enterTransition = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                ) + fadeIn(animationSpec = tween(200))
+                ) + fadeIn(animationSpec = tween(250))
             },
             exitTransition = {
+                slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left
+                ) + fadeOut(animationSpec = tween(250))
+            },
+            popEnterTransition = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right
+                ) + fadeIn(animationSpec = tween(250))
+            },
+            popExitTransition = {
                 slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Down,
                     targetOffset = {
                         it / 5
                     }
-                ) + fadeOut(animationSpec = tween(200))
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    towards = AnimatedContentTransitionScope.SlideDirection.Right
-                ) + fadeIn(animationSpec = tween(200))
+                ) + fadeOut(animationSpec = tween(250))
             },
         ) {
             ProfileScreen(
@@ -88,10 +93,16 @@ fun NavGraphBuilder.profileGraph(
         composable(
             route = ProfileGraphScreens.UserInfo.fullRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(250)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(250)
+                )
             }
         ) {
             UserInfoScreen(
@@ -107,10 +118,16 @@ fun NavGraphBuilder.profileGraph(
         composable(
             route = ProfileGraphScreens.CalorieIntake.fullRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(250)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(250)
+                )
             }
         ) {
             CalorieIntakeScreen(
@@ -122,10 +139,16 @@ fun NavGraphBuilder.profileGraph(
         composable(
             route = ProfileGraphScreens.AboutApp.fullRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(250)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(250)
+                )
             }
         ) {
             val context = LocalContext.current
@@ -148,10 +171,16 @@ fun NavGraphBuilder.profileGraph(
         composable(
             route = ProfileGraphScreens.ContactUs.fullRoute,
             enterTransition = {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left)
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(250)
+                )
             },
             exitTransition = {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right)
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    animationSpec = tween(250)
+                )
             }
         ) {
             val context = LocalContext.current
