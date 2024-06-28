@@ -79,7 +79,7 @@
     <string name="error_invalid_weight">Приложение не поддерживает этот вес.</string>
     <string name="error_invalid_age">Приложение не поддерживает этот возраст.</string>
     <string name="error_unknown">Произошла неизвестная ошибка.</string>
-    <string name="age_unit">возраст</string>
+    <string name="age_unit">Лет</string>
     <string name="years">Годы</string>
     <string name="amount_grams">%1$s г</string>
     <string name="proteins_to_grams">Белки: %1$sг</string>
@@ -235,7 +235,7 @@
     <string name="developer_email_address">itamiomw@gmail.com</string>
     <string name="developer_telegram_username">itamiomw</string>
     <string name="developer_github_username">itamiomw</string>
-    <string name="contact_info">Contact Info</string>
+    <string name="contact_info">Контактная информация</string>
     <string name="message">Сообщение</string>
     <string name="send">Отправить</string>
     <string name="visit_source_code">Посетить исходный код</string>

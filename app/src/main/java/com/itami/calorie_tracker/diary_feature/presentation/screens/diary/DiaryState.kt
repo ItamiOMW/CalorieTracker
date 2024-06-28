@@ -10,6 +10,8 @@ data class DiaryState(
     val user: User = User.DEFAULT,
     val date: ZonedDateTime = DateTimeUtil.getCurrentZonedDateTime(),
 
+    val waterTrackerEnabled: Boolean = true,
+
     val meals: List<MealUi> = emptyList(),
     val consumedProteins: Int = 0,
     val consumedFats: Int = 0,

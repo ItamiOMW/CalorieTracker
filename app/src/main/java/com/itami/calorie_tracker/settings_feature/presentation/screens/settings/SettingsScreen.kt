@@ -330,7 +330,7 @@ fun SettingsScreenContent(
                                 style = CalorieTrackerTheme.typography.bodyMedium
                             )
                         },
-                        onClick = { onAction(SettingsAction.SubscriptionFieldClick) }
+                        onClick = { onAction(SettingsAction.WaterTrackerFieldClick) }
                     )
                 }
                 HorizontalDivider(
