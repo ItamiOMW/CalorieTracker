@@ -61,6 +61,7 @@ class DiaryViewModel @Inject constructor(
         getMeals(date = dateString)
         getConsumedWater(date = dateString)
         loadMealsWithWater(date = dateString)
+        getWaterTrackerEnabledState()
     }
 
     fun onAction(action: DiaryAction) {
@@ -198,6 +199,14 @@ class DiaryViewModel @Inject constructor(
         viewModelScope.launch {
             appSettingsManager.waterServingSize.collectLatest { sizeMl ->
                 this@DiaryViewModel.waterServingSize = sizeMl
+            }
+        }
+    }
+
+    private fun getWaterTrackerEnabledState() {
+        viewModelScope.launch {
+            appSettingsManager.waterTrackerEnabled.collect {
+                state = state.copy(waterTrackerEnabled = it)
             }
         }
     }

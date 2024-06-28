@@ -175,17 +175,19 @@ private fun DiaryScreenContent(
                     dailyNutrientsGoal = state.user.dailyNutrientsGoal,
                     modifier = Modifier.fillMaxWidth()
                 )
-                WaterIntakeSection(
-                    consumedWater = state.consumedWater,
-                    dailyNutrientsGoal = state.user.dailyNutrientsGoal,
-                    onAddWaterClick = {
-                        onAction(DiaryAction.AddConsumedWaterClick)
-                    },
-                    onRemoveWaterClick = {
-                        onAction(DiaryAction.RemoveConsumedWaterClick)
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
+                if (state.waterTrackerEnabled) {
+                    WaterIntakeSection(
+                        consumedWater = state.consumedWater,
+                        dailyNutrientsGoal = state.user.dailyNutrientsGoal,
+                        onAddWaterClick = {
+                            onAction(DiaryAction.AddConsumedWaterClick)
+                        },
+                        onRemoveWaterClick = {
+                            onAction(DiaryAction.RemoveConsumedWaterClick)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
                 MealsSection(
                     meals = state.meals,
                     onMealClick = { id ->
