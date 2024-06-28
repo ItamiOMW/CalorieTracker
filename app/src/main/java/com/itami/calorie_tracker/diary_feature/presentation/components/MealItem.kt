@@ -20,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
-import com.itami.calorie_tracker.core.utils.DateTimeUtil
 import com.itami.calorie_tracker.diary_feature.presentation.model.MealUi
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun MealItem(
@@ -69,7 +69,7 @@ fun MealItem(
                         modifier = Modifier.size(16.dp)
                     )
                     Text(
-                        text = meal.createdAt.format(DateTimeFormatter.ofPattern(DateTimeUtil.DEFAULT_TIME_PATTERN)),
+                        text = meal.createdAt.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)),
                         style = CalorieTrackerTheme.typography.bodySmall,
                         color = secondaryContentColor,
                     )
