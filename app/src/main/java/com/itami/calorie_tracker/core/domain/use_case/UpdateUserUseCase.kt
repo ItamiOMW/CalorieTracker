@@ -11,12 +11,14 @@ class UpdateUserUseCase(private val userRepository: UserRepository) {
         val ageException = updateUser.age?.let { ValidationUtil.validateAge(it) }
         val weightException = updateUser.weightGrams?.let { ValidationUtil.validateWeight(it) }
         val heightException = updateUser.heightCm?.let { ValidationUtil.validateHeight(it) }
+        val nameException = updateUser.name?.let { ValidationUtil.validateName(it) }
 
-        if (ageException != null || weightException != null || heightException != null) {
+        if (ageException != null || weightException != null || heightException != null || nameException != null) {
             return UpdateUserResult(
                 ageException = ageException,
                 weightException = weightException,
                 heightException = heightException,
+                nameException = nameException
             )
         }
 

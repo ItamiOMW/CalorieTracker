@@ -7,5 +7,6 @@ data class UpdateUserResult(
     val ageException: AppException? = null,
     val weightException: AppException? = null,
     val heightException: AppException? = null,
+    val nameException: AppException? = null,
     val response: AppResponse<Unit>? = null
 )

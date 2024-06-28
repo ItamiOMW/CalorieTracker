@@ -1,5 +1,6 @@
 package com.itami.calorie_tracker.core.data.remote
 
+import com.itami.calorie_tracker.core.data.remote.request.ChangePasswordRequest
 import com.itami.calorie_tracker.core.data.remote.request.UpdateUserRequest
 import com.itami.calorie_tracker.core.data.remote.response.ApiResponse
 import com.itami.calorie_tracker.core.data.remote.response.ErrorResponse
@@ -10,6 +11,7 @@ import io.ktor.client.plugins.timeout
 import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.request.forms.formData
+import io.ktor.client.request.setBody
 import io.ktor.client.request.url
 import io.ktor.http.ContentType
 import io.ktor.http.Headers
@@ -26,6 +28,8 @@ class UserApiServiceImpl @Inject constructor(
     companion object {
 
         private const val USER = "/api/v1/user"
+
+        private const val USER_CHANGE_PASSWORD = "$USER/change-password"
 
     }
 
@@ -65,6 +69,26 @@ class UserApiServiceImpl @Inject constructor(
                     }
                 }
             )
+        }
+    }
+
+    override suspend fun deleteAccount(token: String): ApiResponse<Unit, ErrorResponse> {
+        return httpClient.safeRequest {
+            url(USER)
+            method = HttpMethod.Delete
+            bearerAuth(token)
+        }
+    }
+
+    override suspend fun changePassword(
+        token: String,
+        changePasswordRequest: ChangePasswordRequest,
+    ): ApiResponse<Unit, ErrorResponse> {
+        return httpClient.safeRequest {
+            url(USER_CHANGE_PASSWORD)
+            method = HttpMethod.Post
+            bearerAuth(token)
+            setBody(changePasswordRequest)
         }
     }
 }
