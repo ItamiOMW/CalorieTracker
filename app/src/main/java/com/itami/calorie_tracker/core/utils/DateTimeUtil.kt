@@ -7,8 +7,6 @@ import java.time.ZonedDateTime
 
 object DateTimeUtil {
 
-    const val DEFAULT_TIME_PATTERN = "hh:mm a"
-
     fun stringToDateTime(
         datetimeStr: String,
         zoneId: ZoneId = ZoneId.systemDefault(),

@@ -62,6 +62,7 @@ import com.itami.calorie_tracker.diary_feature.presentation.model.ConsumedWaterU
 import com.itami.calorie_tracker.diary_feature.presentation.model.MealUi
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 @Composable
 fun DiaryScreen(
@@ -325,7 +326,7 @@ private fun WaterIntakeSection(
             consumedWaterMl = consumedWater?.waterMl ?: 0,
             waterMlGoal = dailyNutrientsGoal.waterMlGoal,
             lastTimeDrank = consumedWater?.timestamp?.format(
-                DateTimeFormatter.ofPattern(DateTimeUtil.DEFAULT_TIME_PATTERN)
+                DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
             ) ?: stringResource(R.string.text_have_not_drank),
             onAddWaterClick = onAddWaterClick,
             onRemoveWaterClick = onRemoveWaterClick,

@@ -3,7 +3,7 @@
     <string name="app_name">Calorie Tracker</string>
     <string name="current_app_version">Версия: 0.1.0</string>
 
-    <string name="diary">Ежедневник</string>
+    <string name="diary">Дневник</string>
     <string name="recipes">Рецепты</string>
     <string name="reports">Отчёты</string>
     <string name="welcome_em">Добро пожаловать!</string>
@@ -197,7 +197,7 @@
     <string name="enter_password_reset_code">Пожалуйста, введите код для сброса пароля, который мы отправили вам на электронную почту, %1$s</string>
     <string name="calorie_tracker_about_app">приложение для Android, разработанное одним разработчиком, чтобы помочь вам на пути к достижению фигуры мечты.</string>
     <string name="provide_features_such_as">Мы предоставляем все необходимые функции, такие как:</string>
-    <string name="desc_diary_feature">Ежедневник для записи ваших приемов пищи и выпитой воды</string>
+    <string name="desc_diary_feature">Дневник для записи ваших приемов пищи и выпитой воды</string>
     <string name="desc_reports_feature">Отчеты для отслеживания вашего веса</string>
     <string name="desc_recipes_feature">Рецепты, позволяющие быстро придумать, что приготовить</string>
     <string name="you_sure_you_want_to_log_out">Вы уверены, что хотите выйти?</string>
