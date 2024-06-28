@@ -75,6 +75,7 @@
     <string name="weight_unit_pounds">Pounds</string>
     <string name="weight_unit_short_pounds">lb</string>
     <string name="weight_unit">Weight Unit</string>
+    <string name="height_unit">Height Unit</string>
 
     <string name="icon_desc_arrow_drop_down">Arrow drop down</string>
     <string name="error_invalid_height">The app does not support this height.</string>
@@ -133,6 +134,9 @@
     <string name="me">Me</string>
     <string name="calorie_intake">Calorie Intake</string>
     <string name="dark_theme">Dark theme</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_system">System</string>
     <string name="desc_icon_contrast">Contrast icon</string>
     <string name="title_contact_us">Contact us</string>
     <string name="title_about_app">About app</string>
@@ -170,7 +174,10 @@
     <string name="label_email">Email</string>
     <string name="label_name">Name</string>
     <string name="label_password">Password</string>
+    <string name="label_old_password">Old password</string>
+    <string name="label_new_password">New password</string>
     <string name="label_repeat_password">Repeat password</string>
+    <string name="label_repeat_new_password">Repeat new password</string>
     <string name="register">Register</string>
     <string name="forgot_password_qm">Forgot password?</string>
     <string name="desc_visibility_icon">Visibility icon</string>
@@ -197,6 +204,7 @@
     <string name="desc_reports_feature">Reports to keep a track on your weight</string>
     <string name="desc_recipes_feature">Recipes to quickly come up with something to cook</string>
     <string name="you_sure_you_want_to_log_out">Are you sure you want to log out?</string>
+    <string name="you_sure_you_want_to_delete_account">Are you sure you want to delete your account?</string>
     <string name="log_out">Log out</string>
     <string name="goal">Goal</string>
     <string name="age">Age</string>
@@ -235,4 +243,31 @@
     <string name="send">Send</string>
     <string name="visit_source_code">Visit source code</string>
     <string name="desc_github_icon">Github icon</string>
+    <string name="desc_scale_icon">Scale icon</string>
+    <string name="desc_ruler_icon">Ruler icon</string>
+    <string name="desc_water_icon">Water icon</string>
+    <string name="desc_pay_icon">Pay icon</string>
+    <string name="desc_language_icon">Language icon</string>
+    <string name="desc_humidity_icon">Humidity icon</string>
+    <string name="water_serving_size">Water serving size</string>
+    <string name="language">Language</string>
+    <string name="theme">Theme</string>
+    <string name="water_tracker">Water tracker</string>
+    <string name="subscription">Subscription</string>
+    <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
+    <string name="account">Account</string>
+    <string name="desc_person_icon">Person icon</string>
+    <string name="change_profile_picture">Change profile picture</string>
+    <string name="change_password">Change password</string>
+    <string name="desc_lock_reset_icon">Lock reset icon</string>
+    <string name="delete_account">Delete account</string>
+    <string name="desc_delete_icon">Delete icon</string>
+    <string name="error_empty_name">Empty name</string>
+    <string name="error_no_changes_found">No changes found</string>
+    <string name="changes_have_been_saved">Changes have been saved</string>
+    <string name="error_your_account_does_not_have_password">Your account does not have a password. Try resetting the password through login screen.</string>
+    <string name="error_invalid_old_password">Invalid old password.</string>
+    <string name="password_has_been_changed">Password has been changed.</string>
+    <string name="ml">ml</string>
 </resources>

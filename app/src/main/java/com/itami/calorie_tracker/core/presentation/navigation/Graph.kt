@@ -18,4 +18,6 @@ sealed class Graph(val route: String) {
 
     data object Settings: Graph("settings_graph")
 
+    data object Subscription: Graph("subscription_graph")
+
 }

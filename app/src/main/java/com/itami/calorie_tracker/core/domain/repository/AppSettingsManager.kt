@@ -33,6 +33,11 @@ interface AppSettingsManager {
     suspend fun changeHeightUnit(heightUnit: HeightUnit)
 
 
+    val waterTrackerEnabled: Flow<Boolean>
+
+    suspend fun changeWaterTrackerEnabledState(enabled: Boolean)
+
+
     val waterServingSize: Flow<Int>
 
     suspend fun changeWaterServingSize(sizeMl: Int)

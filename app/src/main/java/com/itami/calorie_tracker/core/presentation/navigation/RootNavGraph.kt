@@ -11,6 +11,7 @@ import com.itami.calorie_tracker.onboarding_feature.presentation.onboardingGraph
 import com.itami.calorie_tracker.profile_feature.presentation.profileGraph
 import com.itami.calorie_tracker.recipes_feature.presentation.recipesGraph
 import com.itami.calorie_tracker.reports_feature.presentation.reportsGraph
+import com.itami.calorie_tracker.settings_feature.presentation.settingsGraph
 
 @Composable
 fun RootNavGraph(
@@ -46,6 +47,10 @@ fun RootNavGraph(
             onShowSnackbar = onShowSnackbar
         )
         profileGraph(
+            navHostController = navHostController,
+            onShowSnackbar = onShowSnackbar
+        )
+        settingsGraph(
             navHostController = navHostController,
             onShowSnackbar = onShowSnackbar
         )

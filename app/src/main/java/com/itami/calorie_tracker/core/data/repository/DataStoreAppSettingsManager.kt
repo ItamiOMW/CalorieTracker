@@ -29,6 +29,7 @@ class DataStoreAppSettingsManager @Inject constructor(
 
     private val dataStore: DataStore<Preferences> = context.dataStore
 
+
     override val theme: Flow<Theme> = dataStore.data.map { preferences ->
         preferences[THEME_KEY]?.let { Theme.valueOf(it) } ?: Theme.SYSTEM_THEME
     }
@@ -85,6 +86,16 @@ class DataStoreAppSettingsManager @Inject constructor(
         }
     }
 
+    override val waterTrackerEnabled: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[WATER_INTAKE_ENABLED] ?: true
+    }
+
+    override suspend fun changeWaterTrackerEnabledState(enabled: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[WATER_INTAKE_ENABLED] = enabled
+        }
+    }
+
     override val waterServingSize: Flow<Int> = dataStore.data.map { preferences ->
         preferences[WATER_SERVING_SIZE_KEY] ?: Constants.DEFAULT_WATER_SERVING_ML
     }
@@ -106,6 +117,8 @@ class DataStoreAppSettingsManager @Inject constructor(
         private val WEIGHT_UNIT_KEY = stringPreferencesKey("weight_unit")
 
         private val HEIGHT_UNIT_KEY = stringPreferencesKey("height_unit")
+
+        private val WATER_INTAKE_ENABLED = booleanPreferencesKey("water_tracker_enabled")
 
         private val WATER_SERVING_SIZE_KEY = intPreferencesKey("water_serving_size")
 

@@ -30,6 +30,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        resourceConfigurations += listOf("en", "ru", "fr", "de", "es")
     }
 
     buildTypes {
@@ -101,6 +103,10 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    // App compat
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.appcompat:appcompat-resources:1.7.0")
 
     // Chart
     implementation("com.patrykandpatrick.vico:compose:2.0.0-alpha.19")

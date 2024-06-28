@@ -4,6 +4,8 @@ import com.itami.calorie_tracker.authentication_feature.domain.repository.AuthRe
 import com.itami.calorie_tracker.core.domain.repository.UserManager
 import com.itami.calorie_tracker.core.domain.repository.UserRepository
 import com.itami.calorie_tracker.core.domain.use_case.CalculateNutrientsUseCase
+import com.itami.calorie_tracker.core.domain.use_case.ChangePasswordUseCase
+import com.itami.calorie_tracker.core.domain.use_case.DeleteAccountUseCase
 import com.itami.calorie_tracker.core.domain.use_case.LogoutUseCase
 import com.itami.calorie_tracker.core.domain.use_case.SetAgeUseCase
 import com.itami.calorie_tracker.core.domain.use_case.SetHeightUseCase
@@ -52,4 +54,16 @@ object CoreUseCasesModule {
     fun provideUpdateUserUseCase(
         userRepository: UserRepository
     ) = UpdateUserUseCase(userRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteAccountUseCase(
+        userRepository: UserRepository
+    ) = DeleteAccountUseCase(userRepository)
+
+    @Provides
+    @Singleton
+    fun provideChangePasswordUseCase(
+        userRepository: UserRepository
+    ) = ChangePasswordUseCase(userRepository)
 }

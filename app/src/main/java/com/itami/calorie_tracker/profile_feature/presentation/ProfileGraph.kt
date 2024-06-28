@@ -83,7 +83,7 @@ fun NavGraphBuilder.profileGraph(
                     }
                 },
                 onNavigateToSettings = {
-                    onShowSnackbar("Not implemented yet..")
+                    navHostController.navigate(Graph.Settings.route)
                 },
                 onNavigateBack = {
                     navHostController.navigateUp()
