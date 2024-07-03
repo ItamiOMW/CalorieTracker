@@ -230,14 +230,18 @@ private fun ContactUsTextSection(
     modifier: Modifier = Modifier,
     appNameColor: Color = CalorieTrackerTheme.colors.primary,
     appName: String = stringResource(id = R.string.app_name),
+    contactUsText: String = stringResource(R.string.dont_hesitate_to_contact_us),
 ) {
+
     val annotatedString = remember {
         buildAnnotatedString {
-            append("Don’t hesitate to contact us if you find a bug or have a suggestion. We highly appreciate any feedback provided, as it helps us improve your ")
+            val startIndex = contactUsText.indexOf(appName)
+            val endIndex = startIndex + appName.length
+            append(contactUsText.substring(0, startIndex))
             withStyle(style = SpanStyle(color = appNameColor, fontWeight = FontWeight.Medium)) {
                 append(appName)
             }
-            append(".")
+            append(contactUsText.substring(endIndex))
         }
     }
 

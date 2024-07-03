@@ -271,4 +271,5 @@
     <string name="error_invalid_old_password">Invalid old password.</string>
     <string name="password_has_been_changed">Password has been changed.</string>
     <string name="ml">ml</string>
+    <string name="dont_hesitate_to_contact_us">"Don’t hesitate to contact us if you find a bug or have a suggestion. We highly appreciate any feedback provided, as it helps us improve your "</string>
 </resources>

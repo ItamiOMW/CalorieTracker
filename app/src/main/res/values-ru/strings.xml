@@ -132,7 +132,7 @@
     <string name="calorie_intake">Потребление калорий</string>
     <string name="dark_theme">Темная тема</string>
     <string name="theme_dark">Темная</string>
-    <string name="theme_light">Светла</string>
+    <string name="theme_light">Светлая</string>
     <string name="theme_system">Системная</string>
     <string name="desc_icon_contrast">Иконка контраста</string>
     <string name="title_contact_us">Связаться с нами</string>
@@ -267,4 +267,5 @@
     <string name="error_invalid_old_password">Неверный старый пароль.</string>
     <string name="password_has_been_changed">Вы успешно сменили пароль.</string>
     <string name="ml">мл</string>
+    <string name="dont_hesitate_to_contact_us">"Не стесняйтесь связаться с нами, если вы обнаружите ошибку или у вас есть предложение. Мы высоко ценим любые отзывы, так как они помогают нам улучшить ваш Calorie Tracker."</string>
 </resources>

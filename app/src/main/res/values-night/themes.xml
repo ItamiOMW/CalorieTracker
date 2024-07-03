@@ -1,8 +1,9 @@
 <resources>
 
-<style name="Theme.CalorieTracker" parent="Theme.AppCompat.Light.NoActionBar">
+<style name="Theme.CalorieTracker" parent="Theme.AppCompat.NoActionBar">
     <item name="android:statusBarColor">#0D0D0D</item>
     <item name="android:navigationBarColor">#0D0D0D</item>
+    <item name="showTitle">false</item>
 </style>
 
 </resources>

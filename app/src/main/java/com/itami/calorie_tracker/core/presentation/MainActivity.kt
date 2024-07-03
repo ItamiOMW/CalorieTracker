@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
             navigationBarStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
         )
         super.onCreate(savedInstanceState)
+        actionBar?.hide()
         installSplashScreen().setKeepOnScreenCondition {
             mainViewModel.showSplash
         }

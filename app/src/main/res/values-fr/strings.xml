@@ -265,4 +265,5 @@
     <string name="error_invalid_old_password">Ancien mot de passe invalide.</string>
     <string name="password_has_been_changed">Le mot de passe a été changé.</string>
     <string name="ml">ml</string>
+    <string name="dont_hesitate_to_contact_us">"N'hésitez pas à nous contacter si vous trouvez un bug ou si vous avez une suggestion. Nous apprécions grandement tout retour fourni, car cela nous aide à améliorer votre Calorie Tracker."</string>
 </resources>
