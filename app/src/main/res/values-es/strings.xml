@@ -72,6 +72,8 @@
     <string name="weight_unit_short_pounds">lb</string>
     <string name="weight_unit">Unidad de Peso</string>
     <string name="height_unit">Unidad de Altura</string>
+    <string name="pounds_amount">%1$.1f lb</string>
+    <string name="kilograms_amount">%1$.1f kg</string>
 
     <string name="icon_desc_arrow_drop_down">Desplegar flecha</string>
     <string name="error_invalid_height">La aplicación no admite esta altura.</string>

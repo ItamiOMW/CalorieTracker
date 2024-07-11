@@ -72,6 +72,8 @@
     <string name="weight_unit_short_pounds">lb</string>
     <string name="weight_unit">Gewichtseinheit</string>
     <string name="height_unit">Größeneinheit</string>
+    <string name="pounds_amount">%1$.1f lb</string>
+    <string name="kilograms_amount">%1$.1f kg</string>
 
     <string name="icon_desc_arrow_drop_down">Pfeil nach unten</string>
     <string name="error_invalid_height">Die App unterstützt diese Größe nicht.</string>

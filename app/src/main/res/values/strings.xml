@@ -74,6 +74,8 @@
     <string name="weight_unit_short_kilograms">kg</string>
     <string name="weight_unit_pounds">Pounds</string>
     <string name="weight_unit_short_pounds">lb</string>
+    <string name="pounds_amount">%1$.1f lbs</string>
+    <string name="kilograms_amount">%1$.1f kgs</string>
     <string name="weight_unit">Weight Unit</string>
     <string name="height_unit">Height Unit</string>
 

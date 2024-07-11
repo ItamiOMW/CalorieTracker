@@ -64,28 +64,4 @@ enum class WeightUnit {
             }
         }
     }
-
-    fun format(weight: Float): String {
-        return when(this) {
-            POUND -> {
-                "$weight lbs"
-            }
-            KILOGRAM -> {
-                "$weight kg"
-            }
-        }
-    }
-
-    fun format(weightGrams: Int): String {
-        val weight = convert(weightGrams)
-        val formattedWeight = String.format("%.1f", weight)
-        return when(this) {
-            POUND -> {
-                "$formattedWeight lbs"
-            }
-            KILOGRAM -> {
-                "$formattedWeight kg"
-            }
-        }
-    }
 }
