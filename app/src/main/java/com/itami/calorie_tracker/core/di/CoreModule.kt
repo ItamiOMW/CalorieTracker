@@ -8,6 +8,7 @@ import com.itami.calorie_tracker.core.data.auth.AuthManager
 import com.itami.calorie_tracker.core.data.auth.EncryptedAuthManager
 import com.itami.calorie_tracker.core.data.remote.UserApiService
 import com.itami.calorie_tracker.core.data.remote.UserApiServiceImpl
+import com.itami.calorie_tracker.core.data.remote.utils.LanguageHeaderPlugin
 import com.itami.calorie_tracker.core.data.repository.DataStoreAppSettingsManager
 import com.itami.calorie_tracker.core.data.repository.UserRepositoryImpl
 import com.itami.calorie_tracker.core.data.repository.user_manager.DataStoreUserManager
@@ -73,7 +74,7 @@ object CoreModule {
     @Provides
     @Singleton
     fun provideUserApiService(
-        userApiServiceImpl: UserApiServiceImpl
+        userApiServiceImpl: UserApiServiceImpl,
     ): UserApiService = userApiServiceImpl
 
     @Provides
@@ -106,6 +107,7 @@ object CoreModule {
                 requestTimeoutMillis = 15_000
                 socketTimeoutMillis = 20_000
             }
+            install(LanguageHeaderPlugin)
             defaultRequest {
                 url(BuildConfig.BASE_URL)
                 contentType(ContentType.Application.Json)
