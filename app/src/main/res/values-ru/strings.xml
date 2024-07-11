@@ -73,6 +73,8 @@
     <string name="weight_unit_short_pounds">фунт</string>
     <string name="weight_unit">Единица измерения веса</string>
     <string name="height_unit">Единица измерения роста</string>
+    <string name="pounds_amount">%1$.1f фунт</string>
+    <string name="kilograms_amount">%1$.1f кг</string>
 
     <string name="icon_desc_arrow_drop_down">Иконка стрелки вниз</string>
     <string name="error_invalid_height">Приложение не поддерживает этот рост.</string>
@@ -149,7 +151,7 @@
     <string name="desc_recipe_image">Иконка рецепта</string>
     <string name="desc_time_icon">Иконка времени</string>
     <string name="desc_refresh_icon">Иконка обновления</string>
-    <string name="calories_per_serving">алорий на порцию</string>
+    <string name="calories_per_serving">Калорий на порцию</string>
     <string name="filter_less_than_100cal">Меньше 100</string>
     <string name="filter_between_100_and_250cal">100–250</string>
     <string name="filter_between_250_and_500cal">250–500</string>

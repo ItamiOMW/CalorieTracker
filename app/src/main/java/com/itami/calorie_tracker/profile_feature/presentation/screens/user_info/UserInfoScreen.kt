@@ -47,6 +47,8 @@ import com.itami.calorie_tracker.core.domain.model.Gender
 import com.itami.calorie_tracker.core.domain.model.Lifestyle
 import com.itami.calorie_tracker.core.domain.model.Theme
 import com.itami.calorie_tracker.core.domain.model.WeightGoal
+import com.itami.calorie_tracker.core.domain.model.WeightUnit.KILOGRAM
+import com.itami.calorie_tracker.core.domain.model.WeightUnit.POUND
 import com.itami.calorie_tracker.core.presentation.components.ObserveAsEvents
 import com.itami.calorie_tracker.core.presentation.components.UnderlinedFieldWithValue
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
@@ -161,7 +163,13 @@ private fun UserInfoScreenContent(
                         initialWeightGrams = state.user.weightGrams,
                         weightUnit = state.weightUnit,
                         onWeightUnitChange = { unit -> onAction(UserInfoAction.ChangeWeightUnit(unit)) },
-                        onConfirm = { weightGrams -> onAction(UserInfoAction.ChangeWeight(weightGrams)) }
+                        onConfirm = { weightGrams ->
+                            onAction(
+                                UserInfoAction.ChangeWeight(
+                                    weightGrams
+                                )
+                            )
+                        }
                     )
                 }
 
@@ -251,7 +259,21 @@ private fun UserInfoScreenContent(
                 UnderlinedFieldWithValue(
                     modifier = Modifier.fillMaxWidth(),
                     fieldName = stringResource(R.string.weight),
-                    fieldValue = state.weightUnit.format(state.user.weightGrams),
+                    fieldValue = when (state.weightUnit) {
+                        POUND -> {
+                            stringResource(
+                                id = R.string.pounds_amount,
+                                state.weightUnit.convert(state.user.weightGrams)
+                            )
+                        }
+
+                        KILOGRAM -> {
+                            stringResource(
+                                id = R.string.kilograms_amount,
+                                state.weightUnit.convert(state.user.weightGrams)
+                            )
+                        }
+                    },
                     onClick = { onAction(UserInfoAction.WeightFieldClick) }
                 )
                 UnderlinedFieldWithValue(

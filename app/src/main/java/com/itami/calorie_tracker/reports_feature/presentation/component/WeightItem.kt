@@ -11,7 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
+import com.itami.calorie_tracker.R
 import com.itami.calorie_tracker.core.domain.model.WeightUnit
+import com.itami.calorie_tracker.core.domain.model.WeightUnit.KILOGRAM
+import com.itami.calorie_tracker.core.domain.model.WeightUnit.POUND
 import com.itami.calorie_tracker.core.presentation.theme.CalorieTrackerTheme
 import com.itami.calorie_tracker.reports_feature.presentation.model.WeightUi
 import java.time.format.DateTimeFormatter
@@ -45,13 +49,20 @@ fun WeightItem(
                 text = weight.datetime.format(
                     DateTimeFormatter.ofPattern(
                         "MMM d, yyyy",
-                        Locale.ENGLISH
+                        Locale.getDefault()
                     )
                 ),
                 style = CalorieTrackerTheme.typography.labelLarge,
             )
             Text(
-                text = weightUnit.format(weight.weightGrams),
+                text = when(weightUnit) {
+                    POUND -> {
+                        stringResource(id = R.string.pounds_amount, weightUnit.convert(weight.weightGrams))
+                    }
+                    KILOGRAM -> {
+                        stringResource(id = R.string.kilograms_amount, weightUnit.convert(weight.weightGrams))
+                    }
+                },
                 style = CalorieTrackerTheme.typography.labelLarge,
             )
         }
