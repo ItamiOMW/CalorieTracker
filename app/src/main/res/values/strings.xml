@@ -4,7 +4,7 @@
     em = exclamation mark
       -->
     <string name="app_name">Calorie Tracker</string>
-    <string name="current_app_version">Version: 0.1.4</string>
+    <string name="current_app_version">Version: 0.1.5</string>
 
     <string name="diary">Diary</string>
     <string name="recipes">Recipes</string>
