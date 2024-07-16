@@ -84,7 +84,11 @@ class AuthApiServiceImpl @Inject constructor(
         return httpClient.safeRequest {
             url(LOGIN_EMAIL)
             method = HttpMethod.Post
+            timeout {
+                requestTimeoutMillis = 80000
+            }
             setBody(loginRequest)
+
         }
     }
 
@@ -120,6 +124,9 @@ class AuthApiServiceImpl @Inject constructor(
         return httpClient.safeRequest {
             url(RESET_PASSWORD)
             method = HttpMethod.Post
+            timeout {
+                requestTimeoutMillis = 80000
+            }
             setBody(resetPasswordRequest)
         }
     }
@@ -128,6 +135,9 @@ class AuthApiServiceImpl @Inject constructor(
         return httpClient.safeRequest {
             url(REGISTER_GOOGLE)
             method = HttpMethod.Post
+            timeout {
+                requestTimeoutMillis = 80000
+            }
             setBody(registerRequest)
         }
     }
@@ -136,6 +146,9 @@ class AuthApiServiceImpl @Inject constructor(
         return httpClient.safeRequest {
             url(LOGIN_GOOGLE)
             method = HttpMethod.Post
+            timeout {
+                requestTimeoutMillis = 80000
+            }
             setBody(loginRequest)
         }
     }
@@ -144,6 +157,9 @@ class AuthApiServiceImpl @Inject constructor(
         return httpClient.safeRequest {
             url(AUTH)
             method = HttpMethod.Get
+            timeout {
+                requestTimeoutMillis = 80000
+            }
             bearerAuth(token)
         }
     }
